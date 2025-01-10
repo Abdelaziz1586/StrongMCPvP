@@ -73,13 +73,17 @@ public final class ShopHandler {
 
             final Player player = event.getPlayer();
             final UUID uuid = player.getUniqueId();
+            final int perkSlot = getPerkSlot(event.getSlot());
+
+            if (event.getSlot() == 33) {
+                TrailsHandler.INSTANCE.openGUI(player);
+                return;
+            }
 
             switch (itemStack.getType()) {
                 case BEDROCK:
                     final int price = Integer.parseInt(ChatColor.stripColor(itemStack.getItemMeta().getLore().get(0).split(": ")[1].split(" ")[0]));
                     if (Souls.INSTANCE.remove(uuid, price)) {
-                        final int perkSlot = Integer.parseInt(itemStack.getItemMeta().getDisplayName().split("#")[1]);
-
                         PerkSlots.INSTANCE.add(uuid, perkSlot);
                         MessageHandler.INSTANCE.sendMessage(player, "perks.slots.buy.success", new String[]{"perkSlot," + perkSlot});
 
@@ -92,17 +96,14 @@ public final class ShopHandler {
                 case BARRIER:
                     MessageHandler.INSTANCE.sendMessage(player, "perks.slots.buy.failed.no-permission", new String[]{"rankName," + itemStack.getItemMeta().getLore().get(0).split(" ")[1].split(" §crank!")[0]});
                     break;
-                case CLAY_BALL:
-                    PerksHandler.INSTANCE.openGUI(player, Integer.parseInt(itemStack.getItemMeta().getDisplayName().split("#")[1]));
-                    break;
-                case ARROW:
-                    TrailsHandler.INSTANCE.openGUI(player);
-                    break;
                 case DIAMOND_CHESTPLATE:
                     KitsHandler.INSTANCE.openGUI(player);
                     break;
                 case IRON_SWORD:
                     openGUI(player, true);
+                    break;
+                default:
+                    PerksHandler.INSTANCE.openGUI(player, perkSlot);
                     break;
             }
         });
@@ -124,11 +125,37 @@ public final class ShopHandler {
         return shop;
     }
 
-    private List<Integer> getAvailableSlots(final Player player) {
-        // TODO: Check permissions and return PerkSlots as list of Integers
+    public int getPerkSlot(final int slot) {
+        switch (slot) {
+            case 10:
+                return 1;
+            case 12:
+                return 2;
+            case 14:
+                return 3;
+            case 16:
+                return 4;
+            default:
+                return -1;
+        }
+    }
 
+    public List<Integer> getAvailableSlots(final Player player) {
+        final List<Integer> slots = new ArrayList<>();
 
-        return new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            if (isSlotAvailable(player, i)) {
+                slots.add(i);
+            }
+        }
+
+        return slots;
+    }
+
+    private boolean isSlotAvailable(final Player player, final int slot) {
+        final Configuration section = shop.getSection("perk-slots." + slot);
+
+        return section != null && (section.getBoolean("free") || (section.getInt("price", 0) <= 0 && player.hasPermission(section.getString("rank.permission", "*"))));
     }
 
     private ItemStack getDefaultPerksSlot(final Configuration section, final int slot) {
@@ -144,36 +171,55 @@ public final class ShopHandler {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ItemStack itemStack = inventory.getItem(i);
 
-            if (itemStack != null && itemStack.getType() != Material.AIR && itemStack.getType() != Material.STAINED_GLASS_PANE) {
-                if (itemStack.getItemMeta().getDisplayName().contains("#")) {
-                    final int perkSlot = Integer.parseInt(itemStack.getItemMeta().getDisplayName().split("#")[1]);
+            if (i == 10 || i == 12 || i == 14 || i == 16) {
+                final int finalI = i;
+
+                final PerkSlot perkSlot = PerkSlots.INSTANCE.get(player.getUniqueId()).stream()
+                        .filter(ps -> ps.getPerkSlot() == getPerkSlot(finalI))
+                        .findFirst()
+                        .orElse(null);
+
+                if (perkSlot != null && perkSlot.getPerkId() == -1) {
+                    if (itemStack.getType() == Material.BEDROCK) {
+                        if (itemStack.getItemMeta().getLore().size() == 2)
+                            inventory.setItem(i, GUIHandler.INSTANCE.createItemStack(Material.CLAY_BALL, "§7Perk Slot #" + perkSlot.getPerkSlot(), null));
+                        continue;
+                    }
+
+                    inventory.setItem(i, GUIHandler.INSTANCE.createItemStack(Material.CLAY_BALL, "§7Perk Slot #" + perkSlot.getPerkSlot(), null));
+                    continue;
+                }
+            }
+
+            if (itemStack != null && itemStack.getType() != Material.AIR) {
+                final int perkSlot = getPerkSlot(i);
+                if (perkSlot != -1) {
                     final List<PerkSlot> matchingPerkSlots = perkSlots.stream().filter(perkSlot1 -> perkSlot1.getPerkSlot() == perkSlot).collect(Collectors.toList());
 
-                    switch (itemStack.getType()) {
-                        case CLAY_BALL:
-                        case BEDROCK:
-                            if (!matchingPerkSlots.isEmpty()) {
-                                final Perk perk = PerksHandler.INSTANCE.getPerk(matchingPerkSlots.get(0).getPerkId());
-                                if (perk != null) {
-                                    inventory.setItem(i, perk.getGuiItem());
-                                }
+                    if (Objects.requireNonNull(itemStack.getType()) == Material.BARRIER) {
+                        if (player.hasPermission(shop.getString("perk-slots." + perkSlot + ".rank.permission", "*")) && !matchingPerkSlots.isEmpty()) {
+                            final Perk perk = PerksHandler.INSTANCE.getPerk(matchingPerkSlots.get(0).getPerkId());
+                            if (perk != null) {
+                                inventory.setItem(i, perk.getGuiItem());
+                            } else {
+                                inventory.setItem(i, getDefaultPerksSlot(shop.getSection("perk-slots." + perkSlot), perkSlot));
                             }
-                            break;
-                        case BARRIER:
-                            if (player.hasPermission(shop.getString("perk-slots." + perkSlot + ".rank.permission", "*")) && !matchingPerkSlots.isEmpty()) {
-                                final Perk perk = PerksHandler.INSTANCE.getPerk(matchingPerkSlots.get(0).getPerkId());
-                                if (perk != null) {
-                                    inventory.setItem(i, perk.getGuiItem());
-                                }
-                            }
-                            break;
+                        }
+                    } else if (!matchingPerkSlots.isEmpty()) {
+                        final Perk perk = PerksHandler.INSTANCE.getPerk(matchingPerkSlots.get(0).getPerkId());
+                        if (perk != null) {
+                            inventory.setItem(i, perk.getGuiItem());
+                        } else {
+                            inventory.setItem(i, getDefaultPerksSlot(shop.getSection("perk-slots." + perkSlot), perkSlot));
+                        }
+                    } else {
+                        inventory.setItem(i, getDefaultPerksSlot(shop.getSection("perk-slots." + perkSlot), perkSlot));
                     }
                 }
             }
         }
 
         gui.setInventory(inventory);
-
         return gui;
     }
 }

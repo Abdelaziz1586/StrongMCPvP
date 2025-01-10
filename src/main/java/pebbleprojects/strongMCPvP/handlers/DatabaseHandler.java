@@ -98,7 +98,7 @@ public final class DatabaseHandler {
             Trails.INSTANCE.load(uuid);
             Assists.INSTANCE.load(uuid);
             Scramble.INSTANCE.load(uuid);
-            PerkSlots.INSTANCE.load(uuid);
+            PerkSlots.INSTANCE.load(player);
             ActiveTrail.INSTANCE.load(uuid);
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());

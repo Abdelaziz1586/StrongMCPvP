@@ -37,6 +37,7 @@ public final class PerksHandler {
     public static PerksHandler INSTANCE;
     private final Map<Integer, Perk> perksList;
     private final Map<UUID, GUI> perksGUIClones;
+    private final Map<Integer, Integer> slotIds;
     private final Map<UUID, List<Perk>> playerPerks;
 
     public PerksHandler() {
@@ -44,6 +45,7 @@ public final class PerksHandler {
 
         INSTANCE = this;
 
+        slotIds = new ConcurrentHashMap<>();
         perksList = new ConcurrentHashMap<>();
         playerPerks = new ConcurrentHashMap<>();
         perksGUIClones = new ConcurrentHashMap<>();
@@ -77,6 +79,7 @@ public final class PerksHandler {
 
         if (perks == null) return;
 
+        slotIds.clear();
         perksList.clear();
         for (final File file : perks) {
             try {
@@ -171,8 +174,12 @@ public final class PerksHandler {
     private void updateGUI() {
         final Inventory inventory = Bukkit.createInventory(null, 9 * Math.min(perksList.size(), 1), ChatColor.translateAlternateColorCodes('&', perks.getString("guiName", "Perk Customization")));
 
-        for (final Perk perk : perksList.values()) {
-            inventory.addItem(perk.getGuiItem());
+        int i = 0;
+        for (final Map.Entry<Integer, Perk> entry : perksList.entrySet()) {
+            inventory.addItem(entry.getValue().getGuiItem());
+
+            slotIds.put(i, entry.getKey());
+            i++;
         }
 
         perksGUI = GUIHandler.INSTANCE.createGUI(inventory, event -> {
@@ -184,36 +191,33 @@ public final class PerksHandler {
                 return;
             }
 
-            final List<PerkSlot> perkSlots = PerkSlots.INSTANCE.get(uuid);
+            final PerkSlot perkSlot = PerkSlots.INSTANCE.get(uuid).stream()
+                    .filter(ps -> ps.getPerkSlot() == data[0])
+                    .findFirst()
+                    .orElse(null);
 
-            final PerkSlot perkSlot = perkSlots.size() - 1 >= data[0] ? perkSlots.get(data[0]) : null;
-            if (perkSlot == null) {
-                return;
-            }
+            if (perkSlot == null) return;
 
             final ItemStack itemStack = event.getClickedItem();
             final ItemMeta itemMeta = itemStack.getItemMeta();
 
-            final int perkId = getPerkId(itemStack);
-            if (perkId == -1) {
-                event.getPlayer().closeInventory();
-                return;
-            }
+            if (itemMeta.getLore().size() < 3) return;
 
             final String s = itemMeta.getLore().get(2);
-            if (s.contains("equip")) {
-                perkSlot.setPerkId(perkId);
-                MessageHandler.INSTANCE.sendMessage(player, "perks.perk.equip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
-
-                openGUI(player, perkSlot.getPerkSlot());
-                return;
-            }
-
+            final int perkId = slotIds.get(event.getSlot());
             if (s.contains("unequip")) {
                 perkSlot.setPerkId(-1);
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.unequip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
-                openGUI(player, perkSlot.getPerkSlot());
+                ShopHandler.INSTANCE.openGUI(player, false);
+                return;
+            }
+
+            if (s.contains("equip")) {
+                perkSlot.setPerkId(perkId);
+                MessageHandler.INSTANCE.sendMessage(player, "perks.perk.equip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
+
+                ShopHandler.INSTANCE.openGUI(player, false);
                 return;
             }
 
@@ -224,11 +228,11 @@ public final class PerksHandler {
 
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.buy.success", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
-                openGUI(player, perkSlot.getPerkSlot());
+                ShopHandler.INSTANCE.openGUI(player, false);
                 return;
             }
 
-            MessageHandler.INSTANCE.sendMessage(player, "perks.perk.buy.success", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
+            MessageHandler.INSTANCE.sendMessage(player, "perks.perk.buy.no-enough-souls", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
         });
     }
 
@@ -243,56 +247,57 @@ public final class PerksHandler {
         updatePerksGUI(player, perkSlot).openGUI(player);
     }
 
-    private GUI updatePerksGUI(final Player player, final int perkSlot) {
+    private GUI updatePerksGUI(final Player player, final int perkSlotId) {
         final UUID uuid = player.getUniqueId();
         final GUI gui = perksGUIClones.get(uuid);
         final Inventory inventory = gui.getInventory();
 
         final List<Integer> perks = Perks.INSTANCE.get(uuid);
-        final List<PerkSlot> perkSlots = PerkSlots.INSTANCE.get(uuid);
-        final int perkSlotId = perkSlots.size() - 1 >= perkSlot ? perkSlots.get(perkSlot).getPerkId() : -1;
+        final PerkSlot perkSlot = PerkSlots.INSTANCE.get(uuid).stream()
+                .filter(ps -> ps.getPerkSlot() == perkSlotId)
+                .findFirst()
+                .orElse(null);
 
-        int i = 0;
-        for (final Map.Entry<Integer, Perk> entry : perksList.entrySet()) {
-            final ItemStack itemStack = inventory.getItem(i);
-            if (itemStack == null) continue;
+        if (perkSlot != null) {
+            int i = 0;
+            for (final Map.Entry<Integer, Perk> entry : perksList.entrySet()) {
+                final ItemStack itemStack = inventory.getItem(i);
+                if (itemStack == null) continue;
 
-            final ItemMeta itemMeta = itemStack.getItemMeta();
-            final List<String> lore = itemMeta.getLore();
+                final ItemMeta itemMeta = itemStack.getItemMeta();
+                final List<String> lore = itemMeta.hasLore() ? itemMeta.getLore() : new ArrayList<>();
 
-            lore.add(1, "§7");
-
-            if (perkSlotId == entry.getKey()) {
-                lore.add(2, "§a§l➜ §aClick to §cunequip.");
-            } else if (perks.contains(entry.getKey())) {
-                lore.add(2, "§a§l➜ §aClick to equip.");
-            } else {
-                final int diff = entry.getValue().getPrice() - Souls.INSTANCE.get(uuid);
-
-                if (diff >= 0) {
-                    lore.add(2, "§c§l➜ §cYou are missing " + diff + " souls.");
-                } else {
-                    lore.add(2, "§7§l➜ §7Click to purchase for " + entry.getValue().getPrice() + " souls.");
+                while (lore.size() <= 2) {
+                    lore.add("");
                 }
+
+                if (!"§7".equals(lore.get(1))) {
+                    lore.set(1, "§7");
+                }
+
+                if (perkSlot.getPerkId() == entry.getKey()) {
+                    lore.set(2, "§a§l➜ §aClick to §cunequip.");
+                } else if (perks.contains(entry.getKey())) {
+                    lore.set(2, "§a§l➜ §aClick to equip.");
+                } else {
+                    final int diff = entry.getValue().getPrice() - Souls.INSTANCE.get(uuid);
+
+                    if (diff >= 0) {
+                        lore.set(2, "§c§l➜ §cYou are missing " + diff + " souls.");
+                    } else {
+                        lore.set(2, "§7§l➜ §7Click to purchase for " + entry.getValue().getPrice() + " souls.");
+                    }
+                }
+
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
+
+                i++;
             }
-
-            itemMeta.setLore(lore);
-            itemStack.setItemMeta(itemMeta);
-
-            i++;
         }
 
-
-        gui.setData(new int[]{perkSlot});
+        gui.setData(new int[]{perkSlotId});
         return gui;
-    }
-
-    private int getPerkId(final ItemStack itemStack) {
-        for (final Map.Entry<Integer, Perk> entry : perksList.entrySet()) {
-            if (itemStack.equals(entry.getValue().getGuiItem())) return entry.getKey();
-        }
-
-        return -1;
     }
 
     public Configuration getPerks() {

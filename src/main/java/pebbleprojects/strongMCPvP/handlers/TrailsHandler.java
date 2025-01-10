@@ -173,8 +173,6 @@ public final class TrailsHandler {
             }
 
 
-            System.out.println(Souls.INSTANCE.get(uuid) + " - " + Integer.parseInt(ChatColor.stripColor(itemStack.getItemMeta().getLore().get(0).split(": ")[1].split(" ")[0].replace(",", ""))));
-
             if (Souls.INSTANCE.remove(uuid, Integer.parseInt(ChatColor.stripColor(itemStack.getItemMeta().getLore().get(0).split(": ")[1].split(" ")[0].replace(",", ""))))) {
                 Trails.INSTANCE.add(uuid, slot);
                 ActiveTrail.INSTANCE.set(uuid, slot);
