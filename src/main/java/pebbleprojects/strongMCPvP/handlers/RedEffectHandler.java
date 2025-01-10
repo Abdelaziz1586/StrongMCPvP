@@ -34,9 +34,9 @@ public final class RedEffectHandler {
         final WorldBorder border = new WorldBorder();
 
         border.setCenter(player.getLocation().getX(), player.getLocation().getZ());
-        border.setSize(2000000);
+        border.setSize(20000000);
         border.setWarningTime(0);
-        border.setWarningDistance(2000000);
+        border.setWarningDistance(20000000);
         border.setDamageBuffer(0);
         border.setDamageAmount(0);
 
