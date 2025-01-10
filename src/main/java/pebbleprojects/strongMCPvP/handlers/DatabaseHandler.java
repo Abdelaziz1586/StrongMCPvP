@@ -35,6 +35,7 @@ public final class DatabaseHandler {
         new Trails();
         new Assists();
         new Scramble();
+        new RedEffect();
         new PerkSlots();
         new ActiveTrail();
 
@@ -98,6 +99,7 @@ public final class DatabaseHandler {
             Trails.INSTANCE.load(uuid);
             Assists.INSTANCE.load(uuid);
             Scramble.INSTANCE.load(uuid);
+            RedEffect.INSTANCE.load(uuid);
             PerkSlots.INSTANCE.load(player);
             ActiveTrail.INSTANCE.load(uuid);
         } catch (final SQLException e) {
@@ -120,6 +122,7 @@ public final class DatabaseHandler {
             Trails.INSTANCE.save(uuid);
             Assists.INSTANCE.save(uuid);
             Scramble.INSTANCE.save(uuid);
+            RedEffect.INSTANCE.save(uuid);
             PerkSlots.INSTANCE.save(uuid);
             ActiveTrail.INSTANCE.save(uuid);
         } catch (final Exception e) {
@@ -139,7 +142,7 @@ public final class DatabaseHandler {
     private void createTables() {
         try (final Connection connection = hikari.getConnection();
              final Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, RED_EFFECT boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT");
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;

@@ -362,6 +362,25 @@ settings:
         fadeIn: 1
         stay: 3
         fadeOut: 1
+  redEffect:
+    enable:
+      chat: "%prefix% &aYou have enabled &cRed&fEffect&a."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &cYou have disabled &cRed&fEffect&c."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
   time:
     success:
       chat: "%prefix% &aYour time was changed to &6%time%&a!"

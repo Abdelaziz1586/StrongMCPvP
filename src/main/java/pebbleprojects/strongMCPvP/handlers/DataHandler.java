@@ -60,6 +60,7 @@ public final class DataHandler {
         new SettingsHandler();
         new DatabaseHandler();
         new CommandsHandler();
+        new RedEffectHandler();
         new ListenersHandler();
         new ChatInputHandler();
         new CombatLogHandler();

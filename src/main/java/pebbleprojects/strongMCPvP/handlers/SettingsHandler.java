@@ -8,6 +8,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import pebbleprojects.strongMCPvP.databaseData.RedEffect;
 import pebbleprojects.strongMCPvP.databaseData.Scramble;
 import pebbleprojects.strongMCPvP.functions.GUI;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
@@ -50,6 +51,7 @@ public final class SettingsHandler {
         inventory.setItem(13, GUIHandler.INSTANCE.createItemStack(Material.WATCH, "§eTime", Arrays.asList("§7", "§7Sunrise", "§7Morning", "§a§l» §7Noon", "§7Night", "§7Midnight", "§7", "§b§l➜ §bClick to cycle time"), ItemFlag.HIDE_ENCHANTS));
         inventory.setItem(15, GUIHandler.INSTANCE.createItemStack(Material.PAPER, "§cQuest Reminder §7(§cDISABLED§7)", Arrays.asList("§7This option reminds you", "§7of your quests when you", "§7join the server."), ItemFlag.HIDE_ENCHANTS));
         inventory.setItem(16, GUIHandler.INSTANCE.createItemStack(Material.BOOK, "§cQuest Completion Alerts §7(§cDISABLED§7)", Arrays.asList("§7This option toggles the title", "§7that appears when you", "§7complete a quest."), ItemFlag.HIDE_ENCHANTS));
+        inventory.setItem(22, GUIHandler.INSTANCE.createItemStack(Material.REDSTONE, "§cRed Effect §7(§cDISABLED§7)", Arrays.asList("§7This option toggles red screen effect", "§7when your health is (§f3.0 §c❤§7) or less"), ItemFlag.HIDE_ENCHANTS));
 
         settingsGUI = GUIHandler.INSTANCE.createGUI(inventory, event -> {
             final ItemStack itemStack = event.getClickedItem();
@@ -76,6 +78,12 @@ public final class SettingsHandler {
                     break;
                 case WATCH:
                     handleChangeTime(player, itemStack);
+                    openGUI(player);
+                    break;
+                case REDSTONE:
+                    RedEffect.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
+                    MessageHandler.INSTANCE.sendMessage(player, "settings.redEffect." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
+
                     openGUI(player);
                     break;
             }
@@ -132,6 +140,16 @@ public final class SettingsHandler {
 
                         meta.removeEnchant(Enchantment.DURABILITY);
                         meta.setDisplayName("§cRank Scramble §7(§cDISABLED§7)");
+                        break;
+                    case REDSTONE:
+                        if (RedEffect.INSTANCE.get(uuid)) {
+                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                            meta.setDisplayName("§aRed Effect §7(§aENABLED§7)");
+                            break;
+                        }
+
+                        meta.removeEnchant(Enchantment.DURABILITY);
+                        meta.setDisplayName("§cRed Effect §7(§cDISABLED§7)");
                         break;
 //                    case PAPER:
 //
