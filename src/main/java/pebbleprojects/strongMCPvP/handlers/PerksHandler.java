@@ -186,7 +186,7 @@ public final class PerksHandler {
             final Player player = event.getPlayer();
             final UUID uuid = player.getUniqueId();
 
-            final int[] data = event.getGUI().getData();
+            final short[] data = event.getGUI().getData();
             if (data == null || data.length == 0) {
                 return;
             }
@@ -201,7 +201,7 @@ public final class PerksHandler {
             final ItemStack itemStack = event.getClickedItem();
             final ItemMeta itemMeta = itemStack.getItemMeta();
 
-            if (itemMeta.getLore().size() < 3) return;
+            if (itemMeta == null || itemMeta.getLore() == null || itemMeta.getLore().size() < 3) return;
 
             final String s = itemMeta.getLore().get(2);
             final int perkId = slotIds.get(event.getSlot());
@@ -296,7 +296,7 @@ public final class PerksHandler {
             }
         }
 
-        gui.setData(new int[]{perkSlotId});
+        gui.setData(new short[]{(short) perkSlotId});
         return gui;
     }
 

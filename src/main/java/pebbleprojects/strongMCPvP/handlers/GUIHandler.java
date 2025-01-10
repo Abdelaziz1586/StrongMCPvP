@@ -26,7 +26,7 @@ public final class GUIHandler {
         guis = new ArrayList<>();
     }
 
-    public GUI createGUI(final Inventory inventory, final Consumer<GUIClick> clickEventConsumer, final int... data) {
+    public GUI createGUI(final Inventory inventory, final Consumer<GUIClick> clickEventConsumer, final short... data) {
         final GUI gui = new GUI(inventory, clickEventConsumer, data);
 
         guis.add(gui);

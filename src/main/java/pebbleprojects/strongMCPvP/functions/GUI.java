@@ -16,23 +16,23 @@ import java.util.function.Consumer;
 
 public final class GUI implements Cloneable {
 
-    private int[] data;
+    private short[] data;
     private Inventory inventory;
     private ContainerWorkbench workbench;
     private final Consumer<GUIClick> clickEventConsumer;
 
-    public GUI(final Inventory inventory, final Consumer<GUIClick> clickEventConsumer, final int[] data) {
+    public GUI(final Inventory inventory, final Consumer<GUIClick> clickEventConsumer, final short[] data) {
         workbench = null;
         this.data = data;
         this.inventory = inventory;
         this.clickEventConsumer = clickEventConsumer;
     }
 
-    public void setData(final int[] data) {
+    public void setData(final short[] data) {
         this.data = data;
     }
 
-    public int[] getData() {
+    public short[] getData() {
         return data;
     }
 
