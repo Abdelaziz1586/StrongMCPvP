@@ -1,0 +1,44 @@
+############################################################
+# +------------------------------------------------------+ #
+# |            PvP v1.0 - Configuration file             | #
+# |                  by Pebble Projects                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+############################################################
+# +------------------------------------------------------+ #
+# |                MySQL Database Settings               | #
+# +------------------------------------------------------+ #
+############################################################
+database:
+  enabled: false
+  host: localhost
+  port: 3306
+  database: vampiresmc
+  username: your_mysql_username
+  password: your_mysql_password
+
+############################################################
+# +------------------------------------------------------+ #
+# |                  Gameplay Settings                   | #
+# +------------------------------------------------------+ #
+############################################################
+gameplay:
+  fix-delay: 10 # In seconds
+  combat-log: 30 # In seconds
+
+  points:
+    kill: 20
+    assist: 10
+    divide-fairly: true # If 'true', 'assist' value will be ignored and will be divided according to 'kill' value
+
+  souls:
+    kill: 1
+    assist: 0
+    divide-fairly: false # If 'true', 'assist' value will be ignored and will be divided according to 'kill' value
+
+  kill-streaks:
+    every: 5 # Set to 0 to disable. If disabled, all options below will be disabled.
+    extra-souls: 0 # Set to 0 to disable
+    extra-points: 0 # Set to 0 to disable
+    soul-bounty-increase: 10 # Set to 0 to disable

@@ -1,0 +1,10 @@
+id: 0
+price: 300
+material: "ARROW"
+name: "&b&lEndless Quiver"
+lore:
+  - "&7Get &f3 arrows &7on arrow hit"
+
+damage:
+  if type=ARROW AND selfHit=false:
+    give: attacker,ARROW,3,&7Arrow

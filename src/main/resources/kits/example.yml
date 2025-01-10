@@ -1,0 +1,124 @@
+# 1.8 Material list -> https://helpch.at/docs/1.8/org/bukkit/Material.html
+# 1.13+ Material list -> https://helpch.at/docs/1.13/org/bukkit/Material.html
+
+# Enchantments list -> https://helpch.at/docs/1.8/index.html?org/bukkit/enchantments/Enchantment.html
+
+priority: 0 # Setting priority to 0 means it has the lowest priority
+permission: pvp.example # Set to nothing to disable
+
+items:
+  0:
+    material: STONE_SWORD
+    name: "&7Stone Sword"
+    unbreakable: true
+    amount: 1
+    increase-amount-by-kill: -1 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
+    lore: []
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # 0 -> restore original durability, -1 -> disable increase
+    enchantments:
+      enabled: true
+      enchantments:
+        DAMAGE_ALL: 1
+  1:
+    material: FISHING_ROD
+    name: "&7Fishing Rod"
+    unbreakable: true
+    amount: 1
+    increase-amount-by-kill: -1 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
+    lore: []
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    enchantments:
+      enabled: true
+      enchantments:
+        DURABILITY: 3
+  2:
+    material: BOW
+    name: "&7Bow"
+    unbreakable: true
+    amount: 1
+    increase-amount-by-kill: -1 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: true
+      enchantments:
+        ARROW_DAMAGE: 1
+  3:
+    material: FLINT_AND_STEEL
+    name: "&7Flint and Steel"
+    unbreakable: false
+    amount: 1
+    increase-amount-by-kill: -1 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
+    durability: 64 # Example for 1 hit flint and steel
+    increase-durability-by-kill: 1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: false
+      enchantments:
+        ARROW_DAMAGE: 1
+  8:
+    material: ARROW
+    name: "&7Arrow"
+    unbreakable: false
+    amount: 64
+    increase-amount-by-kill: 0 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
+    durability: -1 # Example for 1 hit flint and steel
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: false
+      enchantments:
+        ARROW_DAMAGE: 1
+
+armor:
+  helmet:
+    material: IRON_HELMET
+    name: "&7"
+    unbreakable: true
+    amount: 1
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: true
+      enchantments:
+        PROTECTION_ENVIRONMENTAL: 1
+  chestplate:
+    material: IRON_CHESTPLATE
+    name: "&7"
+    unbreakable: true
+    amount: 1
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: true
+      enchantments:
+        PROTECTION_ENVIRONMENTAL: 2
+  leggings:
+    material: IRON_LEGGINGS
+    name: "&7"
+    unbreakable: true
+    amount: 1
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: true
+      enchantments:
+        PROTECTION_ENVIRONMENTAL: 1
+  boots:
+    material: IRON_BOOTS
+    name: "&7"
+    unbreakable: true
+    amount: 1
+    durability: -1 # -1 for max possible durability
+    increase-durability-by-kill: -1 # -1 to disable
+    lore: []
+    enchantments:
+      enabled: true
+      enchantments:
+        PROTECTION_ENVIRONMENTAL: 1

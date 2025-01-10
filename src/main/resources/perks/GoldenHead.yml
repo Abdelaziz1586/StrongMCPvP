@@ -1,0 +1,32 @@
+id: 1
+price: 300
+material: "[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=]"
+name: "&6&lGolden Head"
+lore:
+  - "&7Earn &6Golden Heads &7on kill."
+
+variables:
+  msg1: "&aYou may now use the &6Golden Head"
+  msg2: "&6Golden Head &ccooldown, please wait!"
+
+kill:
+  give: player,[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=],1,&6&lGolden Head
+
+spawn:
+  give: player,[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=],5,&6&lGolden Head
+
+click:
+  if click=RIGHT_CLICK AND item=SKULL_ITEM:
+    cancel-event: true
+    if [GoldenHeadDelay::player]=null:
+      addEffect:
+        - player,REGENERATION,5,2,false
+        - player,SPEED,5,1,false
+      removeItem: player,SKULL_ITEM,&6&lGolden Head
+      playSoundGlobally: player,BURP,1,1
+      setVariable: '[GoldenHeadDelay::player],player'
+      wait 5 seconds:
+        setVariable: '[GoldenHeadDelay::player],null'
+        message: player,msg1
+    else:
+      message: player,msg2

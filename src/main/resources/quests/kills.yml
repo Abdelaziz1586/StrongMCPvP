@@ -1,0 +1,21 @@
+name: "Kills"
+description: "Kill 5 Players"
+rewards:
+  souls: 0
+  points: 10
+
+initial-counter: 0 # Counter can't be less than 0
+reward-counter: 5 # Max counter; once reached, reward is given
+
+events:
+  increment-counter:
+    - kill
+  decrement-counter: []
+  reset-counter:
+    - death
+
+# 'every' key refers to when should the quest be available ((IN SECONDS)) for the player.
+# If 'every' key is 0, it will make the quest available 1 time.
+# If 'every' key is -1, it will make the quest available at all times.
+# Otherwise, the quest will be given to the player every 'every' amount of seconds.
+every: 86400

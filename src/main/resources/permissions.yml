@@ -1,0 +1,46 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                 Permission Settings                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+reload: pvp.reload
+set-spawn: pvp.setspawn
+help-admin-commands: pvp.help.admin
+
+npc:
+  gui: pvp.npc.gui
+  shop:
+    create: pvp.npc.shop.create
+    remove: npc.shop.remove
+  perks:
+    create: pvp.npc.perks.create
+    remove: pvp.npc.perks.remove
+  trails:
+    create: pvp.npc.trails.create
+    remove: pvp.npc.trails.remove
+  settings:
+    create: pvp.npc.settings.create
+    remove: pvp.npc.settings.remove
+
+projectile-trails:
+  all: pvp.trails.*
+  angry: pvp.trails.angry
+  smoke: pvp.trails.smoke
+  firework: pvp.trails.firework
+  lava: pvp.trails.lava
+  flame: pvp.trails.flame
+  snow: pvp.trails.snow
+  snowball: pvp.trails.snowball
+  cloud: pvp.trails.cloud
+  happy: pvp.trails.happy
+  slime: pvp.trails.slime
+  water: pvp.trails.water
+  town-aura: pvp.trails.town-aura
+  enchant: pvp.trails.enchant
+  ice: pvp.trails.ice
+  portal: pvp.trails.portal
+  note: pvp.trails.note
+  magic: pvp.trails.magic
+  spell: pvp.trails.spell
+  bubbles: pvp.trails.bubbles

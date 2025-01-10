@@ -1,0 +1,17 @@
+name: StrongMCPvP
+version: '1.0-SNAPSHOT'
+main: pebbleprojects.strongMCPvP.PvP
+api-version: 1.8
+authors: [Abdelaziz]
+description: PvP Plugin for StrongMC
+commands:
+  help:
+    description: Help command for PvP
+  npc:
+    description: Main command for PvP's NPCs
+  setspawn:
+    description: Set spawn command for PvP
+  fix:
+    description: Fix command for PvP
+  settings:
+    description: Settings command for PvP

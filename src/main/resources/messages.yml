@@ -1,0 +1,996 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                  Messages Settings                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Leave whatever message you would like to disable blank/empty
+
+prefix: "&7┃ &e&lPVP &r&7┃"
+
+set-spawn:
+  success:
+    chat: "%prefix% &aSuccessfully set spawn to your current location"
+    actionbar: "&eSpawn Set"
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  no-permission:
+    chat: "%prefix% &cYou don't have permission to use this command"
+    actionbar: "&cNo permission"
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+
+fix:
+  success:
+    chat: "%prefix% &aSuccessfully fixed your position packets"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  failed:
+    delay:
+      chat: "%prefix% &cPlease wait before executing this command again"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    combat-log:
+      chat: "%prefix% &cYou're currently in combat log!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+reload:
+  reloading:
+    chat: "%prefix% &eReloading all configs..."
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  success:
+    chat: "%prefix% &aSuccessfully reloaded all configs"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  already-reloading:
+    chat: "%prefix% &ePlease wait until the previous reload finishes!"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  no-permission:
+    chat: "%prefix% &cYou don't have permission to use this command"
+    actionbar: "&cNo permission"
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+
+# Leave any field empty to disable, leave chat, actionbar, title, and subtitle empty to disable the whole message
+gameplay:
+  kill:
+    self:
+      chat: "%prefix% &aYou have killed &e%victim% &6&l+%points% Points &b&l+%souls% Souls"
+      actionbar: "&6&l+%points% Points &b&l+%souls% Souls"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    broadcast:
+      chat: "%prefix% &e%victim% &cgot killed by &e%attacker%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  assist:
+    chat: "%prefix% &aYou have got share of assisting killing &e%victim% &6&l+%points% Points &b&l+%souls% Souls"
+    actionbar: "&6&l+%points% Points &b&l+%souls% Souls"
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  kill-streak:
+    self:
+      chat: ""
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    broadcast:
+      chat: "%prefix% &e%attacker% &chas a kill streak of &e%killStreak%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  combat-log:
+    start:
+      chat: "%prefix% &cYou're in combat log for &e%combatLog% &cseconds. Don't leave!"
+      actionbar: "&cYou're in combat log!"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    end:
+      chat: "%prefix% &aYou're no longer in combat log, you may leave if you want."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  bounty:
+    increase:
+      self:
+        chat: ""
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      broadcast:
+        chat: "%prefix% &e%attacker% &chas a bounty of &e%bounty%&c. Whoever kills them gets it!"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+    taken:
+      self:
+        chat: "%prefix% &e%attacker% &chas killed you and took &e%bounty% &cworth of bounty!"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      broadcast:
+        chat: "%prefix% &e%attacker% &ahas claimed a bounty of &e%bounty% &afrom killing &e%victim%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+  death:
+    attacked:
+      chat: "%prefix% &cYou have been killed by &e%attacker%"
+      actionbar: "&c&lYOU HAVE DIED!"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    random-death:
+      self:
+        chat: "%prefix% &cYou have died!"
+        actionbar: "&c&lYOU HAVE DIED!"
+        title-screen:
+          title: "&c&lYOU DIED"
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      broadcast:
+        chat: "&7[&e⚔&7] &e%victim% &cdied!"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+
+trails:
+  equip:
+    chat: "%prefix% &aEquipped %trail%"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  un-equip:
+    chat: "%prefix% &cUnequipped %trail%"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  buy:
+    success:
+      chat: "%prefix% &aSuccessfully purchased %trail%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    failed:
+      chat: "%prefix% &cYou don't have enough souls to buy that!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+perks:
+  slots:
+    buy:
+      success:
+        chat: "%prefix% &aSuccessfully purchased perk slot %perkSlot%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        no-enough-souls:
+          chat: "%prefix% &cYou don't have enough Souls!"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou need to have %rankName% &crank to unlock this slot"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  perk:
+    buy:
+      success:
+        chat: "%prefix% &aSuccessfully purchased perk %perk%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      no-enough-souls:
+        chat: "%prefix% &cYou don't have enough Souls to buy this perk!"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+    equip:
+      chat: "%prefix% &aSuccessfully equipped perk %perk% &aon slot &e%perkSlot%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    unequip:
+      chat: "%prefix% &aSuccessfully unequipped perk %perk% &afrom slot &e%perkSlot%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+settings:
+  scramble:
+    enable:
+      chat: "%prefix% &aYour rank is now scrambled."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &cYour rank is no longer scrambled."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  time:
+    success:
+      chat: "%prefix% &aYour time was changed to &6%time%&a!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    failed:
+      chat: "%prefix% &cCooldown, please wait!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  quest-reminder:
+    enabled:
+      chat: "%prefix% &aYou will now be reminded."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disabled:
+      chat: "%prefix% &cYou will no longer be reminded."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  quest-alerts:
+    enabled:
+      chat: "%prefix% &aYou will now be alerted."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disabled:
+      chat: "%prefix% &cYou will no longer be alerted."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+npc:
+  others:
+    invalid-arguments:
+      chat: "%prefix% &c/npc create (shop/perks/trails) [name] [skin name]\n%prefix% &c/npc remove [(shop/perks/trails) (id)]]"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    command-no-permission:
+      chat: "%prefix% &cYou don't have permission to use this command"
+      actionbar: "&cNo permission"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    not-looking-at-npc:
+      chat: "%prefix% &cYou aren't looking at an NPC to remove!"
+      actionbar: "Either look at an NPC and execute the command"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  shop:
+    create:
+      requests:
+        name:
+          chat: "%prefix% &eEnter the name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &eEnter the skin name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+      success:
+        name:
+          chat: "%prefix% &aSuccessfully changed name of new Shop NPC to &r%name%."
+          actionbar: "&eSuccessfully changed name of Shop NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &aSuccessfully changed skin name of new Shop NPC to &r%skinName%."
+          actionbar: "&eSuccessfully changed skin name of Shop NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        creation:
+          creating:
+            chat: "%prefix% &aCreating Shop NPC at your current position..."
+            actionbar: "&eProcessing packets..."
+            title-screen:
+              title: ""
+              subtitle: "&bFeel free to move while this process is complete"
+              fadeIn: 0
+              stay: 1
+              fadeOut: 0
+          created:
+            chat: "%prefix% &aCreated Shop NPC at your location."
+            actionbar: "&eSuccessfully create Shop NPC"
+            title-screen:
+              title: ""
+              subtitle: "&eShop NPC &acreated at your current position"
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+      failed:
+        name:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cName length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        skinName:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC skin name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cSkin name length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aSuccessfully removed Shop NPC with ID of &e%id%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        invalid-id:
+          chat: "%prefix% &cThere is no NPC with such an ID!"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  perks:
+    create:
+      requests:
+        name:
+          chat: "%prefix% &eEnter the name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &eEnter the skin name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+      success:
+        name:
+          chat: "%prefix% &aSuccessfully changed name of new PerksNPC to &r%name%."
+          actionbar: "&eSuccessfully changed name of Perks NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          name:
+            chat: "%prefix% &aSuccessfully changed skin name of new Perks NPC to &r%skinName%."
+            actionbar: "&eSuccessfully changed skin name of Perks NPC"
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        creation:
+          creating:
+            chat: "%prefix% &aCreating Perks NPC at your current position..."
+            actionbar: "&eProcessing packets..."
+            title-screen:
+              title: ""
+              subtitle: "&bFeel free to move while this process is complete"
+              fadeIn: 0
+              stay: 1
+              fadeOut: 0
+          created:
+            chat: "%prefix% &aCreated Perks NPC at your location."
+            actionbar: "&eSuccessfully create Perks NPC"
+            title-screen:
+              title: ""
+              subtitle: "&dPerks NPC &acreated at your current position"
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+      failed:
+        name:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cName length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        skinName:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC skin name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cSkin name length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aSuccessfully removed Perks NPC with ID of &e%id%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        invalid-id:
+          chat: "%prefix% &cThere is no NPC with such an ID!"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  trails:
+    create:
+      requests:
+        name:
+          chat: "%prefix% &eEnter the name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &eEnter the skin name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+      success:
+        name:
+          chat: "%prefix% &aSuccessfully changed name of new Trails NPC to &r%name%."
+          actionbar: "&eSuccessfully changed name of Trails NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &aSuccessfully changed skin name of new Trails NPC to &r%skinName%."
+          actionbar: "&eSuccessfully changed skin name of Trails NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        creation:
+          creating:
+            chat: "%prefix% &aCreating Trails NPC at your current position..."
+            actionbar: "&eProcessing packets..."
+            title-screen:
+              title: ""
+              subtitle: "&bFeel free to move while this process is complete"
+              fadeIn: 0
+              stay: 1
+              fadeOut: 0
+          created:
+            chat: "%prefix% &aCreated Trails NPC at your location."
+            actionbar: "&eSuccessfully create Trails NPC"
+            title-screen:
+              title: ""
+              subtitle: "&6Trails NPC &acreated at your current position"
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+      failed:
+        name:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cName length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        skinName:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC skin name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cSkin name length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aSuccessfully removed Trails NPC with ID of &e%id%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        invalid-id:
+          chat: "%prefix% &cThere is no NPC with such an ID!"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  settings:
+    create:
+      requests:
+        name:
+          chat: "%prefix% &eEnter the name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &eEnter the skin name that you want the NPC to change to in the chat."
+          actionbar: "&eYou've 10 seconds to complete this request"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+      success:
+        name:
+          chat: "%prefix% &aSuccessfully changed name of new Settings NPC to &r%name%."
+          actionbar: "&eSuccessfully changed name of Settings NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        skinName:
+          chat: "%prefix% &aSuccessfully changed skin name of new Settings NPC to &r%skinName%."
+          actionbar: "&eSuccessfully changed skin name of Settings NPC"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        creation:
+          creating:
+            chat: "%prefix% &aCreating Settings NPC at your current position..."
+            actionbar: "&eProcessing packets..."
+            title-screen:
+              title: ""
+              subtitle: "&bFeel free to move while this process is complete"
+              fadeIn: 0
+              stay: 1
+              fadeOut: 0
+          created:
+            chat: "%prefix% &aCreated Settings NPC at your location."
+            actionbar: "&eSuccessfully create Settings NPC"
+            title-screen:
+              title: ""
+              subtitle: "&eSettings NPC &acreated at your current position"
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+      failed:
+        name:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cName length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        skinName:
+          timeout:
+            chat: "%prefix% &cYou have requested to change the NPC skin name, yet no response in 10 seconds. NPC creation stopped"
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+          invalid-length:
+            chat: "%prefix% &cSkin name length must be between 3 and 16 inclusive."
+            actionbar: ""
+            title-screen:
+              title: ""
+              subtitle: ""
+              fadeIn: 1
+              stay: 3
+              fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aSuccessfully removed Settings NPC with ID of &e%id%"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        invalid-id:
+          chat: "%prefix% &cThere is no NPC with such an ID!"
+          actionbar: ""
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1

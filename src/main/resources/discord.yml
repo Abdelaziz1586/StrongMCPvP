@@ -1,0 +1,182 @@
+#############################################################
+# +-------------------------------------------------------+ #
+# |               Discord Bot Configuration               | #
+# +-------------------------------------------------------+ #
+#############################################################
+enabled: false
+token: BOT_TOKEN_HERE
+
+commands:
+  profile:
+    private: true
+    thinking: false
+    success:
+      text-message:
+        enabled: false
+        text: "# %query%\n- %kills% Kills\n- %deaths% Deaths\n- %souls% Souls\n- %points% Points\n- %assists% Assists"
+      embed:
+        enabled: true
+        author:
+          enabled: false
+          text: "VampiresMC PvP"
+          url:
+            enabled: false
+            url: ""
+          icon:
+            enabled: false
+            url: ""
+        title:
+          enabled: true
+          text: "%query%'s Profile"
+          url:
+            enabled: false
+            url: ""
+        description:
+          enabled: false
+          text: "Info about player %query%"
+        color:
+          # If random is enabled, other options will be ignored
+          random: false
+          # If common-color is enabled, rgb-color option will be ignored
+          # Common color will pick the most common color in the player's skin and put it as the embed color.
+          common-color: true
+          rgb-color: 119, 128, 139
+        fields:
+          enabled: true
+          embed-fields:
+            1:
+              name: "Kills"
+              value: "%kills%"
+              inline: true
+            2:
+              name: "Deaths"
+              value: "%deaths%"
+              inline: true
+            3:
+              name: "Souls"
+              value: "%souls%"
+              inline: true
+            4:
+              name: "Points"
+              value: "%points%"
+              inline: true
+            5:
+              name: "Assists"
+              value: "%assists%"
+              inline: true
+        timestamp: true
+        footer:
+          enabled: true
+          text: "Made with <3 by VampiresMC Devs"
+          icon:
+            enabled: false
+            url: "https://mc-heads.net/avatar/%uuid%/"
+        image:
+          enabled: false
+          url: "https://visage.surgeplay.com/bust/256/%uuid%"
+        thumbnail:
+          enabled: true
+          url: "https://visage.surgeplay.com/bust/256/%uuid%"
+    failed:
+      not-found:
+        text-message:
+          enabled: false
+          text: "Failed to fetch data of %query%"
+        embed:
+          enabled: true
+          author:
+            enabled: false
+            text: "VampiresMC PvP"
+            url:
+              enabled: false
+              url: ""
+            icon:
+              enabled: false
+              url: ""
+          title:
+            enabled: true
+            text: "Failed to fetch %query%'s profile"
+            url:
+              enabled: false
+              url: ""
+          description:
+            enabled: false
+            text: "```NotFound!```"
+          color:
+            # If random is enabled, other options will be ignored
+            random: false
+            # If common-color is enabled, rgb-color option will be ignored
+            # Common color will pick the most common color in the player's skin and put it as the embed color.
+            common-color: false
+            rgb-color: 255, 0, 0
+          fields:
+            enabled: true
+            embed-fields:
+              1:
+                name: "Query"
+                value: "%query%"
+                inline: true
+          timestamp: true
+          footer:
+            enabled: true
+            text: "Made with <3 by VampiresMC Devs"
+            icon:
+              enabled: false
+              url: "https://mc-heads.net/avatar/%uuid%/"
+          image:
+            enabled: false
+            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+          thumbnail:
+            enabled: true
+            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+      error:
+        text-message:
+          enabled: false
+          text: "Failed to fetch data of %query%. Error: %error%"
+        embed:
+          enabled: true
+          author:
+            enabled: false
+            text: "VampiresMC PvP"
+            url:
+              enabled: false
+              url: ""
+            icon:
+              enabled: false
+              url: ""
+          title:
+            enabled: true
+            text: "Failed to fetch %query%'s profile"
+            url:
+              enabled: false
+              url: ""
+          description:
+            enabled: true
+            text: "```%error%```"
+          color:
+            # If random is enabled, other options will be ignored
+            random: false
+            # If common-color is enabled, rgb-color option will be ignored
+            # Common color will pick the most common color in the player's skin and put it as the embed color.
+            common-color: false
+            rgb-color: 255, 0, 0
+          fields:
+            enabled: true
+            embed-fields:
+              1:
+                name: "Query"
+                value: "%query%"
+                inline: true
+          timestamp: true
+          footer:
+            enabled: true
+            text: "Made with <3 by VampiresMC Devs"
+            icon:
+              enabled: false
+              url: "https://mc-heads.net/avatar/%uuid%/"
+          image:
+            enabled: false
+            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+          thumbnail:
+            enabled: true
+            url: "https://visage.surgeplay.com/bust/256/%uuid%"

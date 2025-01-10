@@ -1,0 +1,70 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                Shop Configuration File               | #
+# +------------------------------------------------------+ #
+############################################################
+npc:
+  defaultName: "&e&lShop"
+  defaultSkinName: "HoneySalted"
+
+guiName: "&e&lPvP Shop"
+
+perk-slots:
+  1:
+    free: true
+    price: 0
+    rank: # Will be ignored either "free" key is true or "price" key is greater than 0
+      name: "&7Member"
+      permission: strongmc.member
+  2:
+    free: false
+    price: 300 # Will be ignored if "free" key is true
+    rank: # Will be ignored either "free" key is true or "price" key is greater than 0
+      name: "&7Member"
+      permission: strongmc.member
+  3:
+    free: false
+    price: 300 # Will be ignored if "free" key is true
+    rank: # Will be ignored either "free" key is true or "price" key is greater than 0
+      name: "&7Member"
+      permission: strongmc.member
+  4:
+    free: false
+    price: 0 # Will be ignored if "free" key is true
+    rank: # Will be ignored either "free" key is true or "price" key is greater than 0
+      name: "&bMVP&c+"
+      permission: strongmc.mvp
+
+items:
+  diamond_sword:
+    canBuyMultipleOf: false
+    amount: 1
+    price: 300
+    queryName: "&b&lDiamond Sword"
+    gui:
+      name: "&b&lDiamond Sword"
+      lore:
+        - "&7Left click: buy"
+        - "&7Price: &e300"
+    item:
+      name: "&b&lDiamond Sword"
+      lore:
+        enabled: false
+        lore:
+          - "&1Deals +7 damage"
+  diamond_leggings:
+    canBuyMultipleOf: false
+    amount: 1
+    price: 700
+    queryName: "&b&lDiamond Leggings"
+    gui:
+      name: "&b&lDiamond Leggings"
+      lore:
+        - "&7Left click: buy"
+        - "&7Price: &e700"
+    item:
+      name: "&7"
+      lore:
+        enabled: false
+        lore:
+          - "&1Leggings armor"

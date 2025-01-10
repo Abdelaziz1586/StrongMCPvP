@@ -1,0 +1,113 @@
+package pebbleprojects.strongMCPvP.databaseData;
+
+import pebbleprojects.strongMCPvP.handlers.DataHandler;
+import pebbleprojects.strongMCPvP.handlers.DatabaseHandler;
+import org.jetbrains.annotations.NotNull;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+public final class Points {
+
+    public static Points INSTANCE;
+    private final Map<UUID, Integer> points;
+    private final String SAVE, SELECT, SELECT_ALL;
+
+    public Points() {
+        INSTANCE = this;
+
+        points = new ConcurrentHashMap<>();
+
+        SAVE = "UPDATE PvP SET POINTS=? WHERE UUID=?";
+        SELECT = "SELECT POINTS FROM PvP WHERE UUID=?";
+        SELECT_ALL = "SELECT POINTS FROM PvP";
+    }
+
+    public void set(final @NotNull UUID uuid, final int amount) {
+        points.put(uuid, amount);
+    }
+
+    public void add(final @NotNull UUID uuid, final int amount) {
+        points.put(uuid, get(uuid) + amount);
+    }
+
+    public void remove(final @NotNull UUID uuid, final int amount) {
+        points.put(uuid, Math.max(get(uuid) - amount, 0));
+    }
+
+    public int get(final @NotNull UUID uuid) {
+        return points.getOrDefault(uuid, 0);
+    }
+
+    public int search(final @NotNull UUID uuid) throws SQLException {
+        if (points.containsKey(uuid)) return points.get(uuid);
+
+        if (DatabaseHandler.INSTANCE.getHikari() != null) {
+            try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
+                 final PreparedStatement selectAll = connection.prepareStatement(SELECT_ALL);
+                 final ResultSet resultSet = selectAll.executeQuery()) {
+
+                while (resultSet.next()) {
+                    if (UUID.fromString(resultSet.getString("UUID")).equals(uuid)) {
+                        final int i = resultSet.getInt("POINTS");
+                        points.put(uuid, i);
+                        return i;
+                    }
+                }
+            }
+        }
+
+        final int i = DataHandler.INSTANCE.getData().getInt("players." + uuid + ".points", -1);
+
+        if (i != -1) {
+            points.put(uuid, i);
+        }
+
+        return i;
+    }
+
+    public void load(final @NotNull UUID uuid) throws SQLException {
+        if (DatabaseHandler.INSTANCE.getHikari() != null) {
+            try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
+                 final PreparedStatement select = connection.prepareStatement(SELECT)) {
+                select.setString(1, uuid.toString());
+                final ResultSet result = select.executeQuery();
+
+                if (result.next()) {
+                    points.put(uuid, result.getInt("POINTS"));
+                    return;
+                }
+
+                points.put(uuid, 0);
+            }
+
+            return;
+        }
+
+        points.put(uuid, DataHandler.INSTANCE.getData().getInt("players." + uuid + ".points", 0));
+    }
+
+    public void save(final @NotNull UUID uuid) throws SQLException {
+        if (DatabaseHandler.INSTANCE.getHikari() != null) {
+            try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
+                 final PreparedStatement statement = connection.prepareStatement(SAVE)) {
+                statement.setInt(1, get(uuid));
+                statement.setString(2, uuid.toString());
+                statement.execute();
+
+                points.remove(uuid);
+            }
+
+            return;
+        }
+
+        DataHandler.INSTANCE.getData().set("players." + uuid + ".points", get(uuid));
+        DataHandler.INSTANCE.saveData();
+    }
+}
