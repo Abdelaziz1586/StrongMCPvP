@@ -55,11 +55,11 @@ public final class ProfileHandler {
         messages.add(new TextMessage(DiscordHandler.INSTANCE.getDiscord().getSection("commands.profile.failed.error")));
     }
 
-    public Profile getProfile(String query) {
-        query = query.toLowerCase();
+    public Profile getProfile(final String query) {
+        final String lowercaseQuery = query.toLowerCase();
 
-        if (profiles.containsKey(query)) {
-            return profiles.get(query);
+        if (profiles.containsKey(lowercaseQuery)) {
+            return profiles.get(lowercaseQuery);
         }
 
         final Profile profile = new Profile(query);

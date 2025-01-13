@@ -14,7 +14,7 @@ database:
   enabled: false
   host: localhost
   port: 3306
-  database: vampiresmc
+  database: strongmc
   username: your_mysql_username
   password: your_mysql_password
 

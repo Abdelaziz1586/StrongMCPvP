@@ -72,9 +72,7 @@ public final class Souls {
 
         final int i = DataHandler.INSTANCE.getData().getInt("players." + uuid + ".souls", -1);
 
-        if (i != -1) {
-            souls.put(uuid, i);
-        }
+        if (i != -1) souls.put(uuid, i);
 
         return i;
     }

@@ -18,7 +18,7 @@ commands:
         enabled: true
         author:
           enabled: false
-          text: "VampiresMC PvP"
+          text: "StrongMC PvP"
           url:
             enabled: false
             url: ""
@@ -67,7 +67,7 @@ commands:
         timestamp: true
         footer:
           enabled: true
-          text: "Made with <3 by VampiresMC Devs"
+          text: "Made with <3 by StrongMC Devs"
           icon:
             enabled: false
             url: "https://mc-heads.net/avatar/%uuid%/"
@@ -86,7 +86,7 @@ commands:
           enabled: true
           author:
             enabled: false
-            text: "VampiresMC PvP"
+            text: "StrongMC PvP"
             url:
               enabled: false
               url: ""
@@ -119,7 +119,7 @@ commands:
           timestamp: true
           footer:
             enabled: true
-            text: "Made with <3 by VampiresMC Devs"
+            text: "Made with <3 by StrongMC Devs"
             icon:
               enabled: false
               url: "https://mc-heads.net/avatar/%uuid%/"
@@ -137,7 +137,7 @@ commands:
           enabled: true
           author:
             enabled: false
-            text: "VampiresMC PvP"
+            text: "StrongMC PvP"
             url:
               enabled: false
               url: ""
@@ -170,7 +170,7 @@ commands:
           timestamp: true
           footer:
             enabled: true
-            text: "Made with <3 by VampiresMC Devs"
+            text: "Made with <3 by StrongMC Devs"
             icon:
               enabled: false
               url: "https://mc-heads.net/avatar/%uuid%/"
