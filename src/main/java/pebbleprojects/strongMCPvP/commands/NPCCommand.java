@@ -55,7 +55,7 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
         }
 
         if (args.length == 2) {
-            return Stream.of("shop", "perks", "trails", "settings")
+            return Stream.of("shop", "quests", "trails", "settings")
                     .filter(s -> s.startsWith(args[1].toLowerCase()))
                     .collect(Collectors.toList());
         }
@@ -87,8 +87,8 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
             case "shop":
                 handleCreateShop(player, args);
                 break;
-            case "perks":
-                handleCreatePerks(player, args);
+            case "quests":
+                handleCreateQuests(player, args);
                 break;
             case "trails":
                 handleCreateTrails(player, args);
@@ -104,7 +104,7 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
 
     private boolean doesNotHaveCreatePermissions(final Player player) {
         return !PermissionsHandler.INSTANCE.hasPermission(player, "npc.shop.create") &&
-                !PermissionsHandler.INSTANCE.hasPermission(player, "npc.perks.create");
+                !PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.create");
     }
 
     private void handleCreateShop(final Player player, final String[] args) {
@@ -118,15 +118,15 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
         MessageHandler.INSTANCE.sendMessage(player, "npc.shop.create.success.creation.created", null);
     }
 
-    private void handleCreatePerks(final Player player, final String[] args) {
-        if (!PermissionsHandler.INSTANCE.hasPermission(player, "npc.perks.create")) {
-            MessageHandler.INSTANCE.sendMessage(player, "npc.perks.create.failed.no-permission", null);
+    private void handleCreateQuests(final Player player, final String[] args) {
+        if (!PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.create")) {
+            MessageHandler.INSTANCE.sendMessage(player, "npc.quests.create.failed.no-permission", null);
             return;
         }
 
-        MessageHandler.INSTANCE.sendMessage(player, "npc.perks.create.success.creation.creating", null);
+        MessageHandler.INSTANCE.sendMessage(player, "npc.quests.create.success.creation.creating", null);
         NPCHandler.INSTANCE.createNPC(player.getLocation(), args.length > 2 ? args[2] : null, args.length > 3 ? args[3] : null, 1);
-        MessageHandler.INSTANCE.sendMessage(player, "npc.perks.create.success.creation.created", null);
+        MessageHandler.INSTANCE.sendMessage(player, "npc.quests.create.success.creation.created", null);
     }
 
     private void handleCreateTrails(final Player player, final String[] args) {
@@ -166,8 +166,8 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
             case "shop":
                 handleRemoveShop(player, args);
                 break;
-            case "perks":
-                handleRemovePerks(player, args);
+            case "quests":
+                handleRemoveQuests(player, args);
                 break;
             case "trails":
                 handleRemoveTrails(player, args);
@@ -199,21 +199,21 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
         }
     }
 
-    private void handleRemovePerks(final Player player, final String[] args) {
-        if (!PermissionsHandler.INSTANCE.hasPermission(player, "npc.perks.create")) {
-            MessageHandler.INSTANCE.sendMessage(player, "npc.perks.create.failed.no-permission", null);
+    private void handleRemoveQuests(final Player player, final String[] args) {
+        if (!PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.create")) {
+            MessageHandler.INSTANCE.sendMessage(player, "npc.quests.create.failed.no-permission", null);
             return;
         }
 
         try {
-            if (NPCHandler.INSTANCE.removePerksNPC(Integer.parseInt(args[2]))) {
-                MessageHandler.INSTANCE.sendMessage(player, "npc.perks.remove.success", new String[]{"id," + args[2]});
+            if (NPCHandler.INSTANCE.removeQuestsNPC(Integer.parseInt(args[2]))) {
+                MessageHandler.INSTANCE.sendMessage(player, "npc.quests.remove.success", new String[]{"id," + args[2]});
                 return;
             }
 
-            MessageHandler.INSTANCE.sendMessage(player, "npc.perks.remove.failed.invalid-id", null);
+            MessageHandler.INSTANCE.sendMessage(player, "npc.quests.remove.failed.invalid-id", null);
         } catch (final NumberFormatException ignored) {
-            MessageHandler.INSTANCE.sendMessage(player, "npc.perks.remove.failed.invalid-id", null);
+            MessageHandler.INSTANCE.sendMessage(player, "npc.quests.remove.failed.invalid-id", null);
         }
     }
 

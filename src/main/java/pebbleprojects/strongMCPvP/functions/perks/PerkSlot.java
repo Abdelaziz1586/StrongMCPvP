@@ -1,4 +1,4 @@
-package pebbleprojects.strongMCPvP.functions;
+package pebbleprojects.strongMCPvP.functions.perks;
 
 public final class PerkSlot {
 

@@ -58,6 +58,26 @@ fix:
         stay: 3
         fadeOut: 1
 
+quests:
+  reminder:
+    chat: "%prefix% &eYou have an unfinished quest %quest%!"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  completion:
+    chat: "%prefix% &aYou have successfully finished quest &e%quest% &aand earned &6&l+%points% Points &b&l+%souls% Souls"
+    actionbar: "&bQuest completed!"
+    title-screen:
+      title: "&aQuest Completed!"
+      subtitle: "&eFinished &b%quest%&e!"
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+
 reload:
   reloading:
     chat: "%prefix% &eReloading all configs..."
@@ -381,6 +401,44 @@ settings:
         fadeIn: 1
         stay: 3
         fadeOut: 1
+  questReminder:
+    enable:
+      chat: "%prefix% &aYou have enabled &6Quest Reminder&a."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &cYou have disabled &6Quest Reminder&c."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  questCompletion:
+    enable:
+      chat: "%prefix% &aYou have enabled &6Quest Completion&a."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &cYou have disabled &6Quest Completion&c."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
   time:
     success:
       chat: "%prefix% &aYour time was changed to &6%time%&a!"
@@ -604,7 +662,7 @@ npc:
             fadeIn: 1
             stay: 3
             fadeOut: 1
-  perks:
+  quests:
     create:
       requests:
         name:
@@ -627,8 +685,8 @@ npc:
             fadeOut: 1
       success:
         name:
-          chat: "%prefix% &aSuccessfully changed name of new PerksNPC to &r%name%."
-          actionbar: "&eSuccessfully changed name of Perks NPC"
+          chat: "%prefix% &aSuccessfully changed name of new QuestsNPC to &r%name%."
+          actionbar: "&eSuccessfully changed name of Quests NPC"
           title-screen:
             title: ""
             subtitle: ""
@@ -637,8 +695,8 @@ npc:
             fadeOut: 1
         skinName:
           name:
-            chat: "%prefix% &aSuccessfully changed skin name of new Perks NPC to &r%skinName%."
-            actionbar: "&eSuccessfully changed skin name of Perks NPC"
+            chat: "%prefix% &aSuccessfully changed skin name of new Quests NPC to &r%skinName%."
+            actionbar: "&eSuccessfully changed skin name of Quests NPC"
             title-screen:
               title: ""
               subtitle: ""
@@ -647,7 +705,7 @@ npc:
               fadeOut: 1
         creation:
           creating:
-            chat: "%prefix% &aCreating Perks NPC at your current position..."
+            chat: "%prefix% &aCreating Quests NPC at your current position..."
             actionbar: "&eProcessing packets..."
             title-screen:
               title: ""
@@ -656,11 +714,11 @@ npc:
               stay: 1
               fadeOut: 0
           created:
-            chat: "%prefix% &aCreated Perks NPC at your location."
+            chat: "%prefix% &aCreated Quests NPC at your location."
             actionbar: "&eSuccessfully create Perks NPC"
             title-screen:
               title: ""
-              subtitle: "&dPerks NPC &acreated at your current position"
+              subtitle: "&bQuests NPC &acreated at your current position"
               fadeIn: 1
               stay: 3
               fadeOut: 1
@@ -714,7 +772,7 @@ npc:
             fadeOut: 1
     remove:
       success:
-        chat: "%prefix% &aSuccessfully removed Perks NPC with ID of &e%id%"
+        chat: "%prefix% &aSuccessfully removed Quests NPC with ID of &e%id%"
         actionbar: ""
         title-screen:
           title: ""

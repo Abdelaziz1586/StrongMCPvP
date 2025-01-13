@@ -44,12 +44,15 @@ public final class EntityDamage implements Listener {
                 if (event.getFinalDamage() > victim.getHealth()) {
                     event.setCancelled(true);
 
+                    if (attacker != victim)
+                        KillsHandler.INSTANCE.addHit(victim, attacker, true);
+
                     PerksHandler.INSTANCE.onPlayerDeath(victim, attacker);
-                    KillsHandler.INSTANCE.addHit(victim, attacker, true);
                     return;
                 }
 
-                KillsHandler.INSTANCE.addHit(victim, attacker, false);
+                if (attacker != victim)
+                    KillsHandler.INSTANCE.addHit(victim, attacker, false);
             }
         }
     }

@@ -56,9 +56,12 @@ public final class DataHandler {
         new KillsHandler();
         new PerksHandler();
         new TrailsHandler();
+
+
+        new QuestsHandler();
+        new DatabaseHandler();
         new MessageHandler();
         new SettingsHandler();
-        new DatabaseHandler();
         new CommandsHandler();
         new RedEffectHandler();
         new ListenersHandler();

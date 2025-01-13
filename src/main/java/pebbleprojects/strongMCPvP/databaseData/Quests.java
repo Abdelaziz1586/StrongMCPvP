@@ -1,9 +1,14 @@
 package pebbleprojects.strongMCPvP.databaseData;
 
 import com.google.common.reflect.TypeToken;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import pebbleprojects.strongMCPvP.functions.quests.PlayerQuests;
+import pebbleprojects.strongMCPvP.functions.quests.Quest;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 import pebbleprojects.strongMCPvP.handlers.DatabaseHandler;
+import pebbleprojects.strongMCPvP.handlers.QuestsHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +24,7 @@ public final class Quests {
 
     public static Quests INSTANCE;
     private final String SAVE, SELECT;
-    private final Map<UUID, List<Integer>> quests;
+    private final Map<UUID, PlayerQuests> quests;
 
     public Quests() {
         INSTANCE = this;
@@ -30,64 +35,105 @@ public final class Quests {
         SELECT = "SELECT QUESTS FROM PvP WHERE UUID=?";
     }
 
-    public void add(final @NotNull UUID uuid, final int questId) {
-        final List<Integer> quests = this.quests.getOrDefault(uuid, new ArrayList<>());
+    public void add(final @NotNull UUID uuid, final int questId, final long endTime) {
+        if (!quests.containsKey(uuid)) return;
 
-        if (quests.contains(questId)) return;
+        final PlayerQuests playerQuests = quests.get(uuid);
 
-        quests.add(questId);
+        playerQuests.addQuest(Bukkit.getPlayer(uuid), questId, System.currentTimeMillis(), endTime);
 
-        this.quests.put(uuid, quests);
+        quests.put(uuid, playerQuests);
     }
 
     public void remove(final @NotNull UUID uuid, final int questId) {
-        final List<Integer> quests = this.quests.getOrDefault(uuid, new ArrayList<>());
+        if (!quests.containsKey(uuid)) return;
 
-        if (!quests.contains(questId)) return;
+        final PlayerQuests playerQuests = quests.get(uuid);
 
-        quests.remove(questId);
+        playerQuests.removeQuest(questId);
 
-        this.quests.put(uuid, quests);
+        quests.put(uuid, playerQuests);
     }
 
-    public List<Integer> get(final @NotNull UUID uuid) {
-        return quests.getOrDefault(uuid, new ArrayList<>());
+    public PlayerQuests get(final @NotNull UUID uuid) {
+        return quests.get(uuid);
     }
 
     public void load(final @NotNull UUID uuid) throws SQLException {
+        final List<String> quests;
         if (DatabaseHandler.INSTANCE.getHikari() != null) {
             try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
                  final PreparedStatement select = connection.prepareStatement(SELECT)) {
                 select.setString(1, uuid.toString());
                 final ResultSet result = select.executeQuery();
 
-                if (result.next()) {
-                    quests.put(uuid, DatabaseHandler.INSTANCE.getGson().fromJson(result.getString("QUESTS"), new TypeToken<List<Integer>>(){}.getType()));
-                    return;
-                }
-
-                quests.put(uuid, new ArrayList<>());
+                quests = result.next() ? DatabaseHandler.INSTANCE.getGson().fromJson(result.getString("QUESTS"), new TypeToken<List<String>>(){}.getType()) : new ArrayList<>();
             }
-            return;
+        } else {
+            quests = DataHandler.INSTANCE.getData().getStringList("players." + uuid + ".quests");
         }
 
-        quests.put(uuid, DataHandler.INSTANCE.getData().getIntList("players." + uuid + ".quests"));
+        computeQuestsList(uuid, quests);
     }
 
     public void save(final @NotNull UUID uuid) throws SQLException {
         if (DatabaseHandler.INSTANCE.getHikari() != null) {
             try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
                  final PreparedStatement statement = connection.prepareStatement(SAVE)) {
-                statement.setString(1, DatabaseHandler.INSTANCE.getGson().toJson(get(uuid)));
+                final PlayerQuests playerQuests = get(uuid);
+
+                statement.setString(1, DatabaseHandler.INSTANCE.getGson().toJson(playerQuests.getQuests()));
                 statement.setString(2, uuid.toString());
                 statement.execute();
+
+                playerQuests.resetQuests();
 
                 quests.remove(uuid);
             }
             return;
         }
 
-        DataHandler.INSTANCE.getData().set("players." + uuid + ".quests", get(uuid));
+        final PlayerQuests playerQuests = get(uuid);
+
+        DataHandler.INSTANCE.getData().set("players." + uuid + ".quests", playerQuests.getQuests());
         DataHandler.INSTANCE.saveData();
+
+        playerQuests.resetQuests();
+
+        quests.remove(uuid);
+    }
+
+    private void computeQuestsList(final UUID uuid, final List<String> quests) {
+        final Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
+
+        final PlayerQuests playerQuests = new PlayerQuests(uuid);
+
+        final long now = System.currentTimeMillis();
+        for (final String data : quests) {
+            if (!data.contains(",")) continue;
+
+            final String[] split = data.split(",");
+            if (split.length != 3) continue;
+
+            try {
+                final int id = Integer.parseInt(split[0]);
+
+                final Quest quest = QuestsHandler.INSTANCE.getQuest(id);
+                if (quest == null) continue;
+
+                final long endTime = Long.parseLong(split[1]);
+                if (now >= endTime) continue;
+
+                final int currentCounter = Integer.parseInt(split[2]);
+                quest.setCounter(player, currentCounter);
+
+                playerQuests.addQuest(player, id, now, endTime);
+            } catch (final NumberFormatException ignored) {}
+        }
+
+        this.quests.put(uuid, playerQuests);
+
+        QuestsHandler.INSTANCE.setRandomQuests(player);
     }
 }

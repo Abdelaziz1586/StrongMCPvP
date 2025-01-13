@@ -3,4 +3,8 @@
 # |               Quests Configuration File              | #
 # +------------------------------------------------------+ #
 ############################################################
+npc:
+  defaultName: "&b&lQuests"
+  defaultSkinName: "HoneySalted"
+
 guiName: "&bQuests"

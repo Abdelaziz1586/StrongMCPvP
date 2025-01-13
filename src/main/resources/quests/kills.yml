@@ -1,11 +1,12 @@
+id: 0
 name: "Kills"
-description: "Kill 5 Players"
+description: "&7Kill 5 Players In a Row"
 rewards:
   souls: 0
   points: 10
 
 initial-counter: 0 # Counter can't be less than 0
-reward-counter: 5 # Max counter; once reached, reward is given
+reward-counter: 5 # Max counter; once reached, reward is given and the counter resets to 'initial-counter'
 
 events:
   increment-counter:

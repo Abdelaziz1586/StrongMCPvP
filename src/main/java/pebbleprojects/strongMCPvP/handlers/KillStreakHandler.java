@@ -1,7 +1,6 @@
 package pebbleprojects.strongMCPvP.handlers;
 
 import org.bukkit.entity.Player;
-import pebbleprojects.strongMCPvP.databaseData.Kills;
 import pebbleprojects.strongMCPvP.databaseData.Points;
 import pebbleprojects.strongMCPvP.databaseData.Souls;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
@@ -78,7 +77,7 @@ public final class KillStreakHandler {
         final String[] args = {
                 "victim," + victim.getDisplayName(),
                 "attacker," + attacker.getDisplayName(),
-                "killStreaks," + killStreaks.get(attackerId),
+                "killStreak," + killStreaks.get(attackerId),
                 "bounty," + bounty
         };
 

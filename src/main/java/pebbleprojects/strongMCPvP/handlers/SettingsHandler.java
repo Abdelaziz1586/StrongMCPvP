@@ -8,6 +8,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import pebbleprojects.strongMCPvP.databaseData.QuestCompletion;
+import pebbleprojects.strongMCPvP.databaseData.QuestReminder;
 import pebbleprojects.strongMCPvP.databaseData.RedEffect;
 import pebbleprojects.strongMCPvP.databaseData.Scramble;
 import pebbleprojects.strongMCPvP.functions.GUI;
@@ -56,7 +58,7 @@ public final class SettingsHandler {
         settingsGUI = GUIHandler.INSTANCE.createGUI(inventory, event -> {
             final ItemStack itemStack = event.getClickedItem();
 
-            if (itemStack == null || itemStack.getType() == Material.AIR || itemStack.getType() == Material.STAINED_GLASS_PANE)
+            if (itemStack == null || itemStack.getType() == Material.AIR)
                 return;
 
             final Player player = event.getPlayer();
@@ -83,6 +85,18 @@ public final class SettingsHandler {
                 case REDSTONE:
                     RedEffect.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
                     MessageHandler.INSTANCE.sendMessage(player, "settings.redEffect." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
+
+                    openGUI(player);
+                    break;
+                case PAPER:
+                    QuestReminder.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
+                    MessageHandler.INSTANCE.sendMessage(player, "settings.questReminder." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
+
+                    openGUI(player);
+                    break;
+                case BOOK:
+                    QuestCompletion.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
+                    MessageHandler.INSTANCE.sendMessage(player, "settings.questCompletion." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
 
                     openGUI(player);
                     break;
@@ -114,10 +128,10 @@ public final class SettingsHandler {
         if (!settingsGUIClones.containsKey(player.getUniqueId()))
             settingsGUIClones.put(player.getUniqueId(), GUIHandler.INSTANCE.cloneGUI(settingsGUI));
 
-        updateShopGUI(player).openGUI(player);
+        updateSettingsGUI(player).openGUI(player);
     }
 
-    private GUI updateShopGUI(final Player player) {
+    private GUI updateSettingsGUI(final Player player) {
         final UUID uuid = player.getUniqueId();
 
         final GUI gui = settingsGUIClones.get(uuid);
@@ -151,8 +165,26 @@ public final class SettingsHandler {
                         meta.removeEnchant(Enchantment.DURABILITY);
                         meta.setDisplayName("§cRed Effect §7(§cDISABLED§7)");
                         break;
-//                    case PAPER:
-//
+                    case PAPER:
+                        if (QuestReminder.INSTANCE.get(uuid)) {
+                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                            meta.setDisplayName("§aQuest Reminder §7(§aENABLED§7)");
+                            break;
+                        }
+
+                        meta.removeEnchant(Enchantment.DURABILITY);
+                        meta.setDisplayName("§cQuest Reminder §7(§cDISABLED§7)");
+                        break;
+                    case BOOK:
+                        if (QuestCompletion.INSTANCE.get(uuid)) {
+                            meta.addEnchant(Enchantment.DURABILITY, 1, true);
+                            meta.setDisplayName("§aQuest Completion §7(§aENABLED§7)");
+                            break;
+                        }
+
+                        meta.removeEnchant(Enchantment.DURABILITY);
+                        meta.setDisplayName("§cQuest Completion §7(§cDISABLED§7)");
+                        break;
                 }
 
                 itemStack.setItemMeta(meta);

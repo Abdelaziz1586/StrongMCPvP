@@ -26,7 +26,7 @@ public final class NPCHandler {
     public static NPCHandler INSTANCE;
     private final ItemStack nextPage, previousPage;
     private final Map<UUID, Map<Integer, GUI>> createGUIs;
-    private final Map<Integer, NPC> shopNPCs, perksNPCs, trailsNPC, settingsNPC;
+    private final Map<Integer, NPC> shopNPCs, questsNPCs, trailsNPCs, settingsNPCs;
 
     public NPCHandler() {
         DataHandler.INSTANCE.getLogger().info("Loading NPC Handler...");
@@ -36,9 +36,9 @@ public final class NPCHandler {
         guis = new ArrayList<>();
 
         shopNPCs = new ConcurrentHashMap<>();
-        perksNPCs = new ConcurrentHashMap<>();
-        trailsNPC = new ConcurrentHashMap<>();
-        settingsNPC = new ConcurrentHashMap<>();
+        questsNPCs = new ConcurrentHashMap<>();
+        trailsNPCs = new ConcurrentHashMap<>();
+        settingsNPCs = new ConcurrentHashMap<>();
 
         nextPage = getHead("MHF_ArrowRight", "§7Next Page", "§7Left Click: Next Page");
         previousPage = getHead("MHF_ArrowLeft", "§7Previous Page", "§7Left Click: Go Back");
@@ -57,19 +57,23 @@ public final class NPCHandler {
                     npc.sendRemovePacket(player);
                 }
 
-                for (final NPC npc : perksNPCs.values()) {
+                for (final NPC npc : questsNPCs.values()) {
                     npc.sendRemovePacket(player);
                 }
 
-                for (final NPC npc : trailsNPC.values()) {
+                for (final NPC npc : trailsNPCs.values()) {
+                    npc.sendRemovePacket(player);
+                }
+
+                for (final NPC npc : settingsNPCs.values()) {
                     npc.sendRemovePacket(player);
                 }
             }
 
             shopNPCs.clear();
-            perksNPCs.clear();
-            trailsNPC.clear();
-            settingsNPC.clear();
+            questsNPCs.clear();
+            trailsNPCs.clear();
+            settingsNPCs.clear();
 
             final Configuration mainSection = DataHandler.INSTANCE.getData().getSection("NPCs");
 
@@ -90,7 +94,7 @@ public final class NPCHandler {
                     }
                 }
 
-                section = mainSection.getSection("perks");
+                section = mainSection.getSection("quests");
 
                 if (section != null) {
                     for (final String id : section.getKeys()) {
@@ -100,7 +104,7 @@ public final class NPCHandler {
 
                             if (npc == null) continue;
 
-                            perksNPCs.put(i, npc);
+                            questsNPCs.put(i, npc);
                         } catch (final NumberFormatException ignored) {
                         }
                     }
@@ -116,7 +120,7 @@ public final class NPCHandler {
 
                             if (npc == null) continue;
 
-                            trailsNPC.put(i, npc);
+                            trailsNPCs.put(i, npc);
                         } catch (final NumberFormatException ignored) {
                         }
                     }
@@ -132,7 +136,7 @@ public final class NPCHandler {
 
                             if (npc == null) continue;
 
-                            settingsNPC.put(i, npc);
+                            settingsNPCs.put(i, npc);
                         } catch (final NumberFormatException ignored) {
                         }
                     }
@@ -144,15 +148,15 @@ public final class NPCHandler {
                     npc.sendShowPacket(player);
                 }
 
-                for (final NPC npc : perksNPCs.values()) {
+                for (final NPC npc : questsNPCs.values()) {
                     npc.sendShowPacket(player);
                 }
 
-                for (final NPC npc : trailsNPC.values()) {
+                for (final NPC npc : trailsNPCs.values()) {
                     npc.sendShowPacket(player);
                 }
 
-                for (final NPC npc : settingsNPC.values()) {
+                for (final NPC npc : settingsNPCs.values()) {
                     npc.sendShowPacket(player);
                 }
             }
@@ -167,15 +171,15 @@ public final class NPCHandler {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : perksNPCs.values()) {
+            for (final NPC npc : questsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : trailsNPC.values()) {
+            for (final NPC npc : trailsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : settingsNPC.values()) {
+            for (final NPC npc : settingsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
         }
@@ -189,8 +193,8 @@ public final class NPCHandler {
 
     public List<NPC> getNPCs() {
         return Stream.concat(
-                        Stream.concat(shopNPCs.values().stream(), perksNPCs.values().stream()),
-                        Stream.concat(trailsNPC.values().stream(), settingsNPC.values().stream())
+                        Stream.concat(shopNPCs.values().stream(), questsNPCs.values().stream()),
+                        Stream.concat(trailsNPCs.values().stream(), settingsNPCs.values().stream())
                 )
                 .collect(Collectors.toList());
     }
@@ -208,25 +212,25 @@ public final class NPCHandler {
                 shopNPCs.put(shopNPCs.size() + 1, npc);
                 break;
             case 1:
-                npc = new NPC(perksNPCs.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : PerksHandler.INSTANCE.getPerks().getString("npc.defaultName", "&d&lPerks")), null, location);
+                npc = new NPC(questsNPCs.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : QuestsHandler.INSTANCE.getQuests().getString("npc.defaultName", "&e&lQuests")), null, location);
 
-                if (skinName == null) skinName = PerksHandler.INSTANCE.getPerks().getString("npc.defaultSkinName", "HoneySalted");
+                if (skinName == null) skinName = QuestsHandler.INSTANCE.getQuests().getString("npc.defaultSkinName", "HoneySalted");
 
-                perksNPCs.put(perksNPCs.size() + 1, npc);
+                questsNPCs.put(questsNPCs.size() + 1, npc);
                 break;
             case 2:
-                npc = new NPC(trailsNPC.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : TrailsHandler.INSTANCE.getTrails().getString("npc.defaultName", "&6&lTrails")), null, location);
+                npc = new NPC(trailsNPCs.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : TrailsHandler.INSTANCE.getTrails().getString("npc.defaultName", "&6&lTrails")), null, location);
 
                 if (skinName == null) skinName = TrailsHandler.INSTANCE.getTrails().getString("npc.defaultSkinName", "HoneySalted");
 
-                trailsNPC.put(trailsNPC.size() + 1, npc);
+                trailsNPCs.put(trailsNPCs.size() + 1, npc);
                 break;
             case 3:
-                npc = new NPC(settingsNPC.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : SettingsHandler.INSTANCE.getSettings().getString("npc.defaultName", "&5&lSettings")), null, location);
+                npc = new NPC(settingsNPCs.size() + 1, type, ChatColor.translateAlternateColorCodes('&', name != null ? name : SettingsHandler.INSTANCE.getSettings().getString("npc.defaultName", "&5&lSettings")), null, location);
 
                 if (skinName == null) skinName = SettingsHandler.INSTANCE.getSettings().getString("npc.defaultSkinName", "HoneySalted");
 
-                settingsNPC.put(settingsNPC.size() + 1, npc);
+                settingsNPCs.put(settingsNPCs.size() + 1, npc);
                 break;
         }
 
@@ -251,10 +255,10 @@ public final class NPCHandler {
         return false;
     }
 
-    public boolean removePerksNPC(final int id) {
-        if (perksNPCs.containsKey(id)) {
-            removeNPC(perksNPCs.get(id));
-            perksNPCs.remove(id);
+    public boolean removeQuestsNPC(final int id) {
+        if (questsNPCs.containsKey(id)) {
+            removeNPC(questsNPCs.get(id));
+            questsNPCs.remove(id);
 
             saveNPCs();
             return true;
@@ -264,9 +268,9 @@ public final class NPCHandler {
     }
 
     public boolean removeTrailsNPC(final int id) {
-        if (trailsNPC.containsKey(id)) {
-            removeNPC(trailsNPC.get(id));
-            trailsNPC.remove(id);
+        if (trailsNPCs.containsKey(id)) {
+            removeNPC(trailsNPCs.get(id));
+            trailsNPCs.remove(id);
 
             saveNPCs();
             return true;
@@ -276,9 +280,9 @@ public final class NPCHandler {
     }
 
     public boolean removeSettingsNPC(final int id) {
-        if (settingsNPC.containsKey(id)) {
-            removeNPC(settingsNPC.get(id));
-            settingsNPC.remove(id);
+        if (settingsNPCs.containsKey(id)) {
+            removeNPC(settingsNPCs.get(id));
+            settingsNPCs.remove(id);
 
             saveNPCs();
             return true;
@@ -301,8 +305,8 @@ public final class NPCHandler {
                 MessageHandler.INSTANCE.sendMessage(player, "npc.shop.remove.success", new String[]{"id," + target.getId()});
                 break;
             case 1:
-                removePerksNPC(target.getId());
-                MessageHandler.INSTANCE.sendMessage(player, "npc.perks.remove.success", new String[]{"id," + target.getId()});
+                removeQuestsNPC(target.getId());
+                MessageHandler.INSTANCE.sendMessage(player, "npc.quests.remove.success", new String[]{"id," + target.getId()});
                 break;
             case 2:
                 removeTrailsNPC(target.getId());
@@ -322,17 +326,17 @@ public final class NPCHandler {
                 npc.sendShowPacket(player);
             }
 
-            for (final NPC npc : perksNPCs.values()) {
+            for (final NPC npc : questsNPCs.values()) {
                 npc.sendRemovePacket(player);
                 npc.sendShowPacket(player);
             }
 
-            for (final NPC npc : trailsNPC.values()) {
+            for (final NPC npc : trailsNPCs.values()) {
                 npc.sendRemovePacket(player);
                 npc.sendShowPacket(player);
             }
 
-            for (final NPC npc : settingsNPC.values()) {
+            for (final NPC npc : settingsNPCs.values()) {
                 npc.sendRemovePacket(player);
                 npc.sendShowPacket(player);
             }
@@ -345,15 +349,15 @@ public final class NPCHandler {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : perksNPCs.values()) {
+            for (final NPC npc : questsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : trailsNPC.values()) {
+            for (final NPC npc : trailsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
 
-            for (final NPC npc : settingsNPC.values()) {
+            for (final NPC npc : settingsNPCs.values()) {
                 npc.sendRemovePacket(player);
             }
         });
@@ -383,7 +387,7 @@ public final class NPCHandler {
     private Configuration allToSection() {
         final Configuration mainSection = new Configuration(),
                 shopSection = new Configuration(),
-                perksSection = new Configuration(),
+                questsSection = new Configuration(),
                 trailsSection = new Configuration(),
                 settingsSection = new Configuration();
 
@@ -391,20 +395,20 @@ public final class NPCHandler {
             shopSection.set(String.valueOf(entry.getKey()), toSection(entry.getValue()));
         }
 
-        for (final Map.Entry<Integer, NPC> entry : perksNPCs.entrySet()) {
-            perksSection.set(String.valueOf(entry.getKey()), toSection(entry.getValue()));
+        for (final Map.Entry<Integer, NPC> entry : questsNPCs.entrySet()) {
+            questsSection.set(String.valueOf(entry.getKey()), toSection(entry.getValue()));
         }
 
-        for (final Map.Entry<Integer, NPC> entry : trailsNPC.entrySet()) {
+        for (final Map.Entry<Integer, NPC> entry : trailsNPCs.entrySet()) {
             trailsSection.set(String.valueOf(entry.getKey()), toSection(entry.getValue()));
         }
 
-        for (final Map.Entry<Integer, NPC> entry : settingsNPC.entrySet()) {
+        for (final Map.Entry<Integer, NPC> entry : settingsNPCs.entrySet()) {
             settingsSection.set(String.valueOf(entry.getKey()), toSection(entry.getValue()));
         }
 
         mainSection.set("shop", shopSection);
-        mainSection.set("perks", perksSection);
+        mainSection.set("quests", questsSection);
         mainSection.set("trails", trailsSection);
         mainSection.set("settings", settingsSection);
 
@@ -485,7 +489,7 @@ public final class NPCHandler {
         inventories.add(Bukkit.createInventory(null, 18, "§b§lNPC Manager"));
 
         final List<NPC> npcs = NPCHandler.INSTANCE.getNPCs();
-        final ItemStack head = getHead("CONSOLE", "§bTotal NPC Count: §e" + npcs.size(), "§7Left Click: Create Shop NPC", "§7Right Click: Create Perks NPC", "§7Shift Click: Create Trails NPC", "§7Middle Click: Create Settings NPC");
+        final ItemStack head = getHead("CONSOLE", "§bTotal NPC Count: §e" + npcs.size(), "§7Left Click: Create Shop NPC", "§7Right Click: Create Quests NPC", "§7Shift Click: Create Trails NPC", "§7Middle Click: Create Settings NPC");
         inventories.get(0).setItem(4, head);
 
         int i = 0;
@@ -508,7 +512,7 @@ public final class NPCHandler {
                 inventories.get(currentInventory).setItem(4, head);
             }
 
-            inventories.get(currentInventory).setItem(i + 9, getHead(npc.getSkinName(), (npc.getType() == 0 ? "§eShopNPC " : npc.getType() == 1 ? "§dPerksNPC " : npc.getType() == 2 ? "§6TrailsNPC " : "§5SettingsNPC ") + npc.getId() + ": §r" + npc.getName(), "§7Left Click: Teleport", "§7Right Click: Delete"));
+            inventories.get(currentInventory).setItem(i + 9, getHead(npc.getSkinName(), (npc.getType() == 0 ? "§eShopNPC " : npc.getType() == 1 ? "§bQuestsNPC " : npc.getType() == 2 ? "§6TrailsNPC " : "§5SettingsNPC ") + npc.getId() + ": §r" + npc.getName(), "§7Left Click: Teleport", "§7Right Click: Delete"));
             i++;
         }
 
@@ -537,7 +541,7 @@ public final class NPCHandler {
 
                     final String name = itemStack.getItemMeta().getDisplayName();
                     try {
-                        final int type = name.startsWith("§e") ? 0 : name.startsWith("§d") ? 1 : name.startsWith("§6") ? 2 : 3,
+                        final int type = name.startsWith("§e") ? 0 : name.startsWith("§b") ? 1 : name.startsWith("§6") ? 2 : 3,
                                 id = Integer.parseInt(name.split(" ")[1].split(":")[0]);
 
                         final NPC npc;
@@ -547,13 +551,13 @@ public final class NPCHandler {
                                 npc = shopNPCs.get(id);
                                 break;
                             case 1:
-                                npc = perksNPCs.get(id);
+                                npc = questsNPCs.get(id);
                                 break;
                             case 2:
-                                npc = trailsNPC.get(id);
+                                npc = trailsNPCs.get(id);
                                 break;
                             case 3:
-                                npc = settingsNPC.get(id);
+                                npc = settingsNPCs.get(id);
                                 break;
                             default:
                                 npc = null;
@@ -619,7 +623,7 @@ public final class NPCHandler {
             return;
         }
 
-        final Inventory inventory = Bukkit.createInventory(null, InventoryType.WORKBENCH, "Create " + (type == 0 ? "Shop" : type == 1 ? "Perks" : "Trails") + " NPC");
+        final Inventory inventory = Bukkit.createInventory(null, InventoryType.WORKBENCH, "Create " + (type == 0 ? "Shop" : type == 1 ? "Quests" : type == 2 ? "Trails" : "Settings") + " NPC");
 
         String skinName = null;
 
@@ -628,7 +632,7 @@ public final class NPCHandler {
                 skinName = ShopHandler.INSTANCE.getShop().getString("npc.defaultSkinName", "HoneySalted");
                 break;
             case 1:
-                skinName = PerksHandler.INSTANCE.getPerks().getString("npc.defaultSkinName", "HoneySalted");
+                skinName = QuestsHandler.INSTANCE.getQuests().getString("npc.defaultSkinName", "HoneySalted");
                 break;
             case 2:
                 skinName = TrailsHandler.INSTANCE.getTrails().getString("npc.defaultSkinName", "HoneySalted");
@@ -645,7 +649,7 @@ public final class NPCHandler {
                 name = ShopHandler.INSTANCE.getShop().getString("npc.defaultName", "&e&lShop");
                 break;
             case 1:
-                name = PerksHandler.INSTANCE.getPerks().getString("npc.defaultName", "&d&lPerks");
+                name = QuestsHandler.INSTANCE.getQuests().getString("npc.defaultName", "&e&lQuests");
                 break;
             case 2:
                 name = TrailsHandler.INSTANCE.getTrails().getString("npc.defaultName", "&6&lTrails");
@@ -681,13 +685,14 @@ public final class NPCHandler {
         final GUI gui = GUIHandler.INSTANCE.createGUI(inventory, event -> {
             final Player clickedPlayer = event.getPlayer();
 
+            final String s = type == 0 ? "shop" : type == 1 ? "quests" : type == 2 ? "trails" : "settings";
             if (event.getSlot() == 5) {
                 if (event.isLeftClick()) {
                     ChatInputHandler.INSTANCE.inputFromThen(clickedPlayer, chatEvent -> {
                         String message = chatEvent.getMessage();
 
                         if (message.length() > 16 || message.length() < 3) {
-                            MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.failed.name.invalid-length", null);
+                            MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "quests" : "trails") + ".create.failed.name.invalid-length", null);
 
                             guis.get(type).openGUI(clickedPlayer);
                             return;
@@ -709,15 +714,15 @@ public final class NPCHandler {
 
                         guiToOpen.openGUI(clickedPlayer);
 
-                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.success.name", new String[]{"name," + message});
+                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + s + ".create.success.name", new String[]{"name," + message});
                     }, () -> {
-                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.failed.name.timeout", null);
+                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + s + ".create.failed.name.timeout", null);
                         guis.remove(type);
 
                         this.createGUIs.put(clickedPlayer.getUniqueId(), guis);
                     });
 
-                    MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.requests.name", null);
+                    MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + s + ".create.requests.name", null);
                     return;
                 }
 
@@ -726,7 +731,7 @@ public final class NPCHandler {
                         final String message = chatEvent.getMessage();
 
                         if (message.length() > 16 || message.length() < 3) {
-                            MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.failed.skinName.invalid-length", null);
+                            MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "quests" : "trails") + ".create.failed.skinName.invalid-length", null);
 
                             guis.get(type).openGUI(clickedPlayer);
                             return;
@@ -747,15 +752,15 @@ public final class NPCHandler {
 
                         guiToOpen.openGUI(clickedPlayer);
 
-                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.success.skinName", new String[]{"skinName," + message});
+                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "quests" : "trails") + ".create.success.skinName", new String[]{"skinName," + message});
                     }, () -> {
-                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.failed.skinName.timeout", null);
+                        MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "quests" : "trails") + ".create.failed.skinName.timeout", null);
                         guis.remove(type);
 
                         this.createGUIs.put(clickedPlayer.getUniqueId(), guis);
                     });
 
-                    MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "perks" : "trails") + ".create.requests.skinName", null);
+                    MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + (type == 0 ? "shop" : type == 1 ? "quests" : "trails") + ".create.requests.skinName", null);
                 }
                 return;
             }
@@ -766,13 +771,11 @@ public final class NPCHandler {
 
                 clickedPlayer.closeInventory();
 
-                final String key = type == 0 ? "shop" : type == 1 ? "perks" : type == 2 ? "trails" : "settings";
-
-                MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + key + ".create.success.creation.creating", null);
+                MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + s + ".create.success.creation.creating", null);
 
                 createNPC(clickedPlayer.getLocation(), headMeta.getDisplayName(), headMeta.getOwner(), type);
 
-                MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + key + ".create.success.creation.created", null);
+                MessageHandler.INSTANCE.sendMessage(clickedPlayer, "npc." + s + ".create.success.creation.created", null);
 
                 this.createGUIs.remove(clickedPlayer.getUniqueId());
             }
@@ -790,8 +793,8 @@ public final class NPCHandler {
                 MessageHandler.INSTANCE.sendMessage(player, "npc.shop.remove.success", new String[]{"id," + npc.getId()});
                 break;
             case 1:
-                removePerksNPC(npc.getId());
-                MessageHandler.INSTANCE.sendMessage(player, "npc.perks.remove.success", new String[]{"id," + npc.getId()});
+                removeQuestsNPC(npc.getId());
+                MessageHandler.INSTANCE.sendMessage(player, "npc.quests.remove.success", new String[]{"id," + npc.getId()});
                 break;
             case 2:
                 removeTrailsNPC(npc.getId());

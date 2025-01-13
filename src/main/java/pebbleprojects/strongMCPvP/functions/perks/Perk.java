@@ -1,4 +1,4 @@
-package pebbleprojects.strongMCPvP.functions;
+package pebbleprojects.strongMCPvP.functions.perks;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
@@ -54,9 +54,9 @@ public final class Perk {
         return guiItem;
     }
 
-    public void onEntityDamage(final EntityDamageEvent event) {
+    public Player onEntityDamage(final EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player)) {
-            return;
+            return null;
         }
 
         Player attacker = null;
@@ -77,10 +77,11 @@ public final class Perk {
 
         if (event.getFinalDamage() >= victim.getHealth()) {
             executeSection("kill", attacker, victim, event);
-            return;
+            return attacker;
         }
 
         executeSection("damage", attacker, victim, event);
+        return null;
     }
 
     public void onPlayerSpawn(final Player player) {

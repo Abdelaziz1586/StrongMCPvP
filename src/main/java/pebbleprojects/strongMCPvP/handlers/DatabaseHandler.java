@@ -28,8 +28,9 @@ public final class DatabaseHandler {
         update();
 
         new Perks();
-        new Kills();
         new Souls();
+        new Kills();
+        new Quests();
         new Points();
         new Deaths();
         new Trails();
@@ -38,6 +39,8 @@ public final class DatabaseHandler {
         new RedEffect();
         new PerkSlots();
         new ActiveTrail();
+        new QuestReminder();
+        new QuestCompletion();
 
         for (final Player player : DataHandler.INSTANCE.getMain().getServer().getOnlinePlayers()) {
             load(player);
@@ -94,6 +97,7 @@ public final class DatabaseHandler {
             Perks.INSTANCE.load(uuid);
             Souls.INSTANCE.load(uuid);
             Kills.INSTANCE.load(uuid);
+            Quests.INSTANCE.load(uuid);
             Deaths.INSTANCE.load(uuid);
             Points.INSTANCE.load(uuid);
             Trails.INSTANCE.load(uuid);
@@ -102,6 +106,8 @@ public final class DatabaseHandler {
             RedEffect.INSTANCE.load(uuid);
             PerkSlots.INSTANCE.load(player);
             ActiveTrail.INSTANCE.load(uuid);
+            QuestReminder.INSTANCE.load(uuid);
+            QuestCompletion.INSTANCE.load(uuid);
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;
@@ -117,6 +123,7 @@ public final class DatabaseHandler {
             Perks.INSTANCE.save(uuid);
             Souls.INSTANCE.save(uuid);
             Kills.INSTANCE.save(uuid);
+            Quests.INSTANCE.save(uuid);
             Deaths.INSTANCE.save(uuid);
             Points.INSTANCE.save(uuid);
             Trails.INSTANCE.save(uuid);
@@ -125,6 +132,8 @@ public final class DatabaseHandler {
             RedEffect.INSTANCE.save(uuid);
             PerkSlots.INSTANCE.save(uuid);
             ActiveTrail.INSTANCE.save(uuid);
+            QuestReminder.INSTANCE.save(uuid);
+            QuestCompletion.INSTANCE.save(uuid);
         } catch (final Exception e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;
@@ -142,7 +151,7 @@ public final class DatabaseHandler {
     private void createTables() {
         try (final Connection connection = hikari.getConnection();
              final Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, RED_EFFECT boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, RED_EFFECT boolean, QUEST_REMINDER boolean, QUEST_COMPLETION boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT");
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;

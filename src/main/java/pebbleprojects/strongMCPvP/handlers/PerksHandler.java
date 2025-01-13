@@ -16,8 +16,8 @@ import pebbleprojects.strongMCPvP.databaseData.PerkSlots;
 import pebbleprojects.strongMCPvP.databaseData.Perks;
 import pebbleprojects.strongMCPvP.databaseData.Souls;
 import pebbleprojects.strongMCPvP.functions.GUI;
-import pebbleprojects.strongMCPvP.functions.Perk;
-import pebbleprojects.strongMCPvP.functions.PerkSlot;
+import pebbleprojects.strongMCPvP.functions.perks.Perk;
+import pebbleprojects.strongMCPvP.functions.perks.PerkSlot;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.functions.config.ConfigurationProvider;
 import pebbleprojects.strongMCPvP.functions.config.YamlConfiguration;
@@ -300,35 +300,33 @@ public final class PerksHandler {
         return gui;
     }
 
-    public Configuration getPerks() {
-        return perks;
-    }
-
     public void setPerk(final Player player) {
         playerPerks.put(player.getUniqueId(), Arrays.asList(perksList.get(0), perksList.get(1)));
     }
 
     public void onEntityDamage(final EntityDamageEvent event) {
-        for (final Perk perk : playerPerks.getOrDefault(event.getEntity().getUniqueId(), new ArrayList<>())) {
-            perk.onEntityDamage(event);
-        }
+        Player attacker = null;
+        for (final Perk perk : playerPerks.getOrDefault(event.getEntity().getUniqueId(), new ArrayList<>()))
+            attacker = attacker == null ? perk.onEntityDamage(event) : attacker;
+
+        if (attacker != null)
+            QuestsHandler.INSTANCE.onKill(attacker);
     }
 
     public void onPlayerSpawn(final Player player) {
-        for (final Perk perk : playerPerks.getOrDefault(player.getUniqueId(), new ArrayList<>())) {
+        for (final Perk perk : playerPerks.getOrDefault(player.getUniqueId(), new ArrayList<>()))
             perk.onPlayerSpawn(player);
-        }
     }
 
     public void onPlayerDeath(final Player victim, final Player attacker) {
-        for (final Perk perk : playerPerks.getOrDefault(victim.getUniqueId(), new ArrayList<>())) {
+        for (final Perk perk : playerPerks.getOrDefault(victim.getUniqueId(), new ArrayList<>()))
             perk.onPlayerDeath(victim, attacker);
-        }
+
+        QuestsHandler.INSTANCE.onDeath(victim);
     }
 
     public void onPlayerInteract(final PlayerInteractEvent event) {
-        for (final Perk perk : playerPerks.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>())) {
+        for (final Perk perk : playerPerks.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>()))
             perk.onPlayerClick(event);
-        }
     }
 }

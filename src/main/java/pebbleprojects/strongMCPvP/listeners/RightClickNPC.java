@@ -15,7 +15,7 @@ public final class RightClickNPC implements Listener {
                     ShopHandler.INSTANCE.openGUI(event.getPlayer(), false);
                     break;
                 case 1:
-                    PerksHandler.INSTANCE.openGUI(event.getPlayer(), 0);
+                    QuestsHandler.INSTANCE.openGUI(event.getPlayer());
                     break;
                 case 2:
                     TrailsHandler.INSTANCE.openGUI(event.getPlayer());

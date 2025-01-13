@@ -3,7 +3,7 @@ package pebbleprojects.strongMCPvP.databaseData;
 import com.google.common.reflect.TypeToken;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pebbleprojects.strongMCPvP.functions.PerkSlot;
+import pebbleprojects.strongMCPvP.functions.perks.PerkSlot;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 import pebbleprojects.strongMCPvP.handlers.DatabaseHandler;
 import pebbleprojects.strongMCPvP.handlers.ShopHandler;

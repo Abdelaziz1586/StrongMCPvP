@@ -3,8 +3,4 @@
 # |               Perks Configuration File               | #
 # +------------------------------------------------------+ #
 ############################################################
-npc:
-  defaultName: "&d&lPerks"
-  defaultSkinName: "HoneySalted"
-
 guiName: "Perk Customization"
