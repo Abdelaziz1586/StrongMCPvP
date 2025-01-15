@@ -58,6 +58,10 @@ public final class KillStreakHandler {
         killStreaks.remove(player.getUniqueId());
     }
 
+    public int getBounty(final UUID uuid) {
+        return bounties.getOrDefault(uuid, 0);
+    }
+
     public int getKillStreaks(final UUID uuid) {
         return killStreaks.getOrDefault(uuid, 0);
     }

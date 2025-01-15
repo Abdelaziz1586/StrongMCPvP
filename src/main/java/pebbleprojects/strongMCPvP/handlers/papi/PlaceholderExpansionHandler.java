@@ -44,6 +44,8 @@ public final class PlaceholderExpansionHandler extends PlaceholderExpansion {
                 return String.valueOf(Kills.INSTANCE.get(player.getUniqueId()));
             case "deaths":
                 return String.valueOf(Deaths.INSTANCE.get(player.getUniqueId()));
+            case "bounty":
+                return String.valueOf(KillStreakHandler.INSTANCE.getBounty(player.getUniqueId()));
             case "points":
                 return String.valueOf(Points.INSTANCE.get(player.getUniqueId()));
             case "assists":
