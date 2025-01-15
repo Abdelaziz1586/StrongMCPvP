@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pebbleprojects.strongMCPvP.handlers.ChatInputHandler;
 import pebbleprojects.strongMCPvP.handlers.LevelsHandler;
+import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
 
 public final class AsyncPlayerChat implements Listener {
 
@@ -17,9 +18,11 @@ public final class AsyncPlayerChat implements Listener {
         if (ChatInputHandler.INSTANCE.onAsyncPlayerChat(event)) return;
 
         final Player sender = event.getPlayer();
-        final String message = LevelsHandler.INSTANCE.getChatPrefix(sender.getUniqueId())
-                .replace("%player%", sender.getDisplayName())
-                .replace("%message%", event.getMessage());
+        final String message = PlaceholderAPIHandler.INSTANCE.translateMessage(
+                sender, LevelsHandler.INSTANCE.getChatPrefix(sender.getUniqueId())
+                        .replace("%player%", sender.getDisplayName())
+                        .replace("%message%", event.getMessage())
+        );
 
         for (final Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(message);

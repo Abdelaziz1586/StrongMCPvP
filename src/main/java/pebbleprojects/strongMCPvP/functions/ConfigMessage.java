@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.handlers.MessageHandler;
 import pebbleprojects.strongMCPvP.handlers.UtilsHandler;
+import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
 
 public final class ConfigMessage {
 
@@ -38,17 +39,17 @@ public final class ConfigMessage {
     }
 
     public void send(final CommandSender sender, final String[] args) {
-        if (!chat.isEmpty()) sender.sendMessage(replaceWithArgs(chat, args));
+        if (!chat.isEmpty()) sender.sendMessage(replaceWithArgs(sender, chat, args));
 
         if (sender instanceof Player) {
             final Player player = (Player) sender;
 
-            UtilsHandler.INSTANCE.sendActionBar(player, replaceWithArgs(actionbar, args));
-            UtilsHandler.INSTANCE.sendTitle(player, replaceWithArgs(title, args), replaceWithArgs(subtitle, args), fadeIn, stay, fadeOut);
+            UtilsHandler.INSTANCE.sendActionBar(player, replaceWithArgs(sender, actionbar, args));
+            UtilsHandler.INSTANCE.sendTitle(player, replaceWithArgs(sender, title, args), replaceWithArgs(sender, subtitle, args), fadeIn, stay, fadeOut);
         }
     }
 
-    private String replaceWithArgs(String text, final String... args) {
+    private String replaceWithArgs(final CommandSender sender, String text, final String... args) {
         String[] split;
         for (final String s : args) {
             if (s.contains(",")) {
@@ -58,7 +59,7 @@ public final class ConfigMessage {
             }
         }
 
-        return text;
+        return PlaceholderAPIHandler.INSTANCE.translateMessage(sender, text);
     }
 
 }

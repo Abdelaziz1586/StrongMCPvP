@@ -8,6 +8,7 @@ import pebbleprojects.strongMCPvP.databaseData.Points;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.functions.config.ConfigurationProvider;
 import pebbleprojects.strongMCPvP.functions.config.YamlConfiguration;
+import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +42,10 @@ public final class LevelsHandler {
                 for (final Player player : Bukkit.getOnlinePlayers()) {
                     final Level level = prefixes.get(player.getUniqueId());
                     if (level != null && level.tab != null)
-                        player.setPlayerListName(level.tab.replace("%player%", player.getDisplayName()));
+                        player.setPlayerListName(PlaceholderAPIHandler.INSTANCE.translateMessage(player, level.tab.replace("%player%", player.getDisplayName())));
                 }
             }
-        }, 1L);
+        }, 20L);
 
         DataHandler.INSTANCE.getLogger().info("Loaded Levels Handler!");
     }
