@@ -82,8 +82,7 @@ public final class LevelsHandler {
     }
 
     public String getChatPrefix(final UUID uuid) {
-        final Level level = prefixes.get(uuid);
-        return level != null ? level.chat : "";
+        return prefixes.containsKey(uuid) ? prefixes.get(uuid).chat : "";
     }
 
     private static final class Level {

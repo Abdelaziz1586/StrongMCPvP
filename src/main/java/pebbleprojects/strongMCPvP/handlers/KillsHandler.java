@@ -62,6 +62,7 @@ public final class KillsHandler {
         }
 
         if (attacker != null) {
+            KitsHandler.INSTANCE.kill(attacker);
             Kills.INSTANCE.add(attacker.getUniqueId(), 1);
             KillStreakHandler.INSTANCE.addKillStreak(victim, attacker);
 
@@ -104,6 +105,8 @@ public final class KillsHandler {
             final int share = entry.getValue() / totalHits,
                     souls = divideSoulsFairly ? killSouls * share : assistSouls,
                     points = dividePointsFairly ? killPoints * share : assistPoints;
+
+            if (souls == 0 || points == 0) continue;
 
             Souls.INSTANCE.add(entry.getKey(), souls);
             Points.INSTANCE.add(entry.getKey(), points);
