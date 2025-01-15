@@ -22,7 +22,7 @@ public final class FixCommand implements CommandExecutor {
 
             final Player player = (Player) sender;
 
-            if (CombatLogHandler.INSTNACE.isInCombatLog(player)) {
+            if (CombatLogHandler.INSTANCE.isInCombatLog(player)) {
                 MessageHandler.INSTANCE.sendMessage(player, "fix.failed.combat-log", null);
                 return;
             }

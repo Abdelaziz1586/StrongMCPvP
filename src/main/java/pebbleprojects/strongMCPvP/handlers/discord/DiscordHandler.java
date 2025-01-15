@@ -48,33 +48,44 @@ public final class DiscordHandler extends ListenerAdapter {
             DataHandler.INSTANCE.getLogger().warning("Unable to load discord.yml in memory: " + e.getMessage());
         }
 
-        if (discord.getBoolean("enabled", false)) {
-            JDALogger.setFallbackLoggerEnabled(false);
+        TaskHandler.INSTANCE.runAsync(() -> {
 
-            if (jda != null) {
-                jda.shutdown();
+            if (discord.getBoolean("enabled", false)) {
+                DataHandler.INSTANCE.getLogger().info("Attempting to load discord bot... (ASYNC)");
+
+                JDALogger.setFallbackLoggerEnabled(false);
+
+                if (jda != null) {
+                    jda.shutdown();
+                }
+
+                try {
+                    jda = JDABuilder.createDefault(discord.getString("token", null))
+                            .build()
+                            .awaitReady();
+
+                    DataHandler.INSTANCE.getLogger().info("Loaded discord bot!");
+
+                    DataHandler.INSTANCE.getLogger().info("Registering discord bot commands...");
+                    jda.updateCommands().addCommands(
+                            Commands.slash("profile", "Get profile of a player")
+                                    .setGuildOnly(true)
+                                    .addOption(OptionType.STRING, "player", "Player IGN", true)
+                    ).queue();
+                    DataHandler.INSTANCE.getLogger().info("Registered discord bot commands!");
+
+                    DataHandler.INSTANCE.getLogger().info("Registering discord bot events...");
+                    jda.addEventListener(this);
+                    DataHandler.INSTANCE.getLogger().info("Registered discord bot events!");
+                } catch (final InvalidTokenException ignored) {
+                    DataHandler.INSTANCE.getLogger().severe("Invalid discord bot token, disabling bot option until next reload.");
+                    jda = null;
+                } catch (final InterruptedException e) {
+                    DataHandler.INSTANCE.getLogger().severe("Failed to load discord bot, disabling bot option until next reload. Error: " + e.getMessage());
+                    jda = null;
+                }
             }
-
-            try {
-                jda = JDABuilder.createDefault(discord.getString("token", null))
-                        .build()
-                        .awaitReady();
-
-                jda.updateCommands().addCommands(
-                        Commands.slash("profile", "Get profile of a player")
-                                .setGuildOnly(true)
-                                .addOption(OptionType.STRING, "player", "Player IGN", true)
-                ).queue();
-
-                jda.addEventListener(this);
-            } catch (final InvalidTokenException ignored) {
-                DataHandler.INSTANCE.getLogger().severe("Invalid discord bot token, disabling bot option until next reload.");
-                jda = null;
-            } catch (final InterruptedException e) {
-                DataHandler.INSTANCE.getLogger().severe("Failed to load discord bot, disabling bot option until next reload. Error: " + e.getMessage());
-                jda = null;
-            }
-        }
+        });
     }
 
     @Override

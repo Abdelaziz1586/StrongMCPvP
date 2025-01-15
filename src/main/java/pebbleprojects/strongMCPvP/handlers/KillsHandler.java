@@ -37,8 +37,8 @@ public final class KillsHandler {
         final Hits hits = this.hits.getOrDefault(victim.getUniqueId(), new Hits());
 
         if (attacker != null) {
-            CombatLogHandler.INSTNACE.addToCombatLog(victim);
-            CombatLogHandler.INSTNACE.addToCombatLog(attacker);
+            CombatLogHandler.INSTANCE.addToCombatLog(victim);
+            CombatLogHandler.INSTANCE.addToCombatLog(attacker);
 
             hits.addHit(attacker.getUniqueId());
 
@@ -55,7 +55,7 @@ public final class KillsHandler {
         KitsHandler.INSTANCE.applyKit(victim);
         Deaths.INSTANCE.add(victim.getUniqueId(), 1);
         KillStreakHandler.INSTANCE.removeKillStreaks(victim);
-        CombatLogHandler.INSTNACE.removeFromCombatLog(victim);
+        CombatLogHandler.INSTANCE.removeFromCombatLog(victim);
 
         if (attacker == null && !hits.getHits().isEmpty()) {
             attacker = Bukkit.getPlayer(hits.getHits().get(hits.getHits().size() - 1).getUUID());

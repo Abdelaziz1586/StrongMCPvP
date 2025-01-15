@@ -1,6 +1,6 @@
 package pebbleprojects.strongMCPvP.functions.discord;
 
-import pebbleprojects.strongMCPvP.functions.Profile;
+import pebbleprojects.strongMCPvP.functions.profile.Profile;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 
 public final class TextMessage {

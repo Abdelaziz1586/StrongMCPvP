@@ -19,8 +19,8 @@ public final class MessageHandler {
     private Configuration messages;
     private final File messagesFile;
     public static MessageHandler INSTANCE;
-    private final HashMap<String, ConfigMessage> cache;
     private final BaseComponent[][] helpMessage;
+    private final HashMap<String, ConfigMessage> cache;
 
     public MessageHandler() {
         DataHandler.INSTANCE.getLogger().info("Loading Message Handler...");

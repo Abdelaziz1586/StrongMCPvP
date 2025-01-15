@@ -51,5 +51,4 @@ public final class UtilsHandler {
     private void sendSubtitle(final Player player, final String subtitle, final int fadeIn, final int stayTime, final int fadeOut) {
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, new ChatComponentText(subtitle), fadeIn, stayTime, fadeOut));
     }
-
 }

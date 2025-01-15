@@ -57,8 +57,8 @@ public final class DataHandler {
         new PerksHandler();
         new TrailsHandler();
 
-
         new QuestsHandler();
+        new LevelsHandler();
         new DatabaseHandler();
         new MessageHandler();
         new SettingsHandler();
@@ -136,7 +136,7 @@ public final class DataHandler {
         MessageHandler.INSTANCE.update();
         SettingsHandler.INSTANCE.update();
         DatabaseHandler.INSTANCE.update();
-        CombatLogHandler.INSTNACE.update();
+        CombatLogHandler.INSTANCE.update();
         KillStreakHandler.INSTANCE.update();
         ScoreboardHandler.INSTANCE.update();
         PermissionsHandler.INSTANCE.update();

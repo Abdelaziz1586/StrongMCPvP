@@ -1,4 +1,4 @@
-package pebbleprojects.strongMCPvP.functions;
+package pebbleprojects.strongMCPvP.functions.profile;
 
 import pebbleprojects.strongMCPvP.databaseData.*;
 import org.bukkit.Bukkit;
@@ -17,6 +17,7 @@ public final class Profile {
     private UUID uuid;
     private boolean scramble;
     private String query, error;
+    private RealProfile realProfile;
     private int souls, kills, deaths, points, assists;
 
     public Profile(final String query) {
@@ -24,6 +25,8 @@ public final class Profile {
     }
 
     public void loadWithQuery() {
+        realProfile = ProfileHandler.INSTANCE.getRealProfile(query);
+
         final List<OfflinePlayer> offlinePlayers = Arrays.stream(Bukkit.getOfflinePlayers())
                 .filter(offlinePlayer -> offlinePlayer.getName().equalsIgnoreCase(query))
                 .collect(Collectors.toList());
@@ -35,7 +38,7 @@ public final class Profile {
 
         for (final OfflinePlayer offlinePlayer : offlinePlayers) {
             if (!loadWithUUID(offlinePlayer.getUniqueId())) {
-                this.query = offlinePlayer.getName();
+                query = offlinePlayer.getName();
                 return;
             }
         }
@@ -65,20 +68,21 @@ public final class Profile {
 
     public String replaceStringWithData(final String string, final boolean scrambleIfPossible) {
         return string == null ? null : string
-                .replace("%player%", query)
-                .replace("%query%", query)
+                .replace("%player%", getQuery())
+                .replace("%query%", getQuery())
                 .replace("%souls%", getSouls(scrambleIfPossible))
                 .replace("%kills%", getKills())
                 .replace("%deaths%", getDeaths())
                 .replace("%assists%", getAssists())
                 .replace("%points%", getPoints(scrambleIfPossible))
-                .replace("%uuid%", ProfileHandler.INSTANCE.getRealUUID(query))
+                .replace("%uuid%", uuid != null ? uuid.toString() : getRealUUID())
+                .replace("%realUUID%", getRealUUID())
                 .replace("%error%", error != null ? error : "")
                 .replace("%killStreak%", uuid == null ? "0" : String.valueOf(KillStreakHandler.INSTANCE.getKillStreaks(uuid)));
     }
 
-    public String getQuery() {
-        return query;
+    public String getRealUUID() {
+        return realProfile.getUUID() == null ? realProfile.getName() : realProfile.getUUID().toString();
     }
 
     public String getError() {
@@ -103,6 +107,10 @@ public final class Profile {
 
     public String getPoints(final boolean scrambleIfPossible) {
         return scrambleIfPossible ? scramble ? "#" : String.valueOf(points) : String.valueOf(points);
+    }
+
+    private String getQuery() {
+        return realProfile.getName();
     }
 
     private void setErrorValues() {

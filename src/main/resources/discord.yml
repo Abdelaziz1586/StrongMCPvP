@@ -9,7 +9,7 @@ token: BOT_TOKEN_HERE
 commands:
   profile:
     private: true
-    thinking: false
+    thinking: true
     success:
       text-message:
         enabled: false
@@ -70,13 +70,13 @@ commands:
           text: "Made with <3 by StrongMC Devs"
           icon:
             enabled: false
-            url: "https://mc-heads.net/avatar/%uuid%/"
+            url: "https://mc-heads.net/avatar/%realUUID%/"
         image:
           enabled: false
-          url: "https://visage.surgeplay.com/bust/256/%uuid%"
+          url: "https://visage.surgeplay.com/bust/256/%realUUID%"
         thumbnail:
           enabled: true
-          url: "https://visage.surgeplay.com/bust/256/%uuid%"
+          url: "https://visage.surgeplay.com/bust/256/%realUUID%"
     failed:
       not-found:
         text-message:
@@ -122,13 +122,13 @@ commands:
             text: "Made with <3 by StrongMC Devs"
             icon:
               enabled: false
-              url: "https://mc-heads.net/avatar/%uuid%/"
+              url: "https://mc-heads.net/avatar/%realUUID%/"
           image:
             enabled: false
-            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+            url: "https://visage.surgeplay.com/bust/256/%realUUID%"
           thumbnail:
             enabled: true
-            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+            url: "https://visage.surgeplay.com/bust/256/%realUUID%"
       error:
         text-message:
           enabled: false
@@ -173,10 +173,10 @@ commands:
             text: "Made with <3 by StrongMC Devs"
             icon:
               enabled: false
-              url: "https://mc-heads.net/avatar/%uuid%/"
+              url: "https://mc-heads.net/avatar/%realUUID%/"
           image:
             enabled: false
-            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+            url: "https://visage.surgeplay.com/bust/256/%realUUID%"
           thumbnail:
             enabled: true
-            url: "https://visage.surgeplay.com/bust/256/%uuid%"
+            url: "https://visage.surgeplay.com/bust/256/%realUUID%"

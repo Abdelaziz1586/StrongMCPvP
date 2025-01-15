@@ -2,7 +2,7 @@ package pebbleprojects.strongMCPvP.functions.discord;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import pebbleprojects.strongMCPvP.functions.Profile;
+import pebbleprojects.strongMCPvP.functions.profile.Profile;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 
@@ -11,10 +11,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.IntStream;
 
 public final class Embed {
@@ -140,7 +138,7 @@ public final class Embed {
             embedBuilder.setColor(generateRandomColor());
         } else if (common) {
             try {
-                embedBuilder.setColor(getCommonColor("https://mc-heads.net/player/" + profile.getQuery()));
+                embedBuilder.setColor(getCommonColor("https://mineskin.eu/armor/body/" + profile.getRealUUID().replace("-", "")));
             } catch (final IOException ignored) {
                 embedBuilder.setColor(new Color(119, 128, 139));
             }

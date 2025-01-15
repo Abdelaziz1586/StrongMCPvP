@@ -1,0 +1,18 @@
+############################################################
+# +------------------------------------------------------+ #
+# |                    Levels Settings                   | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Format:
+# Minimum_Points_Required_To_Acquire_This_Level:
+#   chat: Chat_Prefix
+#   tab: Tab_List_Prefix
+# ! Make sure to put the levels in descending order (aka from the highest points to lowest) !
+
+500:
+  tab: "&ePro %player%"
+  chat: "&ePro %player%&7: &f%message%"
+0:
+  tab: "&7Newbie %player%"
+  chat: "&7Newbie %player%&7: &f%message%"

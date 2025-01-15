@@ -3,9 +3,10 @@ package pebbleprojects.strongMCPvP.handlers.discord;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import pebbleprojects.strongMCPvP.functions.Profile;
+import pebbleprojects.strongMCPvP.functions.profile.Profile;
 import pebbleprojects.strongMCPvP.functions.discord.Embed;
 import pebbleprojects.strongMCPvP.functions.discord.TextMessage;
+import pebbleprojects.strongMCPvP.functions.profile.RealProfile;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class ProfileHandler {
 
@@ -21,8 +23,8 @@ public final class ProfileHandler {
     public static ProfileHandler INSTANCE;
     private final List<TextMessage> messages;
     private boolean sendThinking, privateReply;
-    private final HashMap<String, Profile> profiles;
-    private final HashMap<String, String> realUUIDs;
+    private final Map<String, Profile> profiles;
+    private final Map<String, RealProfile> realProfiles;
 
     public ProfileHandler() {
         DataHandler.INSTANCE.getLogger().info("Loading Discord Profile Handler...");
@@ -32,8 +34,8 @@ public final class ProfileHandler {
         embeds = new ArrayList<>();
         messages = new ArrayList<>();
 
-        profiles = new LinkedHashMap<>();
-        realUUIDs = new LinkedHashMap<>();
+        profiles = new ConcurrentHashMap<>();
+        realProfiles = new ConcurrentHashMap<>();
 
         update();
 
@@ -85,15 +87,15 @@ public final class ProfileHandler {
         success(event, profile);
     }
 
-    public String getRealUUID(final String name) {
+    public RealProfile getRealProfile(final String name) {
         final String query = name.toLowerCase();
 
-        if (realUUIDs.containsKey(query)) {
-            return realUUIDs.get(query);
+        if (realProfiles.containsKey(query)) {
+            return realProfiles.get(query);
         }
 
         try {
-            final HttpURLConnection connection = (HttpURLConnection) new URL("https://playerdb.co/api/player/minecraft/" + query).openConnection();
+            final HttpURLConnection connection = (HttpURLConnection) new URL("https://api.minecraftservices.com/minecraft/profile/lookup/name/" + query).openConnection();
 
             connection.setRequestProperty("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36");
 
@@ -110,19 +112,32 @@ public final class ProfileHandler {
                 connection.disconnect();
 
                 final String s = content.toString();
-                if (s.contains("raw_id")) {
-                    final String realUUID = s.split("raw_id\":\"")[1].split("\"")[0];
-                    realUUIDs.put(query, realUUID);
+                if (s.contains("\"id\"") && s.contains("\"name\"")) {
+                    final RealProfile realProfile = new RealProfile(formatAndConvertUUID(s.split("id\" : \"")[1].split("\"")[0]),
+                            s.split("name\" : \"")[1].split("\"")[0]);
 
-                    return realUUID;
+                    realProfiles.put(query, realProfile);
+
+                    return realProfile;
                 }
-
-                return name;
             }
-            return name;
+            return new RealProfile(null, name);
         } catch (final IOException ignored) {
-            return name;
+            return new RealProfile(null, name);
         }
+    }
+
+    private UUID formatAndConvertUUID(String rawUuid) {
+        rawUuid = rawUuid.replace("-", "");
+
+        if (rawUuid.length() != 32)
+            throw new IllegalArgumentException("Invalid UUID string length.");
+
+        return UUID.fromString(rawUuid.substring(0, 8) + "-" +
+                rawUuid.substring(8, 12) + "-" +
+                rawUuid.substring(12, 16) + "-" +
+                rawUuid.substring(16, 20) + "-" +
+                rawUuid.substring(20));
     }
 
     private void failed(final SlashCommandInteractionEvent event, final Profile profile) {

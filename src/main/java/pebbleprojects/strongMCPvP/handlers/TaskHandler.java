@@ -37,11 +37,11 @@ public final class TaskHandler {
         return scheduler.runTaskLaterAsynchronously(DataHandler.INSTANCE.getMain(), runnable, delay);
     }
 
-    public BukkitTask runLaterSync(final Runnable runnable, final long delay) {
-        return scheduler.runTaskLater(DataHandler.INSTANCE.getMain(), runnable, delay);
+    public void runLaterSync(final Runnable runnable, final long delay) {
+        scheduler.runTaskLater(DataHandler.INSTANCE.getMain(), runnable, delay);
     }
 
-    public void runTaskTimerAsync(final BukkitRunnable runnable, final long delay) {
-        runnable.runTaskTimer(DataHandler.INSTANCE.getMain(), 0, delay);
+    public BukkitTask runTaskTimerAsync(final BukkitRunnable runnable, final long delay) {
+        return runnable.runTaskTimerAsynchronously(DataHandler.INSTANCE.getMain(), 0, delay);
     }
 }

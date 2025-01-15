@@ -108,6 +108,8 @@ public final class DatabaseHandler {
             ActiveTrail.INSTANCE.load(uuid);
             QuestReminder.INSTANCE.load(uuid);
             QuestCompletion.INSTANCE.load(uuid);
+
+            LevelsHandler.INSTANCE.updatePlayerLevel(uuid);
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;

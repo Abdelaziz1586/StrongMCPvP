@@ -3,12 +3,12 @@ package pebbleprojects.strongMCPvP.databaseData;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 import pebbleprojects.strongMCPvP.handlers.DatabaseHandler;
 import org.jetbrains.annotations.NotNull;
+import pebbleprojects.strongMCPvP.handlers.LevelsHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -31,14 +31,20 @@ public final class Points {
 
     public void set(final @NotNull UUID uuid, final int amount) {
         points.put(uuid, amount);
+
+        LevelsHandler.INSTANCE.updatePlayerLevel(uuid);
     }
 
     public void add(final @NotNull UUID uuid, final int amount) {
         points.put(uuid, get(uuid) + amount);
+
+        LevelsHandler.INSTANCE.updatePlayerLevel(uuid);
     }
 
     public void remove(final @NotNull UUID uuid, final int amount) {
         points.put(uuid, Math.max(get(uuid) - amount, 0));
+
+        LevelsHandler.INSTANCE.updatePlayerLevel(uuid);
     }
 
     public int get(final @NotNull UUID uuid) {
