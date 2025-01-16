@@ -1,15 +1,17 @@
 package pebbleprojects.strongMCPvP.databaseData;
 
+import pebbleprojects.strongMCPvP.functions.TopPlayerData;
+import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 import pebbleprojects.strongMCPvP.handlers.DatabaseHandler;
 import org.jetbrains.annotations.NotNull;
+import pebbleprojects.strongMCPvP.handlers.UtilsHandler;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class Deaths {
@@ -61,6 +63,46 @@ public final class Deaths {
         }
 
         return i;
+    }
+
+    public List<Map.Entry<TopPlayerData, Integer>> getTop10Players() throws SQLException {
+        List<Map.Entry<TopPlayerData, Integer>> topPlayers = new ArrayList<>();
+
+        if (DatabaseHandler.INSTANCE.getHikari() != null) {
+            try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
+                 final PreparedStatement selectAll = connection.prepareStatement(SELECT_ALL);
+                 final ResultSet resultSet = selectAll.executeQuery()) {
+
+                while (resultSet.next()) {
+                    final UUID uuid = UUID.fromString(resultSet.getString("UUID"));
+                    final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
+
+                    if (playerName != null)
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), resultSet.getInt("DEATHS")));
+                }
+
+            } catch (final SQLException e) {
+                throw new SQLException("Error retrieving top players from the database.", e);
+            }
+        } else {
+            final Configuration section = DataHandler.INSTANCE.getData().getSection("players");
+            if (section != null) {
+                for (final String key : section.getKeys()) {
+                    final UUID uuid = UUID.fromString(key);
+                    final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
+
+                    if (playerName != null)
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), section.getInt(key + ".deaths")));
+                }
+            }
+        }
+
+        topPlayers.sort((entry1, entry2) -> Integer.compare(entry2.getValue(), entry1.getValue()));
+
+        if (topPlayers.size() > 10)
+            topPlayers = topPlayers.subList(0, 10);
+
+        return topPlayers;
     }
 
     public void remove(final @NotNull UUID uuid, final int amount) {

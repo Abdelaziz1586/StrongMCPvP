@@ -10,6 +10,8 @@ commands:
     description: Help command for PvP
   npc:
     description: Main command for PvP's NPCs
+  leaderboard:
+    description: Main command for PvP's Leaderboards
   setspawn:
     description: Set spawn command for PvP
   fix:

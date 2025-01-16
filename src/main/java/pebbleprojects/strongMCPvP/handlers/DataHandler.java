@@ -72,6 +72,7 @@ public final class DataHandler {
         new KillStreakHandler();
         new ScoreboardHandler();
         new PermissionsHandler();
+        new LeaderboardHandler();
         new TempItemShopHandler();
 
         new DiscordHandler();
@@ -145,6 +146,7 @@ public final class DataHandler {
         KillStreakHandler.INSTANCE.update();
         ScoreboardHandler.INSTANCE.update();
         PermissionsHandler.INSTANCE.update();
+        LeaderboardHandler.INSTANCE.update();
         TempItemShopHandler.INSTANCE.update();
     }
 

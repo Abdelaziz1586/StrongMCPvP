@@ -13,6 +13,7 @@ public final class CommandsHandler {
         main.getCommand("help").setExecutor(new HelpCommand());
         main.getCommand("settings").setExecutor(new SettingsCommand());
         main.getCommand("setspawn").setExecutor(new SetSpawnCommand());
+        main.getCommand("leaderboard").setExecutor(new LeaderboardCommand());
     }
 
 }

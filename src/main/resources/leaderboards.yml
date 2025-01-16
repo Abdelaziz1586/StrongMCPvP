@@ -1,0 +1,24 @@
+kills:
+  enabled: true
+  title: "&aTop Kills"
+  lines-format: "&e#%place% &e&l%player% &a- &7%score%"
+
+deaths:
+  enabled: true
+  title: "&aTop Deaths"
+  lines-format: "&e#%place% &e&l%player% &a- &7%score%"
+
+assists:
+  enabled: true
+  title: "&aTop Assists"
+  lines-format: "&e#%place% &e&l%player% &a- &7%score%"
+
+souls:
+  enabled: true
+  title: "&aTop Souls"
+  lines-format: "&e#%place% &e&l%player% &a- &7%score%"
+
+points:
+  enabled: true
+  title: "&aTop Points"
+  lines-format: "&e#%place% &e&l%player% &a- &7%score%"

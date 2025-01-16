@@ -39,7 +39,7 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
                     remove(player, args);
                     break;
                 default:
-                    MessageHandler.INSTANCE.sendMessage(player, "npc.invalid-arguments", null);
+                    MessageHandler.INSTANCE.sendMessage(player, "npc.others.invalid-arguments", null);
                     break;
             }
         });
@@ -48,6 +48,12 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
 
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String label, final String[] args) {
+        if (sender instanceof Player) {
+            final Player player = (Player) sender;
+            if (doesNotHaveCreatePermissions(player) && doesNotHaveRemovePermissions(player))
+                return null;
+        }
+
         if (args.length == 1) {
             return Stream.of("create", "remove")
                     .filter(s -> s.startsWith(args[0].toLowerCase()))
@@ -103,8 +109,17 @@ public final class NPCCommand implements CommandExecutor, TabExecutor {
     }
 
     private boolean doesNotHaveCreatePermissions(final Player player) {
-        return !PermissionsHandler.INSTANCE.hasPermission(player, "npc.shop.create") &&
-                !PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.create");
+        return !PermissionsHandler.INSTANCE.hasPermission(player, "npc.shop.create")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.create")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.trails.create")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.settings.create");
+    }
+
+    private boolean doesNotHaveRemovePermissions(final Player player) {
+        return !PermissionsHandler.INSTANCE.hasPermission(player, "npc.shop.remove")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.quests.remove")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.trails.remove")
+                && !PermissionsHandler.INSTANCE.hasPermission(player, "npc.settings.remove");
     }
 
     private void handleCreateShop(final Player player, final String[] args) {

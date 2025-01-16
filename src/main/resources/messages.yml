@@ -527,6 +527,322 @@ settings:
         stay: 3
         fadeOut: 1
 
+leaderboard:
+  others:
+    invalid-arguments:
+      chat: "%prefix% &c/leaderboard create (kills/deaths/assists/points/souls)\n%prefix% &c/leaderboard remove (kills/deaths/assists/points/souls)"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    command-no-permission:
+      chat: "%prefix% &cYou don't have permission to use this command"
+      actionbar: "&cNo permission"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  kills:
+    create:
+      success:
+        chat: "%prefix% &aCreated Kills Leaderboard at your location."
+        actionbar: "&eSuccessfully create Kills Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eKills Leaderboard &acreated at your current position"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aRemoved Kills Leaderboard."
+        actionbar: "&eSuccessfully removed Kills Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eKills Leaderboard &aremoved"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  deaths:
+    success:
+      create:
+        chat: "%prefix% &aCreated Deaths Leaderboard at your location."
+        actionbar: "&eSuccessfully create Deaths Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eDeaths Leaderboard &acreated at your current position"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+    failed:
+      error:
+        chat: "%prefix% &cAn error has occurred, please check the console"
+        actionbar: "&cError"
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      no-permission:
+        chat: "%prefix% &cYou don't have permission to use this command"
+        actionbar: "&cNo permission"
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aRemoved Deaths Leaderboard."
+        actionbar: "&eSuccessfully removed Deaths Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eDeaths Leaderboard &aremoved"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  assists:
+    create:
+      success:
+        chat: "%prefix% &aCreated Assists Leaderboard at your location."
+        actionbar: "&eSuccessfully create Assists Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eAssists Leaderboard &acreated at your current position"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aRemoved Kills Leaderboard."
+        actionbar: "&eSuccessfully removed Kills Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eKills Leaderboard &aremoved"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  souls:
+    create:
+      success:
+        chat: "%prefix% &aCreated Souls Leaderboard at your location."
+        actionbar: "&eSuccessfully create Souls Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eSouls Leaderboard &acreated at your current position"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aRemoved Souls Leaderboard."
+        actionbar: "&eSuccessfully removed Souls Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&eSouls Leaderboard &aremoved"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+  points:
+    create:
+      success:
+        chat: "%prefix% &aCreated Points Leaderboard at your location."
+        actionbar: "&eSuccessfully create Points Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&ePoints Leaderboard &acreated at your current position"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+    remove:
+      success:
+        chat: "%prefix% &aRemoved Points Leaderboard."
+        actionbar: "&eSuccessfully removed Points Leaderboard"
+        title-screen:
+          title: ""
+          subtitle: "&ePoints Leaderboard &aremoved"
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      failed:
+        error:
+          chat: "%prefix% &cAn error has occurred, please check the console"
+          actionbar: "&cError"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+        no-permission:
+          chat: "%prefix% &cYou don't have permission to use this command"
+          actionbar: "&cNo permission"
+          title-screen:
+            title: ""
+            subtitle: ""
+            fadeIn: 1
+            stay: 3
+            fadeOut: 1
+
 npc:
   others:
     invalid-arguments:

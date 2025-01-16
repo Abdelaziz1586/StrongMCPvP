@@ -1,8 +1,10 @@
 package pebbleprojects.strongMCPvP.handlers;
 
 import net.minecraft.server.v1_8_R3.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -11,6 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 public final class UtilsHandler {
 
@@ -51,6 +54,11 @@ public final class UtilsHandler {
         if (message.isEmpty()) return;
 
         ((CraftPlayer) player).getHandle().playerConnection.sendPacket(new PacketPlayOutChat(IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\": \"" + message + "\"}")), (byte) 2));
+    }
+
+    public String getPlayerNameByUUID(final UUID uuid) {
+        final OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(uuid);
+        return offlinePlayer.hasPlayedBefore() ? offlinePlayer.getName() : null;
     }
 
     public ItemStack[] getNextAndPreviousPage(final int page) {

@@ -13,15 +13,32 @@ npc:
   shop:
     create: pvp.npc.shop.create
     remove: npc.shop.remove
-  perks:
-    create: pvp.npc.perks.create
-    remove: pvp.npc.perks.remove
+  quests:
+    create: pvp.npc.quests.create
+    remove: pvp.npc.quests.remove
   trails:
     create: pvp.npc.trails.create
     remove: pvp.npc.trails.remove
   settings:
     create: pvp.npc.settings.create
     remove: pvp.npc.settings.remove
+
+leaderboard:
+  kills:
+    create: pvp.leaderboard.kills.create
+    remove: pvp.leaderboard.kills.remove
+  deaths:
+    create: pvp.leaderboard.deaths.create
+    remove: pvp.leaderboard.deaths.remove
+  assists:
+    create: pvp.leaderboard.assists.create
+    remove: pvp.leaderboard.assists.remove
+  souls:
+    create: pvp.leaderboard.souls.create
+    remove: pvp.leaderboard.souls.remove
+  points:
+    create: pvp.leaderboard.points.create
+    remove: pvp.leaderboard.points.remove
 
 projectile-trails:
   all: pvp.trails.*
