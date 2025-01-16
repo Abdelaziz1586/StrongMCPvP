@@ -85,6 +85,10 @@ public final class LevelsHandler {
         return prefixes.containsKey(uuid) ? prefixes.get(uuid).chat : "";
     }
 
+    public String getTabPrefix(final UUID uuid) {
+        return prefixes.containsKey(uuid) ? prefixes.get(uuid).tab : "";
+    }
+
     private static final class Level {
 
         private final boolean enabled;

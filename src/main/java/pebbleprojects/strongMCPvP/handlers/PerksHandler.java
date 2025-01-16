@@ -209,7 +209,7 @@ public final class PerksHandler {
                 perkSlot.setPerkId(-1);
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.unequip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
-                ShopHandler.INSTANCE.openGUI(player, false);
+                ShopHandler.INSTANCE.openGUI(player);
                 return;
             }
 
@@ -217,7 +217,7 @@ public final class PerksHandler {
                 perkSlot.setPerkId(perkId);
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.equip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
-                ShopHandler.INSTANCE.openGUI(player, false);
+                ShopHandler.INSTANCE.openGUI(player);
                 return;
             }
 
@@ -228,7 +228,7 @@ public final class PerksHandler {
 
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.buy.success", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
-                ShopHandler.INSTANCE.openGUI(player, false);
+                ShopHandler.INSTANCE.openGUI(player);
                 return;
             }
 

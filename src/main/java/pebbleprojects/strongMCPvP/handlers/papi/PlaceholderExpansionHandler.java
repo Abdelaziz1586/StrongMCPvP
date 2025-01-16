@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import pebbleprojects.strongMCPvP.databaseData.*;
 import pebbleprojects.strongMCPvP.handlers.DataHandler;
 import pebbleprojects.strongMCPvP.handlers.KillStreakHandler;
+import pebbleprojects.strongMCPvP.handlers.LevelsHandler;
 
 public final class PlaceholderExpansionHandler extends PlaceholderExpansion {
 
@@ -52,6 +53,10 @@ public final class PlaceholderExpansionHandler extends PlaceholderExpansion {
                 return String.valueOf(Assists.INSTANCE.get(player.getUniqueId()));
             case "killstreak":
                 return String.valueOf(KillStreakHandler.INSTANCE.getKillStreaks(player.getUniqueId()));
+            case "level_tab":
+                return LevelsHandler.INSTANCE.getTabPrefix(player.getUniqueId());
+            case "level_chat":
+                return LevelsHandler.INSTANCE.getChatPrefix(player.getUniqueId());
             default:
                 return null;
         }

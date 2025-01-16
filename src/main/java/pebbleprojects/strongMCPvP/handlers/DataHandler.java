@@ -72,6 +72,7 @@ public final class DataHandler {
         new KillStreakHandler();
         new ScoreboardHandler();
         new PermissionsHandler();
+        new TempItemShopHandler();
 
         new DiscordHandler();
         new ProfileHandler();
@@ -133,6 +134,8 @@ public final class DataHandler {
         KillsHandler.INSTANCE.update();
         PerksHandler.INSTANCE.update();
         TrailsHandler.INSTANCE.update();
+        LevelsHandler.INSTANCE.update();
+        QuestsHandler.INSTANCE.update();
         DiscordHandler.INSTANCE.update();
         ProfileHandler.INSTANCE.update();
         MessageHandler.INSTANCE.update();
@@ -142,6 +145,7 @@ public final class DataHandler {
         KillStreakHandler.INSTANCE.update();
         ScoreboardHandler.INSTANCE.update();
         PermissionsHandler.INSTANCE.update();
+        TempItemShopHandler.INSTANCE.update();
     }
 
     public void saveData() {

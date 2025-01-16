@@ -12,7 +12,7 @@ public final class RightClickNPC implements Listener {
         TaskHandler.INSTANCE.runAsync(() -> {
             switch (event.getNPC().getType()) {
                 case 0:
-                    ShopHandler.INSTANCE.openGUI(event.getPlayer(), false);
+                    ShopHandler.INSTANCE.openGUI(event.getPlayer());
                     break;
                 case 1:
                     QuestsHandler.INSTANCE.openGUI(event.getPlayer());

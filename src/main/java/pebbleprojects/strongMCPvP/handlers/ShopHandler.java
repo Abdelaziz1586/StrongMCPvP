@@ -87,7 +87,7 @@ public final class ShopHandler {
                         PerkSlots.INSTANCE.add(uuid, perkSlot);
                         MessageHandler.INSTANCE.sendMessage(player, "perks.slots.buy.success", new String[]{"perkSlot," + perkSlot});
 
-                        openGUI(player, false);
+                        openGUI(player);
                         return;
                     }
 
@@ -100,7 +100,7 @@ public final class ShopHandler {
                     KitsHandler.INSTANCE.openGUI(player);
                     break;
                 case IRON_SWORD:
-                    openGUI(player, true);
+                    TempItemShopHandler.INSTANCE.openGUI(player);
                     break;
                 default:
                     PerksHandler.INSTANCE.openGUI(player, perkSlot);
@@ -109,12 +109,7 @@ public final class ShopHandler {
         });
     }
 
-    public void openGUI(final Player player, final boolean tempItems) {
-        if (tempItems) {
-            //
-            return;
-        }
-
+    public void openGUI(final Player player) {
         if (!shopGUIClones.containsKey(player.getUniqueId()))
             shopGUIClones.put(player.getUniqueId(), GUIHandler.INSTANCE.cloneGUI(shopGUI));
 

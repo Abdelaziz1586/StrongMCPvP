@@ -36,7 +36,8 @@ perk-slots:
       permission: strongmc.mvp
 
 items:
-  diamond_sword:
+  0:
+    material: diamond_sword
     canBuyMultipleOf: false
     amount: 1
     price: 300
@@ -46,13 +47,22 @@ items:
       lore:
         - "&7Left click: buy"
         - "&7Price: &e300"
+      enchantments:
+        enabled: false
+        enchantments:
+          PROTECTION_ENVIRONMENTAL: 1
     item:
       name: "&b&lDiamond Sword"
       lore:
         enabled: false
         lore:
           - "&1Deals +7 damage"
-  diamond_leggings:
+      enchantments:
+        enabled: false
+        enchantments:
+          DAMAGE_ALL: 1
+  1:
+    material: diamond_leggings
     canBuyMultipleOf: false
     amount: 1
     price: 700
@@ -62,9 +72,17 @@ items:
       lore:
         - "&7Left click: buy"
         - "&7Price: &e700"
+      enchantments:
+        enabled: false
+        enchantments:
+          PROTECTION_ENVIRONMENTAL: 1
     item:
       name: "&7"
       lore:
         enabled: false
         lore:
           - "&1Leggings armor"
+      enchantments:
+        enabled: false
+        enchantments:
+          PROTECTION_ENVIRONMENTAL: 1

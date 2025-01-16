@@ -24,7 +24,6 @@ public final class NPCHandler {
 
     private final List<GUI> guis;
     public static NPCHandler INSTANCE;
-    private final ItemStack nextPage, previousPage;
     private final Map<UUID, Map<Integer, GUI>> createGUIs;
     private final Map<Integer, NPC> shopNPCs, questsNPCs, trailsNPCs, settingsNPCs;
 
@@ -39,9 +38,6 @@ public final class NPCHandler {
         questsNPCs = new ConcurrentHashMap<>();
         trailsNPCs = new ConcurrentHashMap<>();
         settingsNPCs = new ConcurrentHashMap<>();
-
-        nextPage = getHead("MHF_ArrowRight", "§7Next Page", "§7Left Click: Next Page");
-        previousPage = getHead("MHF_ArrowLeft", "§7Previous Page", "§7Left Click: Go Back");
 
         createGUIs = new ConcurrentHashMap<>();
 
@@ -489,7 +485,7 @@ public final class NPCHandler {
         inventories.add(Bukkit.createInventory(null, 18, "§b§lNPC Manager"));
 
         final List<NPC> npcs = NPCHandler.INSTANCE.getNPCs();
-        final ItemStack head = getHead("CONSOLE", "§bTotal NPC Count: §e" + npcs.size(), "§7Left Click: Create Shop NPC", "§7Right Click: Create Quests NPC", "§7Shift Click: Create Trails NPC", "§7Middle Click: Create Settings NPC");
+        final ItemStack head = UtilsHandler.INSTANCE.getHead("CONSOLE", "§bTotal NPC Count: §e" + npcs.size(), "§7Left Click: Create Shop NPC", "§7Right Click: Create Quests NPC", "§7Shift Click: Create Trails NPC", "§7Middle Click: Create Settings NPC");
         inventories.get(0).setItem(4, head);
 
         int i = 0;
@@ -506,13 +502,13 @@ public final class NPCHandler {
                     inventories.add(Bukkit.createInventory(null, 18, "§b§lNPC Manager - Page " + (currentInventory + 1)));
                 }
 
-                final ItemStack[] items = getNextAndPreviousPage(currentInventory + 1);
+                final ItemStack[] items = UtilsHandler.INSTANCE.getNextAndPreviousPage(currentInventory + 1);
                 inventories.get(currentInventory - 1).setItem(17, items[0]);
                 inventories.get(currentInventory).setItem(9, items[1]);
                 inventories.get(currentInventory).setItem(4, head);
             }
 
-            inventories.get(currentInventory).setItem(i + 9, getHead(npc.getSkinName(), (npc.getType() == 0 ? "§eShopNPC " : npc.getType() == 1 ? "§bQuestsNPC " : npc.getType() == 2 ? "§6TrailsNPC " : "§5SettingsNPC ") + npc.getId() + ": §r" + npc.getName(), "§7Left Click: Teleport", "§7Right Click: Delete"));
+            inventories.get(currentInventory).setItem(i + 9, UtilsHandler.INSTANCE.getHead(npc.getSkinName(), (npc.getType() == 0 ? "§eShopNPC " : npc.getType() == 1 ? "§bQuestsNPC " : npc.getType() == 2 ? "§6TrailsNPC " : "§5SettingsNPC ") + npc.getId() + ": §r" + npc.getName(), "§7Left Click: Teleport", "§7Right Click: Delete"));
             i++;
         }
 
@@ -581,38 +577,6 @@ public final class NPCHandler {
         }
     }
 
-    private ItemStack[] getNextAndPreviousPage(final int page) {
-        final ItemStack next = nextPage.clone(),
-                previous = previousPage.clone();
-
-        final ItemMeta nextMeta = next.getItemMeta(),
-                previousMeta = previous.getItemMeta();
-
-        nextMeta.getLore().add(1, "§7Current page: " + page);
-        previousMeta.getLore().add(1, "§7Current page: " + page);
-
-        next.setItemMeta(nextMeta);
-        previous.setItemMeta(previousMeta);
-
-        return new ItemStack[]{next, previous};
-    }
-
-    private ItemStack getHead(final String player, final String name, final String... lore) {
-        final ItemStack itemStack = new ItemStack(Material.SKULL_ITEM, 1, (short) 3);
-        final SkullMeta skull = (SkullMeta) itemStack.getItemMeta();
-
-        skull.setDisplayName(name);
-        skull.setOwner(player);
-
-        if (lore != null) {
-            skull.setLore(Arrays.asList(lore));
-        }
-
-        itemStack.setItemMeta(skull);
-
-        return itemStack;
-    }
-
     private void openCreationGUI(final Player player, final int type) {
         final Map<Integer, GUI> guis = createGUIs.getOrDefault(player.getUniqueId(), new ConcurrentHashMap<>());
 
@@ -659,7 +623,7 @@ public final class NPCHandler {
                 break;
         }
 
-        inventory.setItem(5, getHead(skinName, ChatColor.translateAlternateColorCodes('&', name == null ? "" : name), "§7Left Click: Set Name", "§7Right Click: Set Skin"));
+        inventory.setItem(5, UtilsHandler.INSTANCE.getHead(skinName, ChatColor.translateAlternateColorCodes('&', name == null ? "" : name), "§7Left Click: Set Name", "§7Right Click: Set Skin"));
 
         ItemStack itemStack = new ItemStack(Material.EMERALD);
         ItemMeta itemMeta = itemStack.getItemMeta();

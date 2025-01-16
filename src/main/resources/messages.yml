@@ -116,6 +116,36 @@ reload:
       stay: 3
       fadeOut: 1
 
+temporary-shop-items:
+  success:
+    chat: "%prefix% &aYou have successfully bought %query%"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  failed:
+    no-enough-souls:
+      chat: "%prefix% &cYou don't have enough Souls to buy this item!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    can-not-buy-multiple:
+      chat: "%prefix% &cYou can't buy this item more than once!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
 # Leave any field empty to disable, leave chat, actionbar, title, and subtitle empty to disable the whole message
 gameplay:
   kill:
