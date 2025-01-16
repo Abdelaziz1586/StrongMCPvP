@@ -98,57 +98,79 @@ public final class LeaderboardHandler {
         final Location location = LocationHandler.INSTANCE.convertToLocation(DataHandler.INSTANCE.getData().getString("leaderboards." + key));
         if (location == null) return;
 
-        final List<Map.Entry<TopPlayerData, Integer>> leaderboard;
-        switch (key) {
-            case "kills":
-                leaderboard = Kills.INSTANCE.getTop10Players();
-                break;
-            case "deaths":
-                leaderboard = Deaths.INSTANCE.getTop10Players();
-                break;
-            case "assists":
-                leaderboard = Assists.INSTANCE.getTop10Players();
-                break;
-            case "souls":
-                leaderboard = Souls.INSTANCE.getTop10Players();
-                break;
-            case "points":
-                leaderboard = Points.INSTANCE.getTop10Players();
-                break;
-            default:
-                leaderboard = null;
-                break;
-        }
-
-        createLeaderboard(key, location, leaderboard, ChatColor.translateAlternateColorCodes('&', section.getString("title", "")), ChatColor.translateAlternateColorCodes('&', section.getString("lines-format", "")));
+        createLeaderboard(key, location, ChatColor.translateAlternateColorCodes('&', section.getString("title", "")), ChatColor.translateAlternateColorCodes('&', section.getString("lines-format", "")));
     }
 
-    private void createLeaderboard(final String key, final Location location, final List<Map.Entry<TopPlayerData, Integer>> leaderboard, final String title, final String lineFormat) {
-        if (leaderboard == null || leaderboard.isEmpty())
-            throw new IllegalArgumentException("Leaderboard data cannot be null or empty!");
-
-        final Location currentLocation = location.clone().add(0, 3, 0);
+    private void createLeaderboard(final String key, final Location location, final String title, final String lineFormat) {
+        final Location currentLocation = location.clone();
         if (leaderboardsList.containsKey(key))
             leaderboardsList.remove(key).destroy();
 
         final Leaderboard leaderboardInstance = new Leaderboard();
+        leaderboardInstance.task = TaskHandler.INSTANCE.runTaskTimerSync(() -> {
+            try {
+                updateLeaderboardDisplays(key, leaderboardInstance, currentLocation, title, lineFormat);
+            } catch (final SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }, 20L);
 
-        TaskHandler.INSTANCE.runSync(() -> {
-            leaderboardInstance.stands.add(spawnArmorStand(currentLocation, title));
-            currentLocation.subtract(0, 0.3, 0);
+        leaderboardsList.put(key, leaderboardInstance);
+    }
 
-            int rank = 1;
-            for (final Map.Entry<TopPlayerData, Integer> entry : leaderboard) {
-                leaderboardInstance.stands.add(spawnArmorStand(currentLocation, PlaceholderAPIHandler.INSTANCE.translateMessage(entry.getKey().getUUID(),
-                        lineFormat.replace("%place%", String.valueOf(rank++))
-                                .replace("%player%", entry.getKey().getName())
-                                .replace("%score%", String.valueOf(entry.getValue())))));
+    private void updateLeaderboardDisplays(final String key, final Leaderboard leaderboardInstance, final Location currentLocation, final String title, final String lineFormat) throws SQLException {
+        currentLocation.add(0, 3, 0);
 
-                currentLocation.subtract(0, 0.3, 0);
+        ArmorStand titleStand = leaderboardInstance.stands.isEmpty() ? null : leaderboardInstance.stands.get(0);
+        if (titleStand != null) {
+            titleStand.setCustomName(title);
+        } else {
+            titleStand = spawnArmorStand(currentLocation, title);
+            leaderboardInstance.stands.add(titleStand);
+        }
+
+        currentLocation.subtract(0, 0.3, 0);
+
+        final List<Map.Entry<TopPlayerData, Integer>> leaderboard = getLeaderboardData(key);
+        if (leaderboard == null || leaderboard.isEmpty())
+            throw new IllegalArgumentException("Leaderboard data cannot be null or empty!");
+
+        int rank = 1;
+        for (int i = 0; i < leaderboard.size(); i++) {
+            final Map.Entry<TopPlayerData, Integer> entry = leaderboard.get(i);
+            ArmorStand playerStand = leaderboardInstance.stands.size() > i + 1 ? leaderboardInstance.stands.get(i + 1) : null;
+
+            final String formattedLine = PlaceholderAPIHandler.INSTANCE.translateMessage(entry.getKey().getUUID(),
+                    lineFormat.replace("%place%", String.valueOf(rank++))
+                            .replace("%player%", entry.getKey().getName())
+                            .replace("%score%", String.valueOf(entry.getValue())));
+
+            if (playerStand != null) {
+                playerStand.setCustomName(formattedLine);
+            } else {
+                playerStand = spawnArmorStand(currentLocation, formattedLine);
+                leaderboardInstance.stands.add(playerStand);
             }
 
-            leaderboardsList.put(key, leaderboardInstance);
-        });
+            currentLocation.subtract(0, 0.3, 0);
+        }
+    }
+
+    private List<Map.Entry<TopPlayerData, Integer>> getLeaderboardData(final String key) throws SQLException {
+        switch (key) {
+            case "kills":
+                return Kills.INSTANCE.getTop10Players();
+            case "deaths":
+                return Deaths.INSTANCE.getTop10Players();
+            case "assists":
+                return Assists.INSTANCE.getTop10Players();
+            case "souls":
+                return Souls.INSTANCE.getTop10Players();
+            case "points":
+                return Points.INSTANCE.getTop10Players();
+            default:
+                return null;
+        }
     }
 
     private ArmorStand spawnArmorStand(final Location location, final String name) {
@@ -178,6 +200,10 @@ public final class LeaderboardHandler {
                 task = null;
             }
 
+            removeStands();
+        }
+
+        private void removeStands() {
             for (final ArmorStand stand : stands)
                 stand.remove();
 

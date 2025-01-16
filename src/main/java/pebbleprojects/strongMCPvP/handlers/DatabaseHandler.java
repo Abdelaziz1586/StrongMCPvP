@@ -42,17 +42,15 @@ public final class DatabaseHandler {
         new QuestReminder();
         new QuestCompletion();
 
-        for (final Player player : DataHandler.INSTANCE.getMain().getServer().getOnlinePlayers()) {
+        for (final Player player : DataHandler.INSTANCE.getMain().getServer().getOnlinePlayers())
             load(player);
-        }
 
         DataHandler.INSTANCE.getLogger().info("Loaded Database Handler!");
     }
 
     public void update() {
-        if (hikari != null) {
+        if (hikari != null)
             hikari.close();
-        }
 
         final Configuration database = DataHandler.INSTANCE.getConfig().getSection("database");
 

@@ -86,7 +86,7 @@ public final class Kills {
                     final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
 
                     if (playerName != null)
-                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), resultSet.getInt("KILLS")));
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), kills.containsKey(uuid) ? kills.get(uuid) : resultSet.getInt("KILLS")));
                 }
 
             } catch (final SQLException e) {
@@ -100,7 +100,7 @@ public final class Kills {
                     final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
 
                     if (playerName != null)
-                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), section.getInt(key + ".kills")));
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), kills.containsKey(uuid) ? kills.get(uuid) : section.getInt(key + ".kills")));
                 }
             }
         }

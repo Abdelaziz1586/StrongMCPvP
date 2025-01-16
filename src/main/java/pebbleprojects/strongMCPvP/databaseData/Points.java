@@ -92,7 +92,7 @@ public final class Points {
                     final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
 
                     if (playerName != null)
-                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), resultSet.getInt("POINTS")));
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), points.containsKey(uuid) ? points.get(uuid) : resultSet.getInt("POINTS")));
                 }
 
             } catch (final SQLException e) {
@@ -106,7 +106,7 @@ public final class Points {
                     final String playerName = UtilsHandler.INSTANCE.getPlayerNameByUUID(uuid);
 
                     if (playerName != null)
-                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), section.getInt(key + ".points")));
+                        topPlayers.add(new AbstractMap.SimpleEntry<>(new TopPlayerData(uuid, playerName), points.containsKey(uuid) ? points.get(uuid) : section.getInt(key + ".points")));
                 }
             }
         }

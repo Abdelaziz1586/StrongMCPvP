@@ -71,7 +71,7 @@ public final class TempItemShopHandler {
                 inventories.get(currentInventory - 1).setItem(8, items[0]);
                 inventories.get(currentInventory).setItem(0, items[1]);
 
-                temporarilyItems.put(currentInventory - 1, map);
+                temporarilyItems.put(currentInventory - 1, new ConcurrentHashMap<>(map));
                 map.clear();
             }
 

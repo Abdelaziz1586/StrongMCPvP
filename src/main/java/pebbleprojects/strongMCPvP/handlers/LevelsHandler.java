@@ -66,6 +66,11 @@ public final class LevelsHandler {
                         this.levels.put(Integer.parseInt(key), level);
                 } catch (final NumberFormatException ignored) {}
             }
+
+            TaskHandler.INSTANCE.runAsync(() -> {
+                for (final Player player : Bukkit.getOnlinePlayers())
+                    updatePlayerLevel(player.getUniqueId());
+            });
         } catch (final IOException e) {
             DataHandler.INSTANCE.getLogger().warning("Unable to load levels.yml in memory: " + e.getMessage());
         }

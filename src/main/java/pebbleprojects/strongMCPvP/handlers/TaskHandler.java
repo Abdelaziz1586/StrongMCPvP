@@ -44,4 +44,8 @@ public final class TaskHandler {
     public BukkitTask runTaskTimerAsync(final BukkitRunnable runnable, final long delay) {
         return runnable.runTaskTimerAsynchronously(DataHandler.INSTANCE.getMain(), 0, delay);
     }
+
+    public BukkitTask runTaskTimerSync(final Runnable runnable, final long delay) {
+        return scheduler.runTaskTimer(DataHandler.INSTANCE.getMain(), runnable, 0, delay);
+    }
 }
