@@ -174,27 +174,25 @@ public final class Embed {
     private Color getCommonColor(final String imageUrl) throws IOException {
         final BufferedImage image = ImageIO.read(new URL(imageUrl));
 
-        final int[] colorCountArray = new int[MAX_COLOR];
-        final int width = image.getWidth();
-        final int height = image.getHeight();
-        final int[] rgbArray = new int[width * height];
+        final int width = image.getWidth(),
+                height = image.getHeight();
+        final int[] rgbArray = new int[width * height],
+                colorCountArray = new int[MAX_COLOR];
 
         image.getRGB(0, 0, width, height, rgbArray, 0, width);
 
         IntStream.range(0, rgbArray.length).parallel().forEach(i -> {
-            final int argb = rgbArray[i];
-            final int alpha = (argb >> 24) & 0xff;
+            final int argb = rgbArray[i],
+                    alpha = (argb >> 24) & 0xff;
             if (alpha != 0) {
                 final int rgb = argb & 0x00FFFFFF;
                 colorCountArray[rgb]++;
             }
         });
 
-        final int mostCommonColorRGB = IntStream.range(0, MAX_COLOR)
+        return new Color(IntStream.range(0, MAX_COLOR)
                 .reduce((a, b) -> colorCountArray[a] > colorCountArray[b] ? a : b)
-                .orElseThrow(() -> new RuntimeException("No color found in the image"));
-
-        return new Color(mostCommonColorRGB);
+                .orElseThrow(() -> new RuntimeException("No color found in the image")));
     }
 
     private static class Author {

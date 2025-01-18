@@ -79,6 +79,8 @@ public final class DatabaseHandler {
             hikari.addDataSourceProperty("user", username);
             hikari.addDataSourceProperty("password", password);
             hikari.setAutoCommit(true);
+
+            createTables();
             return;
         }
 

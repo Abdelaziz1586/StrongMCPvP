@@ -113,7 +113,7 @@ public final class LeaderboardHandler {
             } catch (final SQLException e) {
                 throw new RuntimeException(e);
             }
-        }, 20L);
+        }, 1200L);
 
         leaderboardsList.put(key, leaderboardInstance);
     }
