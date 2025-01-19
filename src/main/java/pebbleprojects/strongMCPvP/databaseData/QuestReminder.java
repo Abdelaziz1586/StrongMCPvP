@@ -25,7 +25,7 @@ public final class QuestReminder {
 
         SAVE = "UPDATE PvP SET QUEST_REMINDER=? WHERE UUID=?";
         SELECT = "SELECT QUEST_REMINDER FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT QUEST_REMINDER FROM PvP";
+        SELECT_ALL = "SELECT QUEST_REMINDER, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final boolean questReminder) {

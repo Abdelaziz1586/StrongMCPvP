@@ -133,7 +133,7 @@ public final class LeaderboardHandler {
 
         final List<Map.Entry<TopPlayerData, Integer>> leaderboard = getLeaderboardData(key);
         if (leaderboard == null || leaderboard.isEmpty())
-            throw new IllegalArgumentException("Leaderboard data cannot be null or empty!");
+            return;
 
         int rank = 1;
         for (int i = 0; i < leaderboard.size(); i++) {

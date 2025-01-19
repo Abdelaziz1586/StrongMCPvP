@@ -25,7 +25,7 @@ public final class RedEffect {
 
         SAVE = "UPDATE PvP SET RED_EFFECT=? WHERE UUID=?";
         SELECT = "SELECT RED_EFFECT FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT RED_EFFECT FROM PvP";
+        SELECT_ALL = "SELECT RED_EFFECT, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final boolean redEffect) {

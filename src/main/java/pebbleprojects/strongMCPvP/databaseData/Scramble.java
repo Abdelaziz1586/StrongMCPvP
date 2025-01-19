@@ -25,7 +25,7 @@ public final class Scramble {
 
         SAVE = "UPDATE PvP SET SCRAMBLE=? WHERE UUID=?";
         SELECT = "SELECT SCRAMBLE FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT SCRAMBLE FROM PvP";
+        SELECT_ALL = "SELECT SCRAMBLE, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final boolean scramble) {

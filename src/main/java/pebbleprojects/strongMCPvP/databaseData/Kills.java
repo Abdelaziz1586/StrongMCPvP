@@ -27,7 +27,7 @@ public final class Kills {
 
         SAVE = "UPDATE PvP SET KILLS=? WHERE UUID=?";
         SELECT = "SELECT KILLS FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT KILLS FROM PvP";
+        SELECT_ALL = "SELECT KILLS, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final int amount) {
@@ -66,9 +66,8 @@ public final class Kills {
 
         final int i = DataHandler.INSTANCE.getData().getInt("players." + uuid + ".kills", -1);
 
-        if (i != -1) {
+        if (i != -1)
             kills.put(uuid, i);
-        }
 
         return i;
     }

@@ -28,7 +28,7 @@ public final class Points {
 
         SAVE = "UPDATE PvP SET POINTS=? WHERE UUID=?";
         SELECT = "SELECT POINTS FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT POINTS FROM PvP";
+        SELECT_ALL = "SELECT POINTS, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final int amount) {

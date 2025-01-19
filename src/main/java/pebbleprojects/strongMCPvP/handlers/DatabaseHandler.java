@@ -153,7 +153,7 @@ public final class DatabaseHandler {
     private void createTables() {
         try (final Connection connection = hikari.getConnection();
              final Statement statement = connection.createStatement()) {
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, RED_EFFECT boolean, QUEST_REMINDER boolean, QUEST_COMPLETION boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT");
+            statement.executeUpdate("CREATE TABLE IF NOT EXISTS PvP(UUID varchar(36) PRIMARY KEY, KILLS int, ASSISTS int, SOULS int, POINTS int, DEATHS int, TRAILS varchar(65), ACTIVE_TRAIL int, SCRAMBLE boolean, RED_EFFECT boolean, QUEST_REMINDER boolean, QUEST_COMPLETION boolean, PERKS TEXT, PERK_SLOTS TEXT, QUESTS TEXT)");
         } catch (final SQLException e) {
             DataHandler.INSTANCE.getLogger().severe("Error while accessing the database, using data file. Please check the details: " + e.getMessage());
             hikari = null;

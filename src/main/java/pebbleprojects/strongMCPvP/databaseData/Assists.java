@@ -27,7 +27,7 @@ public final class Assists {
 
         SAVE = "UPDATE PvP SET ASSISTS=? WHERE UUID=?";
         SELECT = "SELECT ASSISTS FROM PvP WHERE UUID=?";
-        SELECT_ALL = "SELECT ASSISTS FROM PvP";
+        SELECT_ALL = "SELECT ASSISTS, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final int amount) {

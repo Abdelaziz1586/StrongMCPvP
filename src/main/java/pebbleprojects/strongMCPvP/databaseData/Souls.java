@@ -28,7 +28,7 @@ public final class Souls {
         SAVE = "UPDATE PvP SET SOULS=? WHERE UUID=?";
         SELECT = "SELECT SOULS FROM PvP WHERE UUID=?";
         INSERT = "INSERT INTO PvP(UUID, SOULS) VALUES (?, ?)";
-        SELECT_ALL = "SELECT SOULS FROM PvP";
+        SELECT_ALL = "SELECT SOULS, UUID FROM PvP";
     }
 
     public void set(final @NotNull UUID uuid, final int amount) {
