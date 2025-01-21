@@ -9,6 +9,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import pebbleprojects.strongMCPvP.databaseData.*;
 import pebbleprojects.strongMCPvP.handlers.KillStreakHandler;
 import pebbleprojects.strongMCPvP.handlers.ScoreboardHandler;
+import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
 
 import java.util.List;
 import java.util.UUID;
@@ -36,13 +37,15 @@ public final class ScoreboardAdapter implements BoardAdapter {
 
     private String replaceStringWithData(final Player player, final String string) {
         final UUID uuid = player.getUniqueId();
-        return string
-                .replace("%player%", player.getName())
-                .replace("%souls%", String.valueOf(Souls.INSTANCE.get(uuid)))
-                .replace("%kills%", String.valueOf(Kills.INSTANCE.get(uuid)))
-                .replace("%deaths%", String.valueOf(Deaths.INSTANCE.get(uuid)))
-                .replace("%assists%", String.valueOf(Assists.INSTANCE.get(uuid)))
-                .replace("%points%", String.valueOf(Points.INSTANCE.get(uuid)))
-                .replace("%killStreak%", String.valueOf(KillStreakHandler.INSTANCE.getKillStreaks(uuid)));
+
+        return PlaceholderAPIHandler.INSTANCE.translateMessage(player,
+                string.replace("%player%", player.getName())
+                        .replace("%souls%", String.valueOf(Souls.INSTANCE.get(uuid)))
+                        .replace("%kills%", String.valueOf(Kills.INSTANCE.get(uuid)))
+                        .replace("%deaths%", String.valueOf(Deaths.INSTANCE.get(uuid)))
+                        .replace("%assists%", String.valueOf(Assists.INSTANCE.get(uuid)))
+                        .replace("%points%", String.valueOf(Points.INSTANCE.get(uuid)))
+                        .replace("%killStreak%", String.valueOf(KillStreakHandler.INSTANCE.getKillStreaks(uuid)))
+        );
     }
 }

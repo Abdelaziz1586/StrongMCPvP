@@ -52,9 +52,7 @@ public final class PerkSlots {
                 final ResultSet result = select.executeQuery();
 
                 if (result.next()) {
-                    result.getString("PERK_SLOTS");
-
-                    final List<PerkSlot> slots = getPerkSlots(DatabaseHandler.INSTANCE.getGson().fromJson(result.getString("GUILD_MEMBERS"), new TypeToken<List<String>>() {
+                    final List<PerkSlot> slots = getPerkSlots(DatabaseHandler.INSTANCE.getGson().fromJson(result.getString("PERK_SLOTS"), new TypeToken<List<String>>() {
                     }.getType()));
 
                     for (final int slot : ShopHandler.INSTANCE.getAvailableSlots(player)) {

@@ -7,6 +7,7 @@ import pebbleprojects.strongMCPvP.functions.config.ConfigurationProvider;
 import pebbleprojects.strongMCPvP.functions.config.YamlConfiguration;
 import pebbleprojects.strongMCPvP.handlers.discord.DiscordHandler;
 import pebbleprojects.strongMCPvP.handlers.discord.ProfileHandler;
+import pebbleprojects.strongMCPvP.handlers.luckperms.LuckPermsHandler;
 import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
 
 import java.io.File;
@@ -48,6 +49,7 @@ public final class DataHandler {
         new UtilsHandler();
         new PacketHandler();
         new LocationHandler();
+        new LuckPermsHandler();
         new PlaceholderAPIHandler();
 
         new GUIHandler();

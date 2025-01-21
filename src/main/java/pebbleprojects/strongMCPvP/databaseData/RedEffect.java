@@ -70,16 +70,15 @@ public final class RedEffect {
             try (final Connection connection = DatabaseHandler.INSTANCE.getHikari().getConnection();
                  final PreparedStatement select = connection.prepareStatement(SELECT)) {
                 select.setString(1, uuid.toString());
-                final ResultSet result = select.executeQuery();
-
-                if (result.next()) {
-                    redEffect.put(uuid, result.getBoolean("RED_EFFECT"));
-                    return;
+                try (final ResultSet result = select.executeQuery()) {
+                    if (result.next()) {
+                        redEffect.put(uuid, result.getBoolean("RED_EFFECT"));
+                        return;
+                    }
                 }
 
                 redEffect.put(uuid, false);
             }
-
             return;
         }
 

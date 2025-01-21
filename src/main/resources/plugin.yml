@@ -3,7 +3,9 @@ version: '1.0-SNAPSHOT'
 main: pebbleprojects.strongMCPvP.PvP
 api-version: 1.8
 authors: [Abdelaziz]
-softdepend: [PlaceholderAPI]
+softdepend:
+  - LuckPerms
+  - PlaceholderAPI
 description: PvP Plugin for StrongMC
 commands:
   help:
