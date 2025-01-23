@@ -127,6 +127,10 @@ public final class MessageHandler {
         return prefix;
     }
 
+    public Configuration getMessages() {
+        return messages;
+    }
+
     private ConfigMessage getMessage(final String key) {
         if (cache.containsKey(key)) {
             return cache.get(key);

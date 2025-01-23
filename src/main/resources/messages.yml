@@ -8,6 +8,10 @@
 
 prefix: "&7┃ &e&lPVP &r&7┃"
 
+flint-actionbar-message: "&6Flint ✸ &e%durability%"
+
+# Start of Command #
+
 set-spawn:
   success:
     chat: "%prefix% &aSuccessfully set spawn to your current location"
@@ -57,6 +61,98 @@ fix:
         fadeIn: 1
         stay: 3
         fadeOut: 1
+
+spawn:
+  success:
+    chat: "%prefix% &aSuccessfully sent you to spawn"
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  failed:
+    delay:
+      chat: "%prefix% &cPlease wait before executing this command again"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    combat-log:
+      chat: "%prefix% &cYou're currently in combat log!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+spectate:
+  success:
+    enable:
+      chat: "%prefix% &aYou are now in &eSpectator Mode"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &aYou are no longer in &eSpectator Mode"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  failed:
+    delay:
+      chat: "%prefix% &cPlease wait before executing this command again"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    combat-log:
+      chat: "%prefix% &cYou're currently in combat log!"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+
+scramble:
+  enable:
+    chat: "%prefix% &aYour rank is now scrambled."
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+  disable:
+    chat: "%prefix% &cYour rank is no longer scrambled."
+    actionbar: ""
+    title-screen:
+      title: ""
+      subtitle: ""
+      fadeIn: 1
+      stay: 3
+      fadeOut: 1
+
+# End of Commands #
 
 quests:
   reminder:
@@ -148,6 +244,25 @@ temporary-shop-items:
 
 # Leave any field empty to disable, leave chat, actionbar, title, and subtitle empty to disable the whole message
 gameplay:
+  toxic-kill:
+    self:
+      chat: "%prefix% &aYou have killed &e%victim% &ausing &e%item% &6&l+%points% Points &b&l+%souls% Souls"
+      actionbar: "&6&l+%points% Points &b&l+%souls% Souls"
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    broadcast:
+      chat: "%prefix% &e%victim% &cgot killed by &e%attacker% &cusing &e%item%"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
   kill:
     self:
       chat: "%prefix% &aYou have killed &e%victim% &6&l+%points% Points &b&l+%souls% Souls"

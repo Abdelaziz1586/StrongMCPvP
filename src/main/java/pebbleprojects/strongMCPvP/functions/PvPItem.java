@@ -79,9 +79,8 @@ public final class PvPItem {
 
             final short durability = section.getShort("durability", (short) -1);
 
-            if (durability > 0) {
-                itemStack.setDurability(durability);
-            }
+            if (durability > 0)
+                itemStack.setDurability((short) Math.min(durability, itemStack.getType().getMaxDurability() - 1));
 
             final List<String> lore = section.getStringList("lore");
 

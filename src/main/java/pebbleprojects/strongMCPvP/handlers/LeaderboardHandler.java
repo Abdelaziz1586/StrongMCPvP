@@ -107,7 +107,7 @@ public final class LeaderboardHandler {
             leaderboardsList.remove(key).destroy();
 
         final Leaderboard leaderboardInstance = new Leaderboard();
-        leaderboardInstance.task = TaskHandler.INSTANCE.runTaskTimerSync(() -> {
+        leaderboardInstance.task = TaskHandler.INSTANCE.runTaskTimerAsync(() -> {
             try {
                 updateLeaderboardDisplays(key, leaderboardInstance, currentLocation, title, lineFormat);
             } catch (final SQLException e) {
@@ -121,12 +121,16 @@ public final class LeaderboardHandler {
     private void updateLeaderboardDisplays(final String key, final Leaderboard leaderboardInstance, final Location currentLocation, final String title, final String lineFormat) throws SQLException {
         currentLocation.add(0, 3, 0);
 
-        ArmorStand titleStand = leaderboardInstance.stands.isEmpty() ? null : leaderboardInstance.stands.get(0);
-        if (titleStand != null) {
-            titleStand.setCustomName(title);
+        final ArmorStand[] titleStand = {leaderboardInstance.stands.isEmpty() ? null : leaderboardInstance.stands.get(0)};
+        if (titleStand[0] != null) {
+            titleStand[0].setCustomName(title);
         } else {
-            titleStand = spawnArmorStand(currentLocation, title);
-            leaderboardInstance.stands.add(titleStand);
+            final Location spawnLocation = currentLocation.clone();
+
+            TaskHandler.INSTANCE.runSync(() -> {
+                titleStand[0] = spawnArmorStand(spawnLocation, title);
+                leaderboardInstance.stands.add(titleStand[0]);
+            });
         }
 
         currentLocation.subtract(0, 0.3, 0);
@@ -138,18 +142,23 @@ public final class LeaderboardHandler {
         int rank = 1;
         for (int i = 0; i < leaderboard.size(); i++) {
             final Map.Entry<TopPlayerData, Integer> entry = leaderboard.get(i);
-            ArmorStand playerStand = leaderboardInstance.stands.size() > i + 1 ? leaderboardInstance.stands.get(i + 1) : null;
+            final ArmorStand[] playerStand = {leaderboardInstance.stands.size() > i + 1 ? leaderboardInstance.stands.get(i + 1) : null};
 
             final String formattedLine = PlaceholderAPIHandler.INSTANCE.translateMessage(entry.getKey().getUUID(),
                     lineFormat.replace("%place%", String.valueOf(rank++))
                             .replace("%player%", entry.getKey().getName())
                             .replace("%score%", String.valueOf(entry.getValue())));
 
-            if (playerStand != null) {
-                playerStand.setCustomName(formattedLine);
+            if (playerStand[0] != null) {
+                playerStand[0].setCustomName(formattedLine);
             } else {
-                playerStand = spawnArmorStand(currentLocation, formattedLine);
-                leaderboardInstance.stands.add(playerStand);
+                final Location spawnLocation = currentLocation.clone();
+
+                TaskHandler.INSTANCE.runSync(() -> {
+                    playerStand[0] = spawnArmorStand(spawnLocation, formattedLine);
+                    leaderboardInstance.stands.add(playerStand[0]);
+                });
+
             }
 
             currentLocation.subtract(0, 0.3, 0);

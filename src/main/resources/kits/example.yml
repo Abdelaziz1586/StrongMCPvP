@@ -52,7 +52,7 @@ items:
     unbreakable: false
     amount: 1
     increase-amount-by-kill: -1 # 0 -> restore original amount, -1 -> disable increase, any other value -> will increase current amount of that item
-    durability: 64 # Example for 1 hit flint and steel
+    durability: 62 # Example for 1 hit flint and steel
     increase-durability-by-kill: 1 # -1 to disable
     lore: []
     enchantments:

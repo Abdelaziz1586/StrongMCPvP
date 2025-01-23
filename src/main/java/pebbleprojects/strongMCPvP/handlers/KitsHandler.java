@@ -22,7 +22,7 @@ public final class KitsHandler {
 
         INSTANCE = this;
 
-        kits = new ArrayList<>();
+        kits = new LinkedList<>();
         playerKits = new ConcurrentHashMap<>();
 
         update();
@@ -75,22 +75,20 @@ public final class KitsHandler {
     }
 
     public void kill(final Player player) {
-        if (playerKits.containsKey(player.getUniqueId())) {
+        if (playerKits.containsKey(player.getUniqueId()))
             playerKits.get(player.getUniqueId()).applyKit(player, true);
-        }
     }
 
     private void sortPriorities() {
-        final HashMap<Integer, Kit> priorities = new HashMap<>();
+        final Map<Integer, Kit> priorities = new ConcurrentHashMap<>();
 
-        for (final Kit kit : kits) {
+        for (final Kit kit : kits)
             priorities.put(kit.getPriority(), kit);
-        }
 
         kits.clear();
 
         final List<Kit> leastPriority = new ArrayList<>();
-        final List<Integer> sortedPriorities = new ArrayList<>(priorities.keySet());
+        final List<Integer> sortedPriorities = new LinkedList<>(priorities.keySet());
         Collections.sort(sortedPriorities);
 
         for (final int priority : sortedPriorities) {

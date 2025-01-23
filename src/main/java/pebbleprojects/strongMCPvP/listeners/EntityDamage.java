@@ -13,7 +13,7 @@ import pebbleprojects.strongMCPvP.handlers.PerksHandler;
 
 public final class EntityDamage implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
         Entity entity = event.getEntity();
 
@@ -53,7 +53,14 @@ public final class EntityDamage implements Listener {
 
                 if (attacker != victim)
                     KillsHandler.INSTANCE.addHit(victim, attacker, false);
+
+                return;
             }
+
+            final boolean b = event.getFinalDamage() > victim.getHealth();
+
+            event.setCancelled(b);
+            KillsHandler.INSTANCE.addHit(victim, null, b);
         }
     }
 

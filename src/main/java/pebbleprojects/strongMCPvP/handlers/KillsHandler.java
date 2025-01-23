@@ -50,16 +50,17 @@ public final class KillsHandler {
 
     private void addDeath(final Player victim, Player attacker, final Hits hits) {
         victim.setHealth(20);
-        victim.teleport(GameHandler.INSTANCE.getSpawn());
+        GameHandler.INSTANCE.sendToSpawn(victim);
+
+        TaskHandler.INSTANCE.runTaskTimerSync(() -> victim.setFireTicks(0), 1L);
 
         KitsHandler.INSTANCE.applyKit(victim);
         Deaths.INSTANCE.add(victim.getUniqueId(), 1);
         KillStreakHandler.INSTANCE.removeKillStreaks(victim);
         CombatLogHandler.INSTANCE.removeFromCombatLog(victim);
 
-        if (attacker == null && !hits.getHits().isEmpty()) {
+        if (attacker == null && !hits.getHits().isEmpty())
             attacker = Bukkit.getPlayer(hits.getHits().get(hits.getHits().size() - 1).getUUID());
-        }
 
         if (attacker != null) {
             KitsHandler.INSTANCE.kill(attacker);
@@ -76,6 +77,11 @@ public final class KillsHandler {
         }
 
         divideFairly(hits, victim, attacker);
+
+        hits.getHits().clear();
+
+        victim.setLevel(0);
+        victim.setExp(0.0f);
     }
 
     private void divideFairly(final Hits hits, final Player victim, final Player attacker) {

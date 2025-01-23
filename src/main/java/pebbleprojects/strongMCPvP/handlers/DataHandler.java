@@ -77,6 +77,8 @@ public final class DataHandler {
         new LeaderboardHandler();
         new TempItemShopHandler();
 
+        new FlintHandler();
+
         new DiscordHandler();
         new ProfileHandler();
     }
@@ -150,6 +152,8 @@ public final class DataHandler {
         PermissionsHandler.INSTANCE.update();
         LeaderboardHandler.INSTANCE.update();
         TempItemShopHandler.INSTANCE.update();
+
+        FlintHandler.INSTANCE.update();
     }
 
     public void saveData() {

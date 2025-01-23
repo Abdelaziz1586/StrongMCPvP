@@ -27,7 +27,7 @@ public final class FixCommand implements CommandExecutor {
                 return;
             }
 
-            if (GameHandler.INSTANCE.addToFixDelay(player.getUniqueId())) {
+            if (GameHandler.INSTANCE.addDelay(player.getUniqueId(), 0)) {
                 for (final Player online : Bukkit.getOnlinePlayers()) {
                     online.hidePlayer(player);
                 }

@@ -24,7 +24,12 @@ database:
 # +------------------------------------------------------+ #
 ############################################################
 gameplay:
+  start-points: 500
+
   fix-delay: 10 # In seconds
+  spawn-delay: 10 # In seconds
+  spectate-delay: 0 # In seconds
+
   combat-log: 30 # In seconds
 
   points:

@@ -18,5 +18,12 @@ commands:
     description: Set spawn command for PvP
   fix:
     description: Fix command for PvP
+  spawn:
+    description: Spawn command for PvP
+  spectate:
+    description: Spectate command for PvP
+  scramble:
+    description: Scramble command for PvP
+    aliases: [sc]
   settings:
     description: Settings command for PvP

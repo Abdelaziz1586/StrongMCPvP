@@ -20,6 +20,7 @@ public final class ListenersHandler {
         pm.registerEvents(new PlayerInteract(), main);
         pm.registerEvents(new InventoryClick(), main);
         pm.registerEvents(new AsyncPlayerChat(), main);
+        pm.registerEvents(new FoodLevelChange(), main);
         pm.registerEvents(new ProjectileLaunch(), main);
         pm.registerEvents(new PlayerSpawnLocation(), main);
         pm.registerEvents(new PlayerCommandPreprocess(), main);

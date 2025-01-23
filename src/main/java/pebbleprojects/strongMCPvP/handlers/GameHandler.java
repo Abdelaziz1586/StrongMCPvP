@@ -1,6 +1,7 @@
 package pebbleprojects.strongMCPvP.handlers;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -11,17 +12,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class GameHandler {
 
-    private int fixDelay;
     private Location spawn;
+    private final int[] delays;
     public static GameHandler INSTANCE;
-    private final Map<UUID, BukkitTask> fixDelays;
+    private final Map<UUID, Map<Integer, BukkitTask>> delaysMap;
 
     public GameHandler() {
         DataHandler.INSTANCE.getLogger().info("Loading Game Handler...");
 
         INSTANCE = this;
 
-        fixDelays = new ConcurrentHashMap<>();
+        delays = new int[3];
+        delaysMap = new ConcurrentHashMap<>();
 
         update();
 
@@ -29,7 +31,10 @@ public final class GameHandler {
     }
 
     public void update() {
-        fixDelay = DataHandler.INSTANCE.getConfig().getInt("fix-delay", 10) * 20;
+        delays[0] = DataHandler.INSTANCE.getConfig().getInt("gameplay.fix-delay", 10) * 20;
+        delays[1] = DataHandler.INSTANCE.getConfig().getInt("gameplay.spawn-delay", 10) * 20;
+        delays[2] = DataHandler.INSTANCE.getConfig().getInt("gameplay.spectate-delay", 10) * 20;
+
         spawn = LocationHandler.INSTANCE.convertToLocation(DataHandler.INSTANCE.getData().getString("spawn"));
     }
 
@@ -40,15 +45,35 @@ public final class GameHandler {
         DataHandler.INSTANCE.saveData();
     }
 
-    public Location getSpawn() {
-        return spawn;
+    public void sendToSpawn(final Player player) {
+        if (spawn != null) {
+            TaskHandler.INSTANCE.runSync(() -> {
+                player.teleport(spawn);
+                player.setGameMode(GameMode.SURVIVAL);
+            });
+        }
     }
 
-    public boolean addToFixDelay(final UUID uuid) {
-        if (fixDelays.containsKey(uuid)) return false;
+    public boolean addDelay(final UUID uuid, final int delayId) {
+        if (delays[delayId] <= 0) return true;
 
-        fixDelays.put(uuid, TaskHandler.INSTANCE.runLaterAsync(() -> fixDelays.remove(uuid), fixDelay));
+        final Map<Integer, BukkitTask> delays = delaysMap.getOrDefault(uuid, new ConcurrentHashMap<>());
+
+        if (delays.containsKey(delayId)) return false;
+
+        delays.put(delayId, TaskHandler.INSTANCE.runLaterAsync(() -> removeDelay(uuid, delayId), this.delays[delayId]));
+        delaysMap.put(uuid, delays);
         return true;
+    }
+
+    private void removeDelay(final UUID uuid, final int delayId) {
+        final Map<Integer, BukkitTask> delays = delaysMap.getOrDefault(uuid, new ConcurrentHashMap<>());
+
+        if (delays.containsKey(delayId)) {
+            delays.remove(delayId).cancel();
+
+            delaysMap.put(uuid, delays);
+        }
     }
 
     public void join(final Player player) {
@@ -58,7 +83,14 @@ public final class GameHandler {
         PerksHandler.INSTANCE.setPerk(player);
         ScoreboardHandler.INSTANCE.setScoreboard(player);
         TaskHandler.INSTANCE.runLaterAsync(() -> PerksHandler.INSTANCE.onPlayerSpawn(player), 1);
-        TaskHandler.INSTANCE.runSync(() -> player.teleport(spawn));
+        TaskHandler.INSTANCE.runSync(() -> {
+            player.setGameMode(GameMode.SURVIVAL);
+
+            player.teleport(spawn);
+        });
+
+        player.setLevel(0);
+        player.setExp(0.0f);
     }
 
     public void leave(final Player player) {
@@ -69,9 +101,12 @@ public final class GameHandler {
         ScoreboardHandler.INSTANCE.removeScoreboard(player);
         ChatInputHandler.INSTANCE.removeInputRequest(player);
 
-        if (fixDelays.containsKey(player.getUniqueId())) {
-            fixDelays.get(player.getUniqueId()).cancel();
-            fixDelays.remove(player.getUniqueId());
+
+        if (delaysMap.containsKey(player.getUniqueId())) {
+            for (final BukkitTask task : delaysMap.get(player.getUniqueId()).values())
+                task.cancel();
+
+            delaysMap.remove(player.getUniqueId());
         }
     }
 

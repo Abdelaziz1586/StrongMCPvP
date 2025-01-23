@@ -33,7 +33,10 @@ public final class Scramble {
     }
 
     public boolean toggle(final @NotNull UUID uuid) {
-        return Boolean.TRUE.equals(scramble.put(uuid, !get(uuid)));
+        final boolean b = !get(uuid);
+        scramble.put(uuid, b);
+
+        return b;
     }
 
     public boolean get(final @NotNull UUID uuid) {
