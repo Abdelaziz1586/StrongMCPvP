@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public final class Perk {
 
+    private static final Random random = new Random();
+
     private final int price;
     private final ItemStack guiItem;
     private final Configuration config;
@@ -120,6 +122,11 @@ public final class Perk {
                 continue;
             }
 
+            if (key.toLowerCase().startsWith("chance of ")) {
+                handleChanceOfActions(section, key, player1, player2, event);
+                continue;
+            }
+
             executeAction(key, section.get(key).toString(), player1, player2, event);
         }
     }
@@ -137,6 +144,29 @@ public final class Perk {
         if (elseSection != null) {
             executeActionsWithConditions(elseSection, player1, player2, event, true);
         }
+    }
+
+    private void handleChanceOfActions(final Configuration section, final String chanceKey, final Player player1, final Player player2, final Object event) {
+        final String chanceString = chanceKey.substring(10);
+        if (!chanceString.endsWith("%")) return;
+
+        final double chance;
+        try {
+            chance = Double.parseDouble(chanceString.substring(0, chanceString.length() - 1));
+        } catch (final NumberFormatException ignored) {
+            return;
+        }
+
+        if (chance < 0 || chance > 100) return;
+
+        if (random.nextInt(100) <= chance) {
+            executeActionsWithConditions(section.getSection(chanceKey), player1, player2, event, true);
+            return;
+        }
+
+        final Configuration elseSection = section.getSection("else");
+        if (elseSection != null)
+            executeActionsWithConditions(elseSection, player1, player2, event, true);
     }
 
     private void handleExecuteActions(final List<String> actions, final Player player1, final Player player2, final Object event) {

@@ -1,0 +1,13 @@
+id: 2
+price: 300
+material: "ICE"
+name: "&b&lFrost"
+lore:
+  - "&740% chance to give a player"
+  - "&cSlowness I &7for 3 seconds on"
+  - "&7bow hit."
+
+damage:
+  if type=ARROW AND selfHit=false:
+    chance of 40%:
+      addEffect: player,SLOW,3,1,false
