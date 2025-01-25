@@ -214,6 +214,11 @@ public final class PerksHandler {
             }
 
             if (s.contains("equip")) {
+                for (final PerkSlot slot : PerkSlots.INSTANCE.get(uuid)) {
+                    if (slot.getPerkId() == perkId)
+                        slot.setPerkId(-1);
+                }
+
                 perkSlot.setPerkId(perkId);
                 MessageHandler.INSTANCE.sendMessage(player, "perks.perk.equip", new String[]{"perk," + itemMeta.getDisplayName(), "perkSlot," + perkSlot.getPerkSlot()});
 
@@ -301,7 +306,14 @@ public final class PerksHandler {
     }
 
     public void setPerk(final Player player) {
-        playerPerks.put(player.getUniqueId(), Arrays.asList(perksList.get(0), perksList.get(1)));
+        final List<Perk> perks = new ArrayList<>();
+        for (final PerkSlot perkSlot : PerkSlots.INSTANCE.get(player.getUniqueId())) {
+            if (perkSlot.getPerkId() != -1 && perksList.containsKey(perkSlot.getPerkId())) {
+                perks.add(perksList.get(perkSlot.getPerkId()));
+            }
+        }
+
+        playerPerks.put(player.getUniqueId(), perks);
     }
 
     public void onEntityDamage(final EntityDamageEvent event) {
