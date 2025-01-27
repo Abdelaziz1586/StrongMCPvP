@@ -1,6 +1,5 @@
 package pebbleprojects.strongMCPvP.commands;
 
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -28,10 +27,7 @@ public final class SpectateCommand implements CommandExecutor {
             }
 
             if (GameHandler.INSTANCE.addDelay(player.getUniqueId(), 2)) {
-                final GameMode mode = player.getGameMode() == GameMode.SPECTATOR ? GameMode.SURVIVAL : GameMode.SPECTATOR;
-                TaskHandler.INSTANCE.runSync(() -> player.setGameMode(mode));
-
-                if (mode == GameMode.SPECTATOR) {
+                if (GameHandler.INSTANCE.toggleSpectate(player)) {
                     MessageHandler.INSTANCE.sendMessage(player, "spectate.success.enable", null);
                     return;
                 }

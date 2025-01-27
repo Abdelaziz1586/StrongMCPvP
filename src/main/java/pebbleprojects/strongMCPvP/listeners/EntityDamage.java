@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.projectiles.ProjectileSource;
+import pebbleprojects.strongMCPvP.handlers.GameHandler;
 import pebbleprojects.strongMCPvP.handlers.KillsHandler;
 import pebbleprojects.strongMCPvP.handlers.PerksHandler;
 
@@ -40,6 +41,11 @@ public final class EntityDamage implements Listener {
                 }
 
                 final Player attacker = (Player) entity;
+
+                if (GameHandler.INSTANCE.isSpectator(attacker)) {
+                    event.setCancelled(true);
+                    return;
+                }
 
                 if (event.getFinalDamage() > victim.getHealth()) {
                     event.setCancelled(true);

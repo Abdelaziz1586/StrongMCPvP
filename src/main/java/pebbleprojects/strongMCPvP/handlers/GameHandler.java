@@ -4,9 +4,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +23,7 @@ public final class GameHandler {
     private Location spawn;
     private final int[] delays;
     public static GameHandler INSTANCE;
+    private final Set<Player> spectators;
     private final Map<UUID, Map<Integer, BukkitTask>> delaysMap;
 
     public GameHandler() {
@@ -24,6 +33,8 @@ public final class GameHandler {
 
         delays = new int[3];
         delaysMap = new ConcurrentHashMap<>();
+
+        spectators = new HashSet<>();
 
         update();
 
@@ -57,6 +68,84 @@ public final class GameHandler {
         }
     }
 
+    public boolean toggleSpectate(final Player player) {
+        boolean b = spectators.add(player);
+
+        TaskHandler.INSTANCE.runSync(() -> {
+            for (final PotionEffect potionEffect : player.getActivePotionEffects())
+                player.removePotionEffect(potionEffect.getType());
+
+            if (b) {
+                addGhost(player);
+                clearInventory(player);
+                player.setGameMode(GameMode.ADVENTURE);
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 0, false, false));
+            } else {
+                TaskHandler.INSTANCE.runLaterAsync(() -> {
+                    KitsHandler.INSTANCE.applyKit(player);
+                    PerksHandler.INSTANCE.onPlayerSpawn(player);
+                }, 1);
+
+                player.setGameMode(GameMode.SURVIVAL);
+
+                removeGhost(player);
+            }
+
+            player.setAllowFlight(b);
+
+            player.setFlying(b);
+            toggleVisibility(player, !b);
+
+            if (spawn != null)
+                player.teleport(spawn);
+        });
+
+        if (!b) spectators.remove(player);
+
+        return b;
+    }
+
+    public boolean isSpectator(final Player player) {
+        return spectators.contains(player);
+    }
+
+    private void addGhost(final Player player) {
+        final Scoreboard scoreboard = Bukkit.getScoreboardManager().getMainScoreboard();
+        Team ghostTeam = scoreboard.getTeam("PvP Ghosts");
+
+        if (ghostTeam == null) {
+            ghostTeam = scoreboard.registerNewTeam("PvP Ghosts");
+            ghostTeam.setCanSeeFriendlyInvisibles(true);
+        }
+
+        ghostTeam.addEntry(player.getName());
+    }
+
+    public void removeGhost(final Player player) {
+        final Team ghostTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam("PvP Ghosts");
+
+        if (ghostTeam != null && ghostTeam.hasEntry(player.getName()))
+            ghostTeam.removeEntry(player.getName());
+    }
+
+    private void clearInventory(final Player player) {
+        final PlayerInventory inventory = player.getInventory();
+
+        inventory.setContents(new ItemStack[]{});
+        inventory.setArmorContents(null);
+    }
+
+    private void toggleVisibility(final Player player, final boolean show) {
+        for (final Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+            if (show) {
+                onlinePlayer.showPlayer(player);
+                continue;
+            }
+
+            onlinePlayer.hidePlayer(player);
+        }
+    }
+
     public boolean addDelay(final UUID uuid, final int delayId) {
         if (delays[delayId] <= 0) return true;
 
@@ -80,6 +169,7 @@ public final class GameHandler {
     }
 
     public void join(final Player player) {
+
         PacketHandler.INSTANCE.inject(player);
         KitsHandler.INSTANCE.applyKit(player);
         DatabaseHandler.INSTANCE.load(player);
@@ -87,9 +177,18 @@ public final class GameHandler {
         ScoreboardHandler.INSTANCE.setScoreboard(player);
         TaskHandler.INSTANCE.runLaterAsync(() -> PerksHandler.INSTANCE.onPlayerSpawn(player), 1);
         TaskHandler.INSTANCE.runSync(() -> {
+            player.setAllowFlight(false);
             player.setGameMode(GameMode.SURVIVAL);
 
             player.teleport(spawn);
+
+            toggleVisibility(player, true);
+
+            for (final PotionEffect potionEffect : player.getActivePotionEffects())
+                player.removePotionEffect(potionEffect.getType());
+
+            for (final Player spectator : spectators)
+                player.hidePlayer(spectator);
         });
 
         player.setLevel(0);
