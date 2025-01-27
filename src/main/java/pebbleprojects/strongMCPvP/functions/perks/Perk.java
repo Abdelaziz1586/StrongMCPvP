@@ -14,28 +14,39 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.projectiles.ProjectileSource;
+import pebbleprojects.strongMCPvP.databaseData.PerkSlots;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
 import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class Perk {
 
     private static final Random random = new Random();
+    private static final ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
+    private static final Pattern variablesPattern = Pattern.compile("(\\[.*?::.*?])"),
+            numbersPatten = Pattern.compile("(\\d\\s*([+*/\\-])\\s*\\d)");
 
-    private final int price;
+    private final int id, price;
+    private final boolean shared;
     private final ItemStack guiItem;
     private final Configuration config;
     private final Map<String, Object> staticVariables;
     private final Map<Player, Map<String, Object>> uniqueVariables;
 
-    public Perk(final int price, final ItemStack guiItem, final Configuration perkSection) {
+    public Perk(final int id, final int price, final ItemStack guiItem, final Configuration perkSection) {
+        this.id = id;
         this.price = price;
         this.guiItem = guiItem;
         this.config = perkSection;
+        this.shared = perkSection.getBoolean("shared");
 
         staticVariables = new ConcurrentHashMap<>();
         uniqueVariables = new ConcurrentHashMap<>();
@@ -56,34 +67,9 @@ public final class Perk {
         return guiItem;
     }
 
-    public Player onEntityDamage(final EntityDamageEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
-            return null;
-        }
-
-        Player attacker = null;
-        final Player victim = (Player) event.getEntity();
-        if (event instanceof EntityDamageByEntityEvent) {
-            final EntityDamageByEntityEvent entityDamageByEntityEvent = (EntityDamageByEntityEvent) event;
-
-            if (entityDamageByEntityEvent.getDamager() instanceof Player) {
-                attacker = (Player) entityDamageByEntityEvent.getDamager();
-            } else if (entityDamageByEntityEvent.getDamager() instanceof Projectile) {
-                final ProjectileSource source = ((Projectile) entityDamageByEntityEvent.getDamager()).getShooter();
-
-                if (source instanceof Player) {
-                    attacker = (Player) source;
-                }
-            }
-        }
-
-        if (event.getFinalDamage() >= victim.getHealth()) {
-            executeSection("kill", attacker, victim, event);
-            return attacker;
-        }
-
-        executeSection("damage", attacker, victim, event);
-        return null;
+    public void onEntityDamage(final Player victim, final Player attacker, final EntityDamageEvent event) {
+        if (hasPerk(attacker))
+            executeSection(event.getFinalDamage() >= victim.getHealth() ? "kill" : "damage", attacker, victim, event);
     }
 
     public void onPlayerSpawn(final Player player) {
@@ -91,11 +77,22 @@ public final class Perk {
     }
 
     public void onPlayerDeath(final Player victim, final Player attacker) {
-        executeSection("death", victim, attacker, victim);
+        if (hasPerk(attacker))
+            executeSection("death", victim, attacker, victim);
     }
 
     public void onPlayerClick(final PlayerInteractEvent event) {
         executeSection("click", event.getPlayer(), null, event);
+    }
+
+    private boolean hasPerk(final Player attacker) {
+        if (shared || attacker == null) return true;
+
+        for (final PerkSlot perkSlot : PerkSlots.INSTANCE.get(attacker.getUniqueId()))
+            if (id == perkSlot.getPerkId())
+                return true;
+
+        return false;
     }
 
     private void executeSection(final String sectionName, final Player player1, final Player player2, final Object event) {
@@ -228,8 +225,8 @@ public final class Perk {
                     break;
                 }
 
-                final String key = resolveVariable(parts[0].trim(), getPlayerFromEvent(event)),
-                        value = resolveVariable(parts[1].trim(), getPlayerFromEvent(event));
+                final String key = resolveVariables(parts[0].trim(), event),
+                        value = resolveVariables(parts[1].trim(), event);
 
                 final boolean singleConditionMet = evaluateSingleCondition(key, value, event);
                 if (!singleConditionMet) {
@@ -292,12 +289,35 @@ public final class Perk {
             case "setVariable":
                 handleSetVariableAction(actionValue, player1, player2);
                 break;
+            case "setDamage":
+                if (event instanceof EntityDamageEvent) {
+                    handleSetDamage(actionValue, (EntityDamageEvent) event);
+                }
+                break;
             case "cancel-event":
                 if (Boolean.parseBoolean(actionValue) && event instanceof Cancellable) {
                     ((Cancellable) event).setCancelled(true);
                 }
                 break;
         }
+    }
+
+    private void handleSetDamage(String actionValue, final EntityDamageEvent event) {
+        actionValue = resolveVariables(actionValue, event);
+
+        if (actionValue.contains("damage")) {
+            actionValue = actionValue.replace("damage", String.valueOf(event.getFinalDamage()));
+        }
+
+        System.out.println("Before: " + actionValue);
+
+        actionValue = replaceMathExpressions(actionValue);
+
+        System.out.println("After: " + actionValue);
+
+        try {
+            event.setDamage(Double.parseDouble(actionValue));
+        } catch (final NumberFormatException ignored) {}
     }
 
     private void handleGiveAction(final String actionValue, final Player player1, final Player player2) {
@@ -367,9 +387,8 @@ public final class Perk {
         if (parts.length != 2) return;
 
         final Player target = getPlayerFromString(parts[0], player1, player2);
-        if (target != null) {
-            target.sendMessage(translateColorCodes(resolveVariable(parts[1], target)));
-        }
+        if (target != null)
+            target.sendMessage(translateColorCodes(resolveVariables(parts[1], target)));
     }
 
     private void handleRemoveItemAction(final String actionValue, final Player player1, final Player player2) {
@@ -501,13 +520,13 @@ public final class Perk {
                 if (varParts.length == 2) {
                     final Player targetPlayer = getPlayerFromString(varParts[1], player1, player2);
                     if (targetPlayer != null) {
-                        setUniqueVariable(targetPlayer, varParts[0], resolveVariable(value, targetPlayer));
+                        setUniqueVariable(targetPlayer, varParts[0], resolveVariables(value, targetPlayer));
                     }
                 }
                 return;
             }
 
-            staticVariables.put(variableName, resolveVariable(value, player1));
+            staticVariables.put(variableName, resolveVariables(value, player1));
         }
     }
 
@@ -523,8 +542,8 @@ public final class Perk {
         }
     }
 
-    private Player getPlayerFromEvent(final Object event) {
-        return event instanceof Player ? (Player) event : event instanceof EntityDamageByEntityEvent ? (Player) ((EntityDamageByEntityEvent) event).getEntity() : event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getPlayer() : null;
+    private Player getPlayerFromEvent(final Object event, final String type) {
+        return event instanceof Player ? (Player) event : event instanceof EntityDamageByEntityEvent ? type.equals("attacker") || type.equals("player") ? ((EntityDamageByEntityEvent) event).getDamager() instanceof Player ? (Player) ((EntityDamageByEntityEvent) event).getDamager() : null : type.equals("victim") ? (Player) ((EntityDamageByEntityEvent) event).getEntity() : null : event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getPlayer() : null;
     }
 
     private String translateColorCodes(final String text) {
@@ -571,6 +590,34 @@ public final class Perk {
         player.updateInventory();
     }
 
+    private String resolveVariables(final String input, final Object event) {
+        String result = input;
+
+        final Matcher matcher = variablesPattern.matcher(input);
+
+        while (matcher.find()) {
+            final String variable = matcher.group();
+
+            result = result.replace(variable, resolveVariable(variable, event));
+        }
+
+        return replaceMathExpressions(result);
+    }
+
+    private String resolveVariables(final String input, final Player player) {
+        String result = input;
+
+        final Matcher matcher = variablesPattern.matcher(input);
+
+        while (matcher.find()) {
+            final String variable = matcher.group();
+
+            result = result.replace(variable, resolveVariable(variable, player));
+        }
+
+        return replaceMathExpressions(result);
+    }
+
     private String resolveVariable(final String value, final Player player) {
         if (value.startsWith("[") && value.endsWith("]")) {
             final String[] parts = value.substring(1, value.length() - 1).split("::");
@@ -586,18 +633,52 @@ public final class Perk {
                 }
             }
         }
+
         return staticVariables.getOrDefault(value, value).toString();
     }
 
+    private String resolveVariable(final String value, final Object event) {
+        if (value.startsWith("[") && value.endsWith("]")) {
+            final String[] parts = value.substring(1, value.length() - 1).split("::");
+            if (parts.length == 2) {
+                final String varName = parts[0],
+                        varType = parts[1];
+
+                if (varType.equals("player") || varType.equals("victim") || varType.equals("attacker")) {
+                    final Player targetPlayer = getPlayerFromEvent(event, varType);
+                    if (targetPlayer != null) {
+                        return getUniqueVariable(targetPlayer, varName).toString();
+                    }
+                }
+            }
+        }
+
+        return staticVariables.getOrDefault(value, value).toString();
+    }
+
+
+    private String replaceMathExpressions(String input) {
+        final Matcher matcher = numbersPatten.matcher(input);
+
+        while (matcher.find()) {
+            final String equation = matcher.group(1);
+
+            try {
+                input = input.replace(equation, String.valueOf(Double.parseDouble(scriptEngine.eval(equation).toString())));
+            } catch (final ScriptException ignored) {}
+        }
+
+        return input;
+    }
+
     private Object getUniqueVariable(final Player player, final String varName) {
-        return uniqueVariables
-                .computeIfAbsent(player, k -> new ConcurrentHashMap<>())
-                .getOrDefault(varName, "null");
+        return uniqueVariables.getOrDefault(player, new ConcurrentHashMap<>()).getOrDefault(varName, "null");
     }
 
     private void setUniqueVariable(final Player player, final String varName, final Object value) {
-        uniqueVariables
-                .computeIfAbsent(player, k -> new ConcurrentHashMap<>())
-                .put(varName, value);
+        final Map<String, Object> map = uniqueVariables.getOrDefault(player, new ConcurrentHashMap<>());
+        map.put(varName, value);
+
+        uniqueVariables.put(player, map);
     }
 }

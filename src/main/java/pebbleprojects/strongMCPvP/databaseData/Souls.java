@@ -153,8 +153,6 @@ public final class Souls {
                     insertStatement.setInt(2, get(uuid));
                     insertStatement.executeUpdate();
                 }
-
-                souls.remove(uuid);
             }
             return;
         }

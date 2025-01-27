@@ -6,12 +6,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.projectiles.ProjectileSource;
 import pebbleprojects.strongMCPvP.databaseData.PerkSlots;
 import pebbleprojects.strongMCPvP.databaseData.Perks;
 import pebbleprojects.strongMCPvP.databaseData.Souls;
@@ -74,6 +77,7 @@ public final class PerksHandler {
             DataHandler.INSTANCE.copyToPluginDirectory("perks/Frost.yml", new File(perksDirectory, "Frost.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/GoldenHead.yml", new File(perksDirectory, "GoldenHead.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/EndlessQuiver.yml", new File(perksDirectory, "EndlessQuiver.yml"));
+            DataHandler.INSTANCE.copyToPluginDirectory("perks/StrengthChain.yml", new File(perksDirectory, "StrengthChain.yml"));
         }
 
         final File[] perks = perksDirectory.listFiles();
@@ -159,17 +163,13 @@ public final class PerksHandler {
                     guiItem.setItemMeta(meta);
                 }
 
-                perksList.put(id, new Perk(price, guiItem, config));
+                perksList.put(id, new Perk(id, price, guiItem, config));
             } catch (final IOException e) {
                 DataHandler.INSTANCE.getLogger().warning("Unable to load perk " + file.getName() + " in memory: " + e.getMessage());
             }
         }
 
         updateGUI();
-
-        for (final Player player : Bukkit.getOnlinePlayers()) {
-            setPerk(player);
-        }
     }
 
     private void updateGUI() {
@@ -318,12 +318,22 @@ public final class PerksHandler {
     }
 
     public void onEntityDamage(final EntityDamageEvent event) {
-        Player attacker = null;
-        for (final Perk perk : playerPerks.getOrDefault(event.getEntity().getUniqueId(), new ArrayList<>()))
-            attacker = attacker == null ? perk.onEntityDamage(event) : attacker;
+        final Player[] players = getAttackerAndVictim(event);
+        if (players == null) return;
 
-        if (attacker != null)
-            QuestsHandler.INSTANCE.onKill(attacker);
+        onEntityDamage(event, players[1], players);
+
+        if (players[0] != null) {
+            onEntityDamage(event, players[0], players);
+
+            if (event.getFinalDamage() >= players[1].getHealth())
+                QuestsHandler.INSTANCE.onKill(players[0]);
+        }
+    }
+
+    private void onEntityDamage(final EntityDamageEvent event, final Player target, final Player[] players) {
+        for (final Perk perk : playerPerks.getOrDefault(target.getUniqueId(), new ArrayList<>()))
+            perk.onEntityDamage(players[1], players[0], event);
     }
 
     public void onPlayerSpawn(final Player player) {
@@ -341,5 +351,28 @@ public final class PerksHandler {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         for (final Perk perk : playerPerks.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>()))
             perk.onPlayerClick(event);
+    }
+
+    private Player[] getAttackerAndVictim(final EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player))
+            return null;
+
+        Player attacker = null;
+        final Player victim = (Player) event.getEntity();
+        if (event instanceof EntityDamageByEntityEvent) {
+            final EntityDamageByEntityEvent entityDamageByEntityEvent = (EntityDamageByEntityEvent) event;
+
+            if (entityDamageByEntityEvent.getDamager() instanceof Player) {
+                attacker = (Player) entityDamageByEntityEvent.getDamager();
+            } else if (entityDamageByEntityEvent.getDamager() instanceof Projectile) {
+                final ProjectileSource source = ((Projectile) entityDamageByEntityEvent.getDamager()).getShooter();
+
+                if (source instanceof Player) {
+                    attacker = (Player) source;
+                }
+            }
+        }
+
+        return new Player[]{attacker, victim};
     }
 }

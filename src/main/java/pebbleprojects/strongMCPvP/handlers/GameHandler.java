@@ -27,6 +27,9 @@ public final class GameHandler {
 
         update();
 
+        for (final Player player : Bukkit.getOnlinePlayers())
+            join(player);
+
         DataHandler.INSTANCE.getLogger().info("Loaded Game Handler");
     }
 

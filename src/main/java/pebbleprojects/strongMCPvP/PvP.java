@@ -22,9 +22,11 @@ public final class PvP extends JavaPlugin {
     public void onDisable() {
         getLogger().info("Disabling PvP v1.0...");
 
+        final PacketHandler packets = PacketHandler.INSTANCE;
+        final DatabaseHandler database = DatabaseHandler.INSTANCE;
         for (final Player player : getOnlinePlayers()) {
-            DatabaseHandler.INSTANCE.save(player);
-            PacketHandler.INSTANCE.uninject(player);
+            database.save(player);
+            packets.uninject(player);
         }
 
         DiscordHandler.INSTANCE.shutdown();

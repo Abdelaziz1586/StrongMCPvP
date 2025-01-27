@@ -56,7 +56,6 @@ public final class DataHandler {
         new NPCHandler();
         new KitsHandler();
         new ShopHandler();
-        new GameHandler();
         new KillsHandler();
         new PerksHandler();
         new TrailsHandler();
@@ -76,6 +75,8 @@ public final class DataHandler {
         new PermissionsHandler();
         new LeaderboardHandler();
         new TempItemShopHandler();
+
+        new GameHandler();
 
         new FlintHandler();
 
@@ -135,7 +136,6 @@ public final class DataHandler {
         NPCHandler.INSTANCE.update();
         KitsHandler.INSTANCE.update();
         ShopHandler.INSTANCE.update();
-        GameHandler.INSTANCE.update();
         KillsHandler.INSTANCE.update();
         PerksHandler.INSTANCE.update();
         TrailsHandler.INSTANCE.update();
@@ -152,6 +152,8 @@ public final class DataHandler {
         PermissionsHandler.INSTANCE.update();
         LeaderboardHandler.INSTANCE.update();
         TempItemShopHandler.INSTANCE.update();
+
+        GameHandler.INSTANCE.update();
 
         FlintHandler.INSTANCE.update();
     }

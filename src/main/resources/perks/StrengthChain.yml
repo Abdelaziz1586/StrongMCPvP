@@ -1,0 +1,19 @@
+id: 3
+price: 300
+material: "REDSTONE"
+name: "&c&lStrength-Chaining"
+lore:
+  - "&c+8% damage &7for 7s"
+  - "&7stacking on kill"
+
+damage:
+  if [StrengthChain::attacker]=null:
+    # Do nothing
+  else:
+    setDamage: damage + (damage * 8/100)
+
+death:
+  if [StrengthChain::attacker]=null:
+    setVariable: '[StrengthChain::attacker],1'
+  else:
+    setVariable: '[StrengthChain::attacker],[StrengthChain::attacker] + 1'

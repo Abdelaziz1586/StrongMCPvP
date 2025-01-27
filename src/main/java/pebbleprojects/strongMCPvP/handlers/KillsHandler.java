@@ -86,10 +86,11 @@ public final class KillsHandler {
 
     private void divideFairly(final Hits hits, final Player victim, final Player attacker) {
         if (hits.getHits().size() == 1 || (!divideSoulsFairly && !dividePointsFairly)) {
-            Souls.INSTANCE.add(attacker.getUniqueId(), killSouls);
-            Points.INSTANCE.add(attacker.getUniqueId(), killPoints);
+            Souls.INSTANCE.add(hits.getHits().get(0).getUUID(), killSouls);
+            Points.INSTANCE.add(hits.getHits().get(0).getUUID(), killPoints);
 
-            MessageHandler.INSTANCE.sendMessage(attacker, "gameplay.kill.self", new String[]{"attacker," + attacker.getDisplayName(), "victim," + victim.getDisplayName(), "souls," + killSouls, "points," + killPoints});
+            if (attacker != null)
+                MessageHandler.INSTANCE.sendMessage(attacker, "gameplay.kill.self", new String[]{"attacker," + attacker.getDisplayName(), "victim," + victim.getDisplayName(), "souls," + killSouls, "points," + killPoints});
         }
 
         if (hits.getHits().size() == 1) return;

@@ -42,9 +42,6 @@ public final class DatabaseHandler {
         new QuestReminder();
         new QuestCompletion();
 
-        for (final Player player : DataHandler.INSTANCE.getMain().getServer().getOnlinePlayers())
-            load(player);
-
         DataHandler.INSTANCE.getLogger().info("Loaded Database Handler!");
     }
 
