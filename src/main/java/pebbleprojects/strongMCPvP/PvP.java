@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import pebbleprojects.strongMCPvP.handlers.*;
 import pebbleprojects.strongMCPvP.handlers.discord.DiscordHandler;
+import pebbleprojects.strongMCPvP.handlers.luckperms.LuckPermsHandler;
 
 import static org.bukkit.Bukkit.getOnlinePlayers;
 
@@ -32,6 +33,7 @@ public final class PvP extends JavaPlugin {
         DiscordHandler.INSTANCE.shutdown();
 
         NPCHandler.INSTANCE.shutdown();
+        LuckPermsHandler.INSTANCE.shutdown();
         LeaderboardHandler.INSTANCE.shutdown();
 
         getLogger().info("Disabled PvP v1.0!");
