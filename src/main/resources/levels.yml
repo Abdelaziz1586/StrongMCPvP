@@ -12,9 +12,9 @@
 
 500:
   level: "&ePro" # Used for placeholders
-  tab: "&ePro %player%"
+  tab: ""
   chat: "&ePro %player%&7: &f%message%"
 0:
   level: "&7Newbie" # Used for placeholders
-  tab: "&7Newbie %player%"
+  tab: ""
   chat: "&7Newbie %player%&7: &f%message%"

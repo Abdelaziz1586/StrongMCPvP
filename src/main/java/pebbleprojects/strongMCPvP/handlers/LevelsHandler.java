@@ -118,7 +118,7 @@ public final class LevelsHandler {
             chat = ChatColor.translateAlternateColorCodes('&', section.getString("chat", ""));
             level = ChatColor.translateAlternateColorCodes('&', section.getString("level", ""));
 
-            enabled = !tab.isEmpty() && !chat.isEmpty();
+            enabled = !chat.isEmpty() || !tab.isEmpty() || !level.isEmpty();
         }
     }
 }
