@@ -78,6 +78,7 @@ public final class PerksHandler {
             DataHandler.INSTANCE.copyToPluginDirectory("perks/Frost.yml", new File(perksDirectory, "Frost.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/Cobweb.yml", new File(perksDirectory, "Cobweb.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/GoldenHead.yml", new File(perksDirectory, "GoldenHead.yml"));
+            DataHandler.INSTANCE.copyToPluginDirectory("perks/LavaBucket.yml", new File(perksDirectory, "LavaBucket.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/EndlessQuiver.yml", new File(perksDirectory, "EndlessQuiver.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/StrengthChain.yml", new File(perksDirectory, "StrengthChain.yml"));
         }

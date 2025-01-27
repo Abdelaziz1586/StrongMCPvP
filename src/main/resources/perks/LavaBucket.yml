@@ -1,0 +1,19 @@
+id: 5
+price: 300
+shared: false
+material: "LAVA_BUCKET"
+name: "&6&lLava Bucket"
+lore:
+  - "&7Allow you to use this"
+  - "&7item to burn your enemies."
+
+spawn:
+  give: player,LAVA_BUCKET,1,&6&lLava
+
+place:
+  if block=LAVA:
+    cancel-event: true
+    removeItem: player,LAVA_BUCKET,&6&lLava
+    setBlock: location of block,LAVA
+    wait 5 seconds:
+      setBlock: location of block,AIR

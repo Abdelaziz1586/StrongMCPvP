@@ -49,6 +49,7 @@ public final class DataHandler {
         new TaskHandler();
         new UtilsHandler();
         new PacketHandler();
+        new BlocksHandler();
         new LocationHandler();
         new LuckPermsHandler();
         new PlaceholderAPIHandler();

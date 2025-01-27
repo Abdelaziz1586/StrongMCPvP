@@ -17,6 +17,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pebbleprojects.strongMCPvP.databaseData.PerkSlots;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
+import pebbleprojects.strongMCPvP.handlers.BlocksHandler;
 import pebbleprojects.strongMCPvP.handlers.MathHandler;
 import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
@@ -317,7 +318,17 @@ public final class Perk {
         if (location == null) return;
 
         final Material material = Material.getMaterial(parts[1]);
-        if (material != null) TaskHandler.INSTANCE.runSync(() -> location.getBlock().setType(material));
+        if (material != null) {
+            TaskHandler.INSTANCE.runSync(() -> {
+                location.getBlock().setType(material);
+                if (material == Material.AIR) {
+                    BlocksHandler.INSTANCE.removeFromCache(location);
+                    return;
+                }
+
+                BlocksHandler.INSTANCE.addToCache(location);
+            });
+        }
     }
 
     private void handleSetDamage(final String actionValue, final EntityDamageEvent event) {
@@ -561,6 +572,9 @@ public final class Perk {
             case "block's location":
             case "location of block":
                 return event instanceof BlockPlaceEvent ? ((BlockPlaceEvent) event).getBlockPlaced().getLocation() : null;
+            case "click's location":
+            case "location of click":
+                return event instanceof PlayerInteractEvent ? ((PlayerInteractEvent) event).getClickedBlock().getLocation().clone().add(0, 1, 0) : null;
             default:
                 return null;
         }
@@ -597,7 +611,7 @@ public final class Perk {
         for (final int index : ammo.keySet()) {
             final ItemStack stack = ammo.get(index);
 
-            if (name != null && !stack.getItemMeta().getDisplayName().equals(name)) continue;
+            if (name != null && (stack == null || stack.getItemMeta() == null || stack.getItemMeta().getDisplayName() == null)) continue;
 
             final int removed = Math.min(count, stack.getAmount());
             count -= removed;

@@ -21,6 +21,7 @@ public final class PlayerInteract implements Listener {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK
                 && clickedBlock != null
                 && clickedBlock.getType() != Material.AIR
+                && itemStack != null
                 && itemStack.getType() == Material.FLINT_AND_STEEL
                 && itemStack.getDurability() == 63) {
             event.setCancelled(true);
