@@ -27,6 +27,11 @@ public final class FixCommand implements CommandExecutor {
                 return;
             }
 
+            if (GameHandler.INSTANCE.isSpectator(player)) {
+                MessageHandler.INSTANCE.sendMessage(player, "fix.failed.spectator", null);
+                return;
+            }
+
             if (GameHandler.INSTANCE.addDelay(player.getUniqueId(), 0)) {
                 for (final Player online : Bukkit.getOnlinePlayers()) {
                     online.hidePlayer(player);

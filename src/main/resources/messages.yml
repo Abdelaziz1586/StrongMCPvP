@@ -9,6 +9,8 @@
 prefix: "&7┃ &e&lPVP &r&7┃"
 
 chat-scramble-message: "&e# %player%&7: &f%message%"
+chat-spectator-message: "&7SPECTATE &8┃ &a%player% &7» %message%"
+
 flint-actionbar-message: "&6Flint ✸ &e%durability%"
 
 # Start of Command #
@@ -46,6 +48,15 @@ fix:
   failed:
     delay:
       chat: "%prefix% &cPlease wait before executing this command again"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    spectator:
+      chat: "%prefix% &cYou can't use &e/fix &cwhile you're spectating"
       actionbar: ""
       title-screen:
         title: ""

@@ -8,6 +8,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import pebbleprojects.strongMCPvP.databaseData.Scramble;
 import pebbleprojects.strongMCPvP.handlers.ChatInputHandler;
+import pebbleprojects.strongMCPvP.handlers.GameHandler;
 import pebbleprojects.strongMCPvP.handlers.LevelsHandler;
 import pebbleprojects.strongMCPvP.handlers.MessageHandler;
 import pebbleprojects.strongMCPvP.handlers.papi.PlaceholderAPIHandler;
@@ -29,7 +30,10 @@ public final class AsyncPlayerChat implements Listener {
 
     private String buildChatMessage(final Player sender, final String originalMessage) {
         final String messageFormat;
-        if (Scramble.INSTANCE.get(sender.getUniqueId())) {
+
+        if (GameHandler.INSTANCE.isSpectator(sender)) {
+            messageFormat = ChatColor.translateAlternateColorCodes('&', MessageHandler.INSTANCE.getMessages().getString("chat-spectator-message", "&7SPECTATE &8&l┃ &a%player% &7» %message%"));
+        } else if (Scramble.INSTANCE.get(sender.getUniqueId())) {
             messageFormat = ChatColor.translateAlternateColorCodes('&',
                     MessageHandler.INSTANCE.getMessages()
                             .getString("chat-scramble-message", "&e# %player%&7: &f%message%")
