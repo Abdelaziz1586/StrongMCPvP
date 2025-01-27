@@ -8,6 +8,7 @@
 
 prefix: "&7┃ &e&lPVP &r&7┃"
 
+chat-scramble-message: "&e# %player%&7: &f%message%"
 flint-actionbar-message: "&6Flint ✸ &e%durability%"
 
 # Start of Command #

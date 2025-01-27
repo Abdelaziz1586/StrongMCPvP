@@ -11,8 +11,10 @@
 # ! Make sure to put the levels in descending order (aka from the highest points to lowest) !
 
 500:
+  level: "&ePro" # Used for placeholders
   tab: "&ePro %player%"
   chat: "&ePro %player%&7: &f%message%"
 0:
+  level: "&7Newbie" # Used for placeholders
   tab: "&7Newbie %player%"
   chat: "&7Newbie %player%&7: &f%message%"

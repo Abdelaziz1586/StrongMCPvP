@@ -53,6 +53,8 @@ public final class PlaceholderExpansionHandler extends PlaceholderExpansion {
                 return String.valueOf(Assists.INSTANCE.get(player.getUniqueId()));
             case "killstreak":
                 return String.valueOf(KillStreakHandler.INSTANCE.getKillStreaks(player.getUniqueId()));
+            case "level":
+                return LevelsHandler.INSTANCE.getLevel(player.getUniqueId());
             case "level_tab":
                 return LevelsHandler.INSTANCE.getTabPrefix(player.getUniqueId());
             case "level_chat":

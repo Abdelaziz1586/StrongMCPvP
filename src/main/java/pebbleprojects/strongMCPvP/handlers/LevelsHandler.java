@@ -94,15 +94,21 @@ public final class LevelsHandler {
         return prefixes.containsKey(uuid) ? prefixes.get(uuid).tab : "";
     }
 
+    public String getLevel(final UUID uuid) {
+        return prefixes.containsKey(uuid) ? prefixes.get(uuid).level : "";
+    }
+
+
     private static final class Level {
 
         private final boolean enabled;
-        private final String tab, chat;
+        private final String tab, chat, level;
 
         private Level(final Configuration section) {
             if (section == null) {
                 tab = null;
                 chat = null;
+                level = null;
 
                 enabled = false;
                 return;
@@ -110,6 +116,7 @@ public final class LevelsHandler {
 
             tab = ChatColor.translateAlternateColorCodes('&', section.getString("tab", ""));
             chat = ChatColor.translateAlternateColorCodes('&', section.getString("chat", ""));
+            level = ChatColor.translateAlternateColorCodes('&', section.getString("level", ""));
 
             enabled = !tab.isEmpty() && !chat.isEmpty();
         }
