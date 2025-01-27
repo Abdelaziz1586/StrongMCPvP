@@ -1,5 +1,6 @@
 id: 3
 price: 300
+shared: false
 material: "REDSTONE"
 name: "&c&lStrength-Chaining"
 lore:
@@ -7,13 +8,21 @@ lore:
   - "&7stacking on kill"
 
 damage:
+  message: attacker,[StrengthChain::attacker]
   if [StrengthChain::attacker]=null:
     # Do nothing
   else:
-    setDamage: damage + (damage * 8/100)
+    setDamage: damage + 1 * [StrengthChain::attacker]
 
-death:
+kill:
   if [StrengthChain::attacker]=null:
     setVariable: '[StrengthChain::attacker],1'
   else:
     setVariable: '[StrengthChain::attacker],[StrengthChain::attacker] + 1'
+    message: attacker,[StrengthChain::attacker]
+
+  wait 7 seconds:
+    if [StrengthChain::attacker]=null OR [StrengthChain::attacker]=0:
+      # Do nothing
+    else:
+      setVariable: '[StrengthChain::attacker],[StrengthChain::attacker] - 1'

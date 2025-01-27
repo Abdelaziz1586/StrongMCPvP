@@ -45,6 +45,7 @@ public final class DataHandler {
         dataFile = new File(dataFolder.getPath(), "data.yml");
         updateData();
 
+        new MathHandler();
         new TaskHandler();
         new UtilsHandler();
         new PacketHandler();

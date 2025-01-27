@@ -16,11 +16,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import pebbleprojects.strongMCPvP.databaseData.PerkSlots;
 import pebbleprojects.strongMCPvP.functions.config.Configuration;
+import pebbleprojects.strongMCPvP.handlers.MathHandler;
 import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -30,9 +28,7 @@ import java.util.regex.Pattern;
 public final class Perk {
 
     private static final Random random = new Random();
-    private static final ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
-    private static final Pattern variablesPattern = Pattern.compile("(\\[.*?::.*?])"),
-            numbersPatten = Pattern.compile("(\\d\\s*([+*/\\-])\\s*\\d)");
+    private static final Pattern variablesPattern = Pattern.compile("(\\[.*?::.*?])");
 
     private final int id, price;
     private final boolean shared;
@@ -302,21 +298,9 @@ public final class Perk {
         }
     }
 
-    private void handleSetDamage(String actionValue, final EntityDamageEvent event) {
-        actionValue = resolveVariables(actionValue, event);
-
-        if (actionValue.contains("damage")) {
-            actionValue = actionValue.replace("damage", String.valueOf(event.getFinalDamage()));
-        }
-
-        System.out.println("Before: " + actionValue);
-
-        actionValue = replaceMathExpressions(actionValue);
-
-        System.out.println("After: " + actionValue);
-
+    private void handleSetDamage(final String actionValue, final EntityDamageEvent event) {
         try {
-            event.setDamage(Double.parseDouble(actionValue));
+            event.setDamage(Double.parseDouble(MathHandler.INSTANCE.processString(resolveVariables(actionValue.replace("damage", String.valueOf(event.getFinalDamage())), event))));
         } catch (final NumberFormatException ignored) {}
     }
 
@@ -601,7 +585,8 @@ public final class Perk {
             result = result.replace(variable, resolveVariable(variable, event));
         }
 
-        return replaceMathExpressions(result);
+
+        return MathHandler.INSTANCE.processString(result);
     }
 
     private String resolveVariables(final String input, final Player player) {
@@ -615,7 +600,7 @@ public final class Perk {
             result = result.replace(variable, resolveVariable(variable, player));
         }
 
-        return replaceMathExpressions(result);
+        return MathHandler.INSTANCE.processString(result);
     }
 
     private String resolveVariable(final String value, final Player player) {
@@ -654,21 +639,6 @@ public final class Perk {
         }
 
         return staticVariables.getOrDefault(value, value).toString();
-    }
-
-
-    private String replaceMathExpressions(String input) {
-        final Matcher matcher = numbersPatten.matcher(input);
-
-        while (matcher.find()) {
-            final String equation = matcher.group(1);
-
-            try {
-                input = input.replace(equation, String.valueOf(Double.parseDouble(scriptEngine.eval(equation).toString())));
-            } catch (final ScriptException ignored) {}
-        }
-
-        return input;
     }
 
     private Object getUniqueVariable(final Player player, final String varName) {
