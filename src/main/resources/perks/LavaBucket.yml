@@ -10,10 +10,10 @@ lore:
 spawn:
   give: player,LAVA_BUCKET,1,&6&lLava
 
-place:
-  if block=LAVA:
+click:
+  if click=RIGHT_CLICK_BLOCK AND item=LAVA_BUCKET:
     cancel-event: true
     removeItem: player,LAVA_BUCKET,&6&lLava
-    setBlock: location of block,LAVA
+    setBlock: location of click,LAVA
     wait 5 seconds:
-      setBlock: location of block,AIR
+      setBlock: location of click,AIR
