@@ -138,7 +138,7 @@ public final class DataHandler {
         KitsHandler.INSTANCE.update();
         ShopHandler.INSTANCE.update();
         KillsHandler.INSTANCE.update();
-        PerksHandler.INSTANCE.update();
+        PerksHandler.INSTANCE.update(true);
         TrailsHandler.INSTANCE.update();
         LevelsHandler.INSTANCE.update();
         QuestsHandler.INSTANCE.update();

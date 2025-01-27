@@ -1,5 +1,6 @@
 id: 0
 price: 300
+shared: false
 material: "ARROW"
 name: "&b&lEndless Quiver"
 lore:

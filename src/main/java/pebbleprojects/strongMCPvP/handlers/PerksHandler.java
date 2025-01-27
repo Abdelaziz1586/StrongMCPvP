@@ -55,12 +55,12 @@ public final class PerksHandler {
 
         perksFile = new File(DataHandler.INSTANCE.getDataFolder().getPath(), "perks.yml");
 
-        update();
+        update(false);
 
         DataHandler.INSTANCE.getLogger().info("Loaded Perks Handler!");
     }
 
-    public void update() {
+    public void update(final boolean setPerks) {
         if (!perksFile.exists()) {
             DataHandler.INSTANCE.copyToPluginDirectory("perks.yml", perksFile);
         }
@@ -105,7 +105,7 @@ public final class PerksHandler {
                     DataHandler.INSTANCE.getLogger().warning("Unable to load perk " + file.getName() + " in memory: Couldn't fetch 'material' key from configuration!");
                     continue;
                 }
-                
+
                 final Material material;
                 if (materialString.startsWith("[") && materialString.endsWith("]")) {
                     final String[] materialParts = materialString.split("\\[")[1].split("]")[0].split(";", 2);
@@ -125,7 +125,7 @@ public final class PerksHandler {
                     DataHandler.INSTANCE.getLogger().warning("Unable to load perk " + file.getName() + " in memory: Can't recognize material '" + materialString + "'");
                     continue;
                 }
-                
+
                 if (perksList.containsKey(id)) {
                     DataHandler.INSTANCE.getLogger().warning("Unable to load perk " + file.getName() + " in memory: Duplicate IDs");
                     continue;
@@ -170,6 +170,10 @@ public final class PerksHandler {
         }
 
         updateGUI();
+
+        if (setPerks)
+            for (final Player player : Bukkit.getOnlinePlayers())
+                setPerk(player);
     }
 
     private void updateGUI() {

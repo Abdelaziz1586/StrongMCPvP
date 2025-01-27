@@ -1,5 +1,6 @@
 id: 2
 price: 300
+shared: false
 material: "ICE"
 name: "&b&lFrost"
 lore:
