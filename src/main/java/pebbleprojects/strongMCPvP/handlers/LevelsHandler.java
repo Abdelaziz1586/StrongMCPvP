@@ -41,7 +41,7 @@ public final class LevelsHandler {
             public void run() {
                 for (final Player player : Bukkit.getOnlinePlayers()) {
                     final Level level = prefixes.get(player.getUniqueId());
-                    if (level != null && level.tab != null)
+                    if (level != null && level.tab != null && !level.tab.isEmpty())
                         player.setPlayerListName(PlaceholderAPIHandler.INSTANCE.translateMessage(player, level.tab.replace("%player%", player.getDisplayName())));
                 }
             }

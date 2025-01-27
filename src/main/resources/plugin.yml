@@ -22,6 +22,7 @@ commands:
     description: Spawn command for PvP
   spectate:
     description: Spectate command for PvP
+    aliases: [spec]
   scramble:
     description: Scramble command for PvP
     aliases: [sc]
