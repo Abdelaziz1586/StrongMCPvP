@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -75,6 +76,7 @@ public final class PerksHandler {
 
         if (perksDirectory.mkdir()) {
             DataHandler.INSTANCE.copyToPluginDirectory("perks/Frost.yml", new File(perksDirectory, "Frost.yml"));
+            DataHandler.INSTANCE.copyToPluginDirectory("perks/Cobweb.yml", new File(perksDirectory, "Cobweb.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/GoldenHead.yml", new File(perksDirectory, "GoldenHead.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/EndlessQuiver.yml", new File(perksDirectory, "EndlessQuiver.yml"));
             DataHandler.INSTANCE.copyToPluginDirectory("perks/StrengthChain.yml", new File(perksDirectory, "StrengthChain.yml"));
@@ -350,6 +352,11 @@ public final class PerksHandler {
             perk.onPlayerDeath(victim, attacker);
 
         QuestsHandler.INSTANCE.onDeath(victim);
+    }
+
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        for (final Perk perk : playerPerks.getOrDefault(event.getPlayer().getUniqueId(), new ArrayList<>()))
+            perk.onBlockPlace(event);
     }
 
     public void onPlayerInteract(final PlayerInteractEvent event) {

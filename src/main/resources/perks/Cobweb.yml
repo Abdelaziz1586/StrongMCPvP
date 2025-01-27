@@ -1,0 +1,16 @@
+id: 4
+price: 300
+shared: false
+material: "WEB"
+name: "&f&lCobweb"
+lore:
+  - "&7Allow you to use this"
+  - "&7item to hinder your enemies."
+
+spawn:
+  give: player,WEB,1,&f&lCobweb
+
+place:
+  if block=WEB:
+    wait 15 seconds:
+      setBlock: location of block,AIR

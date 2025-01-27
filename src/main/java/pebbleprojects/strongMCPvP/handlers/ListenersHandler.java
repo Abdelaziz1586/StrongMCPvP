@@ -12,6 +12,7 @@ public final class ListenersHandler {
 
         pm.registerEvents(new PlayerJoin(), main);
         pm.registerEvents(new PlayerQuit(), main);
+        pm.registerEvents(new BlockPlace(), main);
         pm.registerEvents(new PlayerDeath(), main);
         pm.registerEvents(new EntityDamage(), main);
         pm.registerEvents(new RightClickNPC(), main);

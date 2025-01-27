@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -79,6 +80,10 @@ public final class Perk {
 
     public void onPlayerClick(final PlayerInteractEvent event) {
         executeSection("click", event.getPlayer(), null, event);
+    }
+
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        executeSection("place", event.getPlayer(), null, event);
     }
 
     private boolean hasPerk(final Player attacker) {
@@ -254,6 +259,9 @@ public final class Perk {
                 return event instanceof EntityDamageByEntityEvent &&
                         ((EntityDamageByEntityEvent) event).getDamager() instanceof Projectile &&
                         (Boolean.parseBoolean(value) == ((Projectile) ((EntityDamageByEntityEvent) event).getDamager()).getShooter().equals(((EntityDamageByEntityEvent) event).getEntity()));
+            case "block":
+                return event instanceof BlockPlaceEvent &&
+                        ((BlockPlaceEvent) event).getBlockPlaced().getType() == Material.getMaterial(value);
             default:
                 return key.equals(value);
         }
@@ -285,6 +293,9 @@ public final class Perk {
             case "setVariable":
                 handleSetVariableAction(actionValue, player1, player2);
                 break;
+            case "setBlock":
+                handleSetBlock(actionValue, player1, player2, event);
+                break;
             case "setDamage":
                 if (event instanceof EntityDamageEvent) {
                     handleSetDamage(actionValue, (EntityDamageEvent) event);
@@ -296,6 +307,17 @@ public final class Perk {
                 }
                 break;
         }
+    }
+
+    private void handleSetBlock(final String actionValue, final Player player1, final Player player2, final Object event) {
+        final String[] parts = actionValue.split(",", 2);
+        if (parts.length != 2) return;
+
+        final Location location = getLocationFromString(parts[0], player1, player2, event);
+        if (location == null) return;
+
+        final Material material = Material.getMaterial(parts[1]);
+        if (material != null) TaskHandler.INSTANCE.runSync(() -> location.getBlock().setType(material));
     }
 
     private void handleSetDamage(final String actionValue, final EntityDamageEvent event) {
@@ -521,6 +543,24 @@ public final class Perk {
                 return player1;
             case "victim":
                 return player2;
+            default:
+                return null;
+        }
+    }
+
+    private Location getLocationFromString(final String locationString, final Player player1, final Player player2, final Object event) {
+        switch (locationString.toLowerCase()) {
+            case "player's location":
+            case "attacker's location":
+            case "location of player":
+            case "location of attacker":
+                return player1.getLocation();
+            case "victim's location":
+            case "location of victim":
+                return player2.getLocation();
+            case "block's location":
+            case "location of block":
+                return event instanceof BlockPlaceEvent ? ((BlockPlaceEvent) event).getBlockPlaced().getLocation() : null;
             default:
                 return null;
         }
