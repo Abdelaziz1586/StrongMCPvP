@@ -11,10 +11,10 @@ variables:
   msg2: "&6Golden Head &ccooldown, please wait!"
 
 kill:
-  give: player,[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=],1,&6&lGolden Head
-
-spawn:
-  give: player,[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=],5,&6&lGolden Head
+  if hasItem=player,SKULL_ITEM,1,false,&6&lGolden Head:
+  # Do nothing
+  else:
+    give: player,[SKULL_ITEM;e3RleHR1cmVzOntTS0lOOnt1cmw6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU1YjMwOGExZWI1Y2FhOTdlNWZiMjU3YjJkOWUxODYxZmRlZjE1MTYxZDUwYTFmNDZmMjIzMTVmNDkyOSJ9fX0=],1,&6&lGolden Head
 
 click:
   if click=RIGHT_CLICK AND item=SKULL_ITEM:

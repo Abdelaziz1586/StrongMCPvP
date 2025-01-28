@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 public final class Perk {
 
     private static final Random random = new Random();
-    private static final Pattern variablesPattern = Pattern.compile("(\\[.*?::.*?])");
+    private static final Pattern variablesPattern = Pattern.compile("(\\[.*?::.*?])|(\\b[a-zA-Z_][a-zA-Z0-9_]*\\b)");
 
     private final int id, price;
     private final boolean shared;
@@ -256,6 +256,8 @@ public final class Perk {
             case "type":
                 return event instanceof EntityDamageByEntityEvent &&
                         ((EntityDamageByEntityEvent) event).getDamager().getType().name().equals(value);
+            case "hasItem":
+                return hasItem(value, event);
             case "selfHit":
                 return event instanceof EntityDamageByEntityEvent &&
                         ((EntityDamageByEntityEvent) event).getDamager() instanceof Projectile &&
@@ -266,6 +268,37 @@ public final class Perk {
             default:
                 return key.equals(value);
         }
+    }
+
+    private boolean hasItem(final String value, final Object event) {
+        final String[] parts = value.split(",");
+        if (parts.length < 2) return false;
+
+        final Player player = event instanceof Player ? (Player) event : getPlayerFromEvent(event, parts[0]);
+        if (player == null) return false;
+
+        final Material material = Material.getMaterial(parts[1]);
+        if (material == null) return false;
+
+        final String name = translateColorCodes(parts.length > 4 ? parts[4] : null);
+        final boolean exact = parts.length > 3 && Boolean.parseBoolean(parts[3]);
+        final int count = parts.length > 2 ? Math.min(parseInt(parts[2]), 1) : 1;
+
+        final Map<Integer, ? extends ItemStack> ammo = player.getInventory().all(material);
+
+        int found = 0;
+        for (final ItemStack stack : ammo.values()) {
+            if (name != null) {
+                final ItemMeta itemMeta = stack.getItemMeta();
+                if (itemMeta == null || itemMeta.getDisplayName() == null || !itemMeta.getDisplayName().equals(name)) continue;
+            }
+
+            found += stack.getAmount();
+
+            if (found > count) return !exact;
+        }
+
+        return found == count;
     }
 
     private void executeAction(final String actionType, final String actionValue, final Player player1, final Player player2, final Object event) {
@@ -333,7 +366,7 @@ public final class Perk {
 
     private void handleSetDamage(final String actionValue, final EntityDamageEvent event) {
         try {
-            event.setDamage(Double.parseDouble(MathHandler.INSTANCE.processString(resolveVariables(actionValue.replace("damage", String.valueOf(event.getFinalDamage())), event))));
+            event.setDamage(Double.parseDouble(MathHandler.INSTANCE.processString(resolveVariables(actionValue.replace("damage", String.valueOf(event.getDamage())), event))));
         } catch (final NumberFormatException ignored) {}
     }
 
@@ -602,9 +635,8 @@ public final class Perk {
         final Map<Integer, ? extends ItemStack> ammo = player.getInventory().all(material);
 
         int found = 0;
-        for (final ItemStack stack : ammo.values()) {
+        for (final ItemStack stack : ammo.values())
             found += stack.getAmount();
-        }
 
         if (count > found) return;
 
@@ -630,28 +662,31 @@ public final class Perk {
 
     private String resolveVariables(final String input, final Object event) {
         String result = input;
-
         final Matcher matcher = variablesPattern.matcher(input);
 
         while (matcher.find()) {
             final String variable = matcher.group();
-
-            result = result.replace(variable, resolveVariable(variable, event));
+            if (!variable.matches("\\d+")) {
+                result = result.replace(variable, variable.startsWith("[") ?
+                        resolveVariable(variable, event) :
+                        staticVariables.getOrDefault(variable, variable).toString());
+            }
         }
-
 
         return MathHandler.INSTANCE.processString(result);
     }
 
     private String resolveVariables(final String input, final Player player) {
         String result = input;
-
         final Matcher matcher = variablesPattern.matcher(input);
 
         while (matcher.find()) {
             final String variable = matcher.group();
-
-            result = result.replace(variable, resolveVariable(variable, player));
+            if (!variable.matches("\\d+")) {
+                result = result.replace(variable, variable.startsWith("[") ?
+                        resolveVariable(variable, player) :
+                        staticVariables.getOrDefault(variable, variable).toString());
+            }
         }
 
         return MathHandler.INSTANCE.processString(result);

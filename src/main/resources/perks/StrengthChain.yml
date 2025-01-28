@@ -11,7 +11,8 @@ damage:
   if [StrengthChain::attacker]=null:
   # Do nothing
   else:
-    setDamage: damage + 1 * [StrengthChain::attacker]
+    msg: 1 * [StrengthChain::attacker]
+    setDamage: damage + (1 * [StrengthChain::attacker])
 
 kill:
   if [StrengthChain::attacker]=null:
