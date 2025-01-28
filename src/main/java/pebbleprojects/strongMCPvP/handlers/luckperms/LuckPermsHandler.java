@@ -63,21 +63,11 @@ public final class LuckPermsHandler {
     public String translateMessage(final UUID uuid, final String text) {
         if (api == null) return text;
 
-        try {
-            final CachedUser cached = userCache.get(uuid);
-            if (cached != null && !cached.isExpired()) {
-                return formatMessage(cached.user, text);
-            }
+        User user = api.getUserManager().getUser(uuid);
+        if (user == null)
+            user = api.getUserManager().loadUser(uuid).join();
 
-            final User user = api.getUserManager().loadUser(uuid).get(100, TimeUnit.MILLISECONDS);
-            if (user == null) return text;
-
-            userCache.put(uuid, new CachedUser(user));
-            return formatMessage(user, text);
-
-        } catch (Exception e) {
-            return text;
-        }
+        return user == null ? text : formatMessage(user, text);
     }
 
     private String formatMessage(final User user, final String text) {
