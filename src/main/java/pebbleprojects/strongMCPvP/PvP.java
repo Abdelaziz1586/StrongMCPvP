@@ -33,7 +33,6 @@ public final class PvP extends JavaPlugin {
         DiscordHandler.INSTANCE.shutdown();
 
         NPCHandler.INSTANCE.shutdown();
-        LuckPermsHandler.INSTANCE.shutdown();
         LeaderboardHandler.INSTANCE.shutdown();
 
         getLogger().info("Disabled PvP v1.0!");
