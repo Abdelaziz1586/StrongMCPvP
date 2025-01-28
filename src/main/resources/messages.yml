@@ -145,24 +145,35 @@ spectate:
         fadeOut: 1
 
 scramble:
-  enable:
-    chat: "%prefix% &aYour rank is now scrambled."
-    actionbar: ""
-    title-screen:
-      title: ""
-      subtitle: ""
-      fadeIn: 1
-      stay: 3
-      fadeOut: 1
-  disable:
-    chat: "%prefix% &cYour rank is no longer scrambled."
-    actionbar: ""
-    title-screen:
-      title: ""
-      subtitle: ""
-      fadeIn: 1
-      stay: 3
-      fadeOut: 1
+  success:
+    enable:
+      chat: "%prefix% &aYour rank is now scrambled."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+    disable:
+      chat: "%prefix% &cYour rank is no longer scrambled."
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
+  failed:
+    no-permission:
+      chat: "%prefix% &cYou don't have permission to do that"
+      actionbar: ""
+      title-screen:
+        title: ""
+        subtitle: ""
+        fadeIn: 1
+        stay: 3
+        fadeOut: 1
 
 # End of Commands #
 
@@ -521,24 +532,35 @@ perks:
 
 settings:
   scramble:
-    enable:
-      chat: "%prefix% &aYour rank is now scrambled."
-      actionbar: ""
-      title-screen:
-        title: ""
-        subtitle: ""
-        fadeIn: 1
-        stay: 3
-        fadeOut: 1
-    disable:
-      chat: "%prefix% &cYour rank is no longer scrambled."
-      actionbar: ""
-      title-screen:
-        title: ""
-        subtitle: ""
-        fadeIn: 1
-        stay: 3
-        fadeOut: 1
+    success:
+      enable:
+        chat: "%prefix% &aYour rank is now scrambled."
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+      disable:
+        chat: "%prefix% &cYour rank is no longer scrambled."
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
+    failed:
+      no-permission:
+        chat: "%prefix% &cYou don't have permission to do that"
+        actionbar: ""
+        title-screen:
+          title: ""
+          subtitle: ""
+          fadeIn: 1
+          stay: 3
+          fadeOut: 1
   redEffect:
     enable:
       chat: "%prefix% &aYou have enabled &cRed&fEffect&a."

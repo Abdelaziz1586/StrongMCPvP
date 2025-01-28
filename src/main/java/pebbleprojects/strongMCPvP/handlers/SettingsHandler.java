@@ -67,10 +67,15 @@ public final class SettingsHandler {
             final ItemMeta meta = itemStack.getItemMeta();
             switch (itemStack.getType()) {
                 case BOOK_AND_QUILL:
-                    Scramble.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
-                    MessageHandler.INSTANCE.sendMessage(player, "settings.scramble." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
+                    if (PermissionsHandler.INSTANCE.hasPermission(player, "scramble")) {
+                        Scramble.INSTANCE.set(uuid, meta.getEnchants().isEmpty());
+                        MessageHandler.INSTANCE.sendMessage(player, "settings.scramble.success." + (meta.getEnchants().isEmpty() ? "enable" : "disable"), null);
 
-                    openGUI(player);
+                        openGUI(player);
+                        break;
+                    }
+
+                    MessageHandler.INSTANCE.sendMessage(player, "settings.scramble.failed.no-permission", null);
                     break;
                 case GOLD_BLOCK:
                     TaskHandler.INSTANCE.runSync(() -> {

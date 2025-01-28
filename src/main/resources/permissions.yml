@@ -5,6 +5,7 @@
 ############################################################
 
 reload: pvp.reload
+scramble: pvp.scramble
 set-spawn: pvp.setspawn
 help-admin-commands: pvp.help.admin
 

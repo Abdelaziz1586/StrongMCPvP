@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import pebbleprojects.strongMCPvP.databaseData.Scramble;
 import pebbleprojects.strongMCPvP.handlers.MessageHandler;
+import pebbleprojects.strongMCPvP.handlers.PermissionsHandler;
 import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
 public final class ScrambleCommand implements CommandExecutor {
@@ -19,7 +20,12 @@ public final class ScrambleCommand implements CommandExecutor {
             }
 
             final Player player = (Player) sender;
-            MessageHandler.INSTANCE.sendMessage(player, "scramble." + (Scramble.INSTANCE.toggle(player.getUniqueId()) ? "enable" : "disable"), null);
+            if (!PermissionsHandler.INSTANCE.hasPermission(player, "scramble")) {
+                MessageHandler.INSTANCE.sendMessage(player, "scramble.failed.no-permission", null);
+                return;
+            }
+
+            MessageHandler.INSTANCE.sendMessage(player, "scramble.success." + (Scramble.INSTANCE.toggle(player.getUniqueId()) ? "enable" : "disable"), null);
         });
         return false;
     }
