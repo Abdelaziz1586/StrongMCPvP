@@ -8,7 +8,7 @@ import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
 public final class PlayerCommandPreprocess implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
         if (event.getMessage().toLowerCase().startsWith("/reload")) {
             event.setCancelled(true);

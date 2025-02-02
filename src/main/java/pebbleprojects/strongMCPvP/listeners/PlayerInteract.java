@@ -12,7 +12,7 @@ import pebbleprojects.strongMCPvP.handlers.PerksHandler;
 
 public final class PlayerInteract implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         PerksHandler.INSTANCE.onPlayerInteract(event);
 

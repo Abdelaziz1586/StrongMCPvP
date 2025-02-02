@@ -6,7 +6,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 
 public final class FoodLevelChange implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onFoodLevelChange(final FoodLevelChangeEvent event) {
         event.setCancelled(true);
     }

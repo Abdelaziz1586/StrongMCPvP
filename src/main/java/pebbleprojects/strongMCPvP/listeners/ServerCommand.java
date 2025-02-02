@@ -8,7 +8,7 @@ import pebbleprojects.strongMCPvP.handlers.TaskHandler;
 
 public final class ServerCommand implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onServerCommand(final ServerCommandEvent event) {
         if (event.getCommand().toLowerCase().startsWith("reload")) {
             event.setCancelled(true);

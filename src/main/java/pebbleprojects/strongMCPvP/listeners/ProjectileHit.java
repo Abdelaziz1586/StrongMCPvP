@@ -18,9 +18,8 @@ public final class ProjectileHit implements Listener {
 
         final ProjectileSource source = projectile.getShooter();
 
-        if (source instanceof Player) {
+        if (source instanceof Player)
             projectile.remove();
-        }
     }
 
 }

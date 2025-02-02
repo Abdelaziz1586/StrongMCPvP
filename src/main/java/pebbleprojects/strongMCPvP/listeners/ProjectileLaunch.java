@@ -13,7 +13,7 @@ import pebbleprojects.strongMCPvP.handlers.TrailsHandler;
 
 public final class ProjectileLaunch implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onProjectileLaunch(final ProjectileLaunchEvent event) {
         TaskHandler.INSTANCE.runAsync(() -> {
             final Projectile projectile = event.getEntity();
@@ -22,9 +22,8 @@ public final class ProjectileLaunch implements Listener {
 
             final ProjectileSource source = projectile.getShooter();
 
-            if (source instanceof Player && TrailsHandler.INSTANCE.playParticle(((Player) source).getUniqueId(), projectile) && projectile.getType() == EntityType.ARROW) {
+            if (source instanceof Player && TrailsHandler.INSTANCE.playParticle(((Player) source).getUniqueId(), projectile) && projectile.getType() == EntityType.ARROW)
                 ((Arrow) projectile).setCritical(false);
-            }
         });
     }
 

@@ -7,7 +7,7 @@ import pebbleprojects.strongMCPvP.handlers.PerksHandler;
 
 public final class BlockPlace implements Listener {
 
-    @EventHandler
+    @EventHandler(ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         PerksHandler.INSTANCE.onBlockPlace(event);
     }
